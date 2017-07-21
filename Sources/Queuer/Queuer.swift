@@ -29,21 +29,22 @@ import Foundation
 /// Queuer class.
 public class Queuer {
     /// Shared Queuer.
-    public static let shared: Queuer = Queuer(name: "com.FabrizioBrancati.Queuer")
+    public static let shared: Queuer = Queuer(name: "Queuer")
     
     /// Private OperationQueue.
-    private let queue: OperationQueue = OperationQueue()
+    internal let queue: OperationQueue = OperationQueue()
     
     /// Total Operation count in queue.
     public var operationCount: Int {
         return self.queue.operationCount
     }
     
-    /// The number of operations currently in queue.
+    /// Operations currently in queue.
     public var operations: [Operation] {
         return self.queue.operations
     }
     
+    /// Define the max concurrent operation count.
     public var maxConcurrentOperationCount: Int {
         get {
             return self.queue.maxConcurrentOperationCount
