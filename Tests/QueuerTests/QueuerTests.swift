@@ -28,90 +28,78 @@ import XCTest
 @testable import Queuer
 
 class QueuerTests: XCTestCase {
-    let queuer: Queuer = Queuer.shared
-    let testingAddress: String = "https://www.google.com"
+    static let allTests = [
+        ("testOperationCount", testOperationCount),
+        ("testOperations", testOperations),
+        ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
+        ("testInitWithName", testInitWithName),
+        ("testAddOperationBlock", testAddOperationBlock),
+        ("testAddOperation", testAddOperation)/*,
+        ("testAddChainedOperations", testAddChainedOperations),
+        ("testCancelAll", testCancelAll),
+        ("testPause", testPause),
+        ("testResume", testResume)*/
+    ]
     
-    override func setUp() {
-        super.setUp()
+    let queue = Queuer(name: "QueuerTests")
+    
+    func testOperationCount() {
+        XCTAssertEqual(queue.operationCount, 0)
+        
+        ConcurrentOperation().addToQueue(queue)
+        
+        XCTAssertEqual(queue.operationCount, 1)
     }
     
-    override func tearDown() {
-        super.tearDown()
+    func testOperations() {
+        let concurrentOperation = ConcurrentOperation()
+        queue.addOperation(concurrentOperation)
+        
+        XCTAssertTrue(queue.operations.contains(concurrentOperation))
     }
     
-    func testSingleOperation() {
-        queuer.maxConcurrentOperationCount = 1
+    func testMaxConcurrentOperationCount() {
+        queue.maxConcurrentOperationCount = 10
         
-        let testExpectation = expectation(description: "Single Operation")
+        XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
+    }
+    
+    func testInitWithName() {
+        let queueName = "TestInitWithName"
+        let otherQueue = Queuer(name: queueName)
         
-        let requestOperation: RequestOperation = RequestOperation(url: self.testingAddress, query: ["test": "test", "test 2": "test 2"]) { success, _, _, error in
-            if error == nil && success {
-                XCTAssertTrue(true)
-            } else {
-                XCTFail()
-            }
-            
+        XCTAssertEqual(otherQueue.queue.name, queueName)
+    }
+    
+    func testAddOperationBlock() {
+        let testExpectation = expectation(description: "Add Operation Block")
+        
+        queue.addOperationBlock {
             testExpectation.fulfill()
         }
         
-        requestOperation.addToQueuer()
+        XCTAssertEqual(queue.operationCount, 1)
         
         waitForExpectations(timeout: 5, handler: { error in
-            XCTAssertNil(error, "Error on RequestOperation.")
+            XCTAssertNil(error, "Error on block Operation.")
+            XCTAssertEqual(self.queue.operationCount, 0)
         })
     }
     
-    func testChainedOperations() {
-        let testExpectation = expectation(description: "Chained Operations")
-        var order: [Int] = []
+    func testAddOperation() {
+        let testExpectation = expectation(description: "Add Operation")
         
-        let requestOperation1: RequestOperation = RequestOperation(url: self.testingAddress) { success, _, _, error in
-            if error == nil && success {
-                order.append(0)
-            } else {
-                XCTFail()
-            }
-        }
-        let requestOperation2: RequestOperation = RequestOperation(url: self.testingAddress) { success, _, _, error in
-            if error == nil && success {
-                order.append(1)
-            } else {
-                XCTFail()
-            }
-        }
-        
-        self.queuer.addChainedOperations([requestOperation1, requestOperation2]) {
-            order.append(2)
+        let concurrentOperation = ConcurrentOperation()
+        concurrentOperation.completionBlock = {
             testExpectation.fulfill()
         }
+        queue.addOperation(concurrentOperation)
         
-        XCTAssertEqual(self.queuer.operationCount, 3)
-        
-        waitForExpectations(timeout: 5, handler: { error in
-            XCTAssertNil(error, "Error on RequestOperation.")
-            XCTAssertEqual(order, [0, 1, 2])
-        })
-    }
-    
-    func testCancelAllOperations() {
-        let testExpectation = expectation(description: "Cancel Single Operation")
-        
-        let requestOperation: RequestOperation = RequestOperation(url: self.testingAddress) { success, _, _, error in
-            if error == nil && success {
-                XCTFail()
-            } else {
-                XCTAssertTrue(true)
-            }
-            
-            testExpectation.fulfill()
-        }
-        
-        self.queuer.addOperation(requestOperation)
-        
-        self.queuer.cancelAll()
+        XCTAssertEqual(queue.operationCount, 1)
         
         waitForExpectations(timeout: 5, handler: { error in
-            XCTAssertNil(error, "Error on RequestOperation.")
+            XCTAssertNil(error, "Error on block Operation.")
+            XCTAssertEqual(self.queue.operationCount, 0)
         })
     }
 }
