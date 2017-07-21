@@ -79,8 +79,15 @@ public class ConcurrentOperation: Operation {
         _finished = true
     }
     
-    /// Add the Operation to `shared` Queuer.
-    public func addToQueuer() {
+    /// Adds the Operation to `shared` Queuer.
+    public func addToSharedQueuer() {
         Queuer.shared.addOperation(self)
+    }
+    
+    /// Adds the Operation to the custom queue.
+    ///
+    /// - Parameter queue: Custom queue where the Operation will be added.
+    public func addToQueue(_ queue: Queuer) {
+        queue.addOperation(self)
     }
 }
