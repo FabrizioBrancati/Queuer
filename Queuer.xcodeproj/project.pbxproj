@@ -31,6 +31,14 @@
 		493F573D1F220DC1009EC8FA /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57071F21F086009EC8FA /* URLBuilder.swift */; };
 		493F573E1F22287E009EC8FA /* QueuerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57001F21F03C009EC8FA /* QueuerTests.swift */; };
 		493F573F1F222A63009EC8FA /* QueuerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57001F21F03C009EC8FA /* QueuerTests.swift */; };
+		493F57411F222D83009EC8FA /* SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57401F222D83009EC8FA /* SynchronousOperation.swift */; };
+		493F57421F222D83009EC8FA /* SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57401F222D83009EC8FA /* SynchronousOperation.swift */; };
+		493F57431F222D83009EC8FA /* SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57401F222D83009EC8FA /* SynchronousOperation.swift */; };
+		493F57441F222D83009EC8FA /* SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57401F222D83009EC8FA /* SynchronousOperation.swift */; };
+		493F57461F222F13009EC8FA /* Semaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57451F222F13009EC8FA /* Semaphore.swift */; };
+		493F57471F222F13009EC8FA /* Semaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57451F222F13009EC8FA /* Semaphore.swift */; };
+		493F57481F222F13009EC8FA /* Semaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57451F222F13009EC8FA /* Semaphore.swift */; };
+		493F57491F222F13009EC8FA /* Semaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57451F222F13009EC8FA /* Semaphore.swift */; };
 		4995D7431F21E19C00A34E6E /* Queuer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995D7391F21E19B00A34E6E /* Queuer.framework */; };
 		4995D76F1F21ED1C00A34E6E /* Queuer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995D7661F21ED1B00A34E6E /* Queuer.framework */; };
 /* End PBXBuildFile section */
@@ -69,6 +77,8 @@
 		493F57201F21F32B009EC8FA /* Queuer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Queuer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		493F57281F21F32B009EC8FA /* QueuerTests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "QueuerTests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		493F57381F220AA5009EC8FA /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Info-macOS.plist"; path = "Sources/Info-macOS.plist"; sourceTree = SOURCE_ROOT; };
+		493F57401F222D83009EC8FA /* SynchronousOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SynchronousOperation.swift; path = Sources/Queuer/SynchronousOperation.swift; sourceTree = SOURCE_ROOT; };
+		493F57451F222F13009EC8FA /* Semaphore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Semaphore.swift; path = Sources/Queuer/Semaphore.swift; sourceTree = SOURCE_ROOT; };
 		4995D7391F21E19B00A34E6E /* Queuer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Queuer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4995D73D1F21E19B00A34E6E /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "Info-iOS.plist"; path = "Sources/Info-iOS.plist"; sourceTree = "<group>"; };
 		4995D7421F21E19C00A34E6E /* QueuerTests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "QueuerTests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -165,6 +175,8 @@
 				493F57041F21F086009EC8FA /* ConcurrentOperation.swift */,
 				493F57051F21F086009EC8FA /* Queuer.swift */,
 				493F57061F21F086009EC8FA /* RequestOperation.swift */,
+				493F57451F222F13009EC8FA /* Semaphore.swift */,
+				493F57401F222D83009EC8FA /* SynchronousOperation.swift */,
 				493F57071F21F086009EC8FA /* URLBuilder.swift */,
 				493F57171F21F182009EC8FA /* Queuer.h */,
 				4995D73D1F21E19B00A34E6E /* Info-iOS.plist */,
@@ -473,6 +485,8 @@
 				493F573D1F220DC1009EC8FA /* URLBuilder.swift in Sources */,
 				493F573C1F220DC1009EC8FA /* Queuer.swift in Sources */,
 				493F573A1F220DBD009EC8FA /* RequestOperation.swift in Sources */,
+				493F57471F222F13009EC8FA /* Semaphore.swift in Sources */,
+				493F57421F222D83009EC8FA /* SynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,6 +506,8 @@
 				493F570B1F21F086009EC8FA /* URLBuilder.swift in Sources */,
 				493F57091F21F086009EC8FA /* Queuer.swift in Sources */,
 				493F57081F21F086009EC8FA /* ConcurrentOperation.swift in Sources */,
+				493F57461F222F13009EC8FA /* Semaphore.swift in Sources */,
+				493F57411F222D83009EC8FA /* SynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,6 +527,8 @@
 				493F57131F21F08A009EC8FA /* URLBuilder.swift in Sources */,
 				493F57111F21F08A009EC8FA /* Queuer.swift in Sources */,
 				493F57101F21F08A009EC8FA /* ConcurrentOperation.swift in Sources */,
+				493F57491F222F13009EC8FA /* Semaphore.swift in Sources */,
+				493F57441F222D83009EC8FA /* SynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +540,8 @@
 				493F570F1F21F08A009EC8FA /* URLBuilder.swift in Sources */,
 				493F570D1F21F08A009EC8FA /* Queuer.swift in Sources */,
 				493F570C1F21F08A009EC8FA /* ConcurrentOperation.swift in Sources */,
+				493F57481F222F13009EC8FA /* Semaphore.swift in Sources */,
+				493F57431F222D83009EC8FA /* SynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

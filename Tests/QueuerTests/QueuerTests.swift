@@ -40,6 +40,8 @@ class QueuerTests: XCTestCase {
     }
     
     func testSingleOperation() {
+        queuer.maxConcurrentOperationCount = 1
+        
         let testExpectation = expectation(description: "Single Operation")
         
         let requestOperation: RequestOperation = RequestOperation(url: self.testingAddress, query: ["test": "test", "test 2": "test 2"]) { success, _, _, error in
@@ -52,7 +54,7 @@ class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        self.queuer.addOperation(requestOperation)
+        requestOperation.addToQueuer()
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error on RequestOperation.")
@@ -61,23 +63,25 @@ class QueuerTests: XCTestCase {
     
     func testChainedOperations() {
         let testExpectation = expectation(description: "Chained Operations")
+        var order: [Int] = []
         
         let requestOperation1: RequestOperation = RequestOperation(url: self.testingAddress) { success, _, _, error in
             if error == nil && success {
-                XCTAssertTrue(true)
+                order.append(0)
             } else {
                 XCTFail()
             }
         }
         let requestOperation2: RequestOperation = RequestOperation(url: self.testingAddress) { success, _, _, error in
             if error == nil && success {
-                XCTAssertTrue(true)
+                order.append(1)
             } else {
                 XCTFail()
             }
         }
         
         self.queuer.addChainedOperations([requestOperation1, requestOperation2]) {
+            order.append(2)
             testExpectation.fulfill()
         }
         
@@ -85,6 +89,7 @@ class QueuerTests: XCTestCase {
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error, "Error on RequestOperation.")
+            XCTAssertEqual(order, [0, 1, 2])
         })
     }
     
