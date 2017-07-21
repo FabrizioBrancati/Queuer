@@ -28,7 +28,7 @@ import Foundation
 
 /// Concurrent Operation class.
 public class ConcurrentOperation: Operation {
-    /// Set if the Operation is asynchronous.
+    /// Set the Operation as asynchronous.
     public override var isAsynchronous: Bool {
         return true
     }
@@ -77,5 +77,10 @@ public class ConcurrentOperation: Operation {
     public func finish() {
         _executing = false
         _finished = true
+    }
+    
+    /// Add the Operation to `shared` Queuer.
+    public func addToQueuer() {
+        Queuer.shared.addOperation(self)
     }
 }
