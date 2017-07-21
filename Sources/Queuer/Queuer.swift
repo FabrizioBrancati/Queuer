@@ -44,14 +44,20 @@ public class Queuer {
         return self.queue.operations
     }
     
+    public var maxConcurrentOperationCount: Int {
+        get {
+            return self.queue.maxConcurrentOperationCount
+        }
+        set {
+            self.queue.maxConcurrentOperationCount = newValue
+        }
+    }
+    
     /// Creates a new queue.
     ///
-    /// - Parameters:
-    ///   - name: Custom queue name.
-    ///   - maxConcurrentOperation: Number of max concurrent operations.
-    public init(name: String, maxConcurrentOperation: Int = Int.max) {
+    /// - Parameter name: Custom queue name.
+    public init(name: String) {
         self.queue.name = name
-        self.queue.maxConcurrentOperationCount = Int.max
     }
     
     /// Add an Operation to be executed asynchronously.
