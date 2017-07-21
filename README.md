@@ -50,6 +50,7 @@ Here is the list of all the features:
 - [x] Create a network request operation
 - [ ] Create a network download operation
 - [ ] Create a network upload operation
+- [ ] Ability to restore uncompleted network operations
 
 Requirements
 ============
