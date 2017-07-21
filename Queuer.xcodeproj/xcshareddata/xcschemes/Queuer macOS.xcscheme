@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "493F571F1F21F32B009EC8FA"
-               BuildableName = "Queuer macOS.framework"
+               BuildableName = "Queuer.framework"
                BlueprintName = "Queuer macOS"
                ReferencedContainer = "container:Queuer.xcodeproj">
             </BuildableReference>
@@ -26,7 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -43,7 +44,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "493F571F1F21F32B009EC8FA"
-            BuildableName = "Queuer macOS.framework"
+            BuildableName = "Queuer.framework"
             BlueprintName = "Queuer macOS"
             ReferencedContainer = "container:Queuer.xcodeproj">
          </BuildableReference>
@@ -65,7 +66,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "493F571F1F21F32B009EC8FA"
-            BuildableName = "Queuer macOS.framework"
+            BuildableName = "Queuer.framework"
             BlueprintName = "Queuer macOS"
             ReferencedContainer = "container:Queuer.xcodeproj">
          </BuildableReference>
@@ -83,7 +84,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "493F571F1F21F32B009EC8FA"
-            BuildableName = "Queuer macOS.framework"
+            BuildableName = "Queuer.framework"
             BlueprintName = "Queuer macOS"
             ReferencedContainer = "container:Queuer.xcodeproj">
          </BuildableReference>

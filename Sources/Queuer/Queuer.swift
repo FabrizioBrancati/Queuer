@@ -34,14 +34,22 @@ public class Queuer {
     /// Private OperationQueue.
     private let queue: OperationQueue = OperationQueue()
     
-    /// Total Operation count.
-    public lazy var operationCount: Int = {
+    /// Total Operation count in queue.
+    public var operationCount: Int {
         return self.queue.operationCount
-    }()
+    }
     
-    /// Private init.
-    /// Use shared instead.
-    internal init(name: String) {
+    /// The number of operations currently in queue.
+    public var operations: [Operation] {
+        return self.queue.operations
+    }
+    
+    /// Creates a new queue.
+    ///
+    /// - Parameters:
+    ///   - name: Custom queue name.
+    ///   - maxConcurrentOperation: Number of max concurrent operations.
+    public init(name: String, maxConcurrentOperation: Int = Int.max) {
         self.queue.name = name
         self.queue.maxConcurrentOperationCount = Int.max
     }

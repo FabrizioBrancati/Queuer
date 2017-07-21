@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		493F57021F21F040009EC8FA /* QueuerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57001F21F03C009EC8FA /* QueuerTests.swift */; };
-		493F57031F21F040009EC8FA /* QueuerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57001F21F03C009EC8FA /* QueuerTests.swift */; };
 		493F57081F21F086009EC8FA /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57041F21F086009EC8FA /* ConcurrentOperation.swift */; };
 		493F57091F21F086009EC8FA /* Queuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57051F21F086009EC8FA /* Queuer.swift */; };
 		493F570A1F21F086009EC8FA /* RequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57061F21F086009EC8FA /* RequestOperation.swift */; };
@@ -26,6 +25,12 @@
 		493F571A1F21F185009EC8FA /* Queuer.h in Headers */ = {isa = PBXBuildFile; fileRef = 493F57171F21F182009EC8FA /* Queuer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		493F57291F21F32B009EC8FA /* Queuer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493F57201F21F32B009EC8FA /* Queuer.framework */; };
 		493F57371F21F3CB009EC8FA /* Queuer.h in Headers */ = {isa = PBXBuildFile; fileRef = 493F57171F21F182009EC8FA /* Queuer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		493F573A1F220DBD009EC8FA /* RequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57061F21F086009EC8FA /* RequestOperation.swift */; };
+		493F573B1F220DC1009EC8FA /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57041F21F086009EC8FA /* ConcurrentOperation.swift */; };
+		493F573C1F220DC1009EC8FA /* Queuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57051F21F086009EC8FA /* Queuer.swift */; };
+		493F573D1F220DC1009EC8FA /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57071F21F086009EC8FA /* URLBuilder.swift */; };
+		493F573E1F22287E009EC8FA /* QueuerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57001F21F03C009EC8FA /* QueuerTests.swift */; };
+		493F573F1F222A63009EC8FA /* QueuerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57001F21F03C009EC8FA /* QueuerTests.swift */; };
 		4995D7431F21E19C00A34E6E /* Queuer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995D7391F21E19B00A34E6E /* Queuer.framework */; };
 		4995D76F1F21ED1C00A34E6E /* Queuer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995D7661F21ED1B00A34E6E /* Queuer.framework */; };
 /* End PBXBuildFile section */
@@ -62,8 +67,8 @@
 		493F57071F21F086009EC8FA /* URLBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLBuilder.swift; path = Sources/Queuer/URLBuilder.swift; sourceTree = SOURCE_ROOT; };
 		493F57171F21F182009EC8FA /* Queuer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Queuer.h; path = Sources/Queuer.h; sourceTree = SOURCE_ROOT; };
 		493F57201F21F32B009EC8FA /* Queuer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Queuer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		493F57231F21F32B009EC8FA /* Info-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-macOS.plist"; path = "../Sources/Info-macOS.plist"; sourceTree = "<group>"; };
 		493F57281F21F32B009EC8FA /* QueuerTests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "QueuerTests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		493F57381F220AA5009EC8FA /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Info-macOS.plist"; path = "Sources/Info-macOS.plist"; sourceTree = SOURCE_ROOT; };
 		4995D7391F21E19B00A34E6E /* Queuer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Queuer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4995D73D1F21E19B00A34E6E /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "Info-iOS.plist"; path = "Sources/Info-iOS.plist"; sourceTree = "<group>"; };
 		4995D7421F21E19C00A34E6E /* QueuerTests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "QueuerTests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,7 +168,7 @@
 				493F57071F21F086009EC8FA /* URLBuilder.swift */,
 				493F57171F21F182009EC8FA /* Queuer.h */,
 				4995D73D1F21E19B00A34E6E /* Info-iOS.plist */,
-				493F57231F21F32B009EC8FA /* Info-macOS.plist */,
+				493F57381F220AA5009EC8FA /* Info-macOS.plist */,
 				4995D77E1F21EDFE00A34E6E /* Info-tvOS.plist */,
 				4995D75B1F21EA3F00A34E6E /* Info-watchOS.plist */,
 			);
@@ -464,6 +469,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				493F573B1F220DC1009EC8FA /* ConcurrentOperation.swift in Sources */,
+				493F573D1F220DC1009EC8FA /* URLBuilder.swift in Sources */,
+				493F573C1F220DC1009EC8FA /* Queuer.swift in Sources */,
+				493F573A1F220DBD009EC8FA /* RequestOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +480,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				493F573E1F22287E009EC8FA /* QueuerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,7 +499,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				493F57031F21F040009EC8FA /* QueuerTests.swift in Sources */,
+				493F573F1F222A63009EC8FA /* QueuerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,7 +572,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-macOS";
-				PRODUCT_NAME = Queuer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -588,7 +597,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-macOS";
-				PRODUCT_NAME = Queuer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -599,6 +607,7 @@
 		493F57351F21F32B009EC8FA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Tests/Info.plist;
@@ -614,6 +623,7 @@
 		493F57361F21F32B009EC8FA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Tests/Info.plist;
@@ -671,6 +681,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = Queuer;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -718,6 +729,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Queuer;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -743,8 +755,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-iOS";
-				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
-				PRODUCT_NAME = Queuer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -768,8 +778,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-iOS";
-				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
-				PRODUCT_NAME = Queuer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
@@ -823,7 +831,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-watchOS";
-				PRODUCT_NAME = Queuer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -848,7 +855,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-watchOS";
-				PRODUCT_NAME = Queuer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -873,7 +879,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-tvOS";
-				PRODUCT_NAME = Queuer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -898,7 +903,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-tvOS";
-				PRODUCT_NAME = Queuer;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -952,6 +956,7 @@
 				493F57331F21F32B009EC8FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		493F57341F21F32B009EC8FA /* Build configuration list for PBXNativeTarget "QueuerTests macOS" */ = {
 			isa = XCConfigurationList;
@@ -960,6 +965,7 @@
 				493F57361F21F32B009EC8FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4995D7331F21E19B00A34E6E /* Build configuration list for PBXProject "Queuer" */ = {
 			isa = XCConfigurationList;

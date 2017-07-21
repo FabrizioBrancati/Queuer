@@ -55,7 +55,7 @@ class QueuerTests: XCTestCase {
         self.queuer.addOperation(requestOperation)
         
         waitForExpectations(timeout: 5, handler: { error in
-            XCTAssertNil(error, "Something went horribly wrong.")
+            XCTAssertNil(error, "Error on RequestOperation.")
         })
     }
     
@@ -84,7 +84,7 @@ class QueuerTests: XCTestCase {
         XCTAssertEqual(self.queuer.operationCount, 3)
         
         waitForExpectations(timeout: 5, handler: { error in
-            XCTAssertNil(error, "Something went horribly wrong.")
+            XCTAssertNil(error, "Error on RequestOperation.")
         })
     }
     
@@ -106,7 +106,7 @@ class QueuerTests: XCTestCase {
         self.queuer.cancelAll()
         
         waitForExpectations(timeout: 5, handler: { error in
-            XCTAssertNil(error, "Something went horribly wrong.")
+            XCTAssertNil(error, "Error on RequestOperation.")
         })
     }
 }

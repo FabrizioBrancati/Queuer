@@ -60,26 +60,28 @@ public class RequestOperation: ConcurrentOperation {
     public typealias RequestClosure = (Bool, HTTPURLResponse?, Data?, Error?) -> Void
     
     /// Request task.
-    private var task: URLSessionDataTask?
+    private(set) public var task: URLSessionDataTask?
     /// Request URL.
-    private var url: URL?
+    private(set) public var url: URL?
     /// Request query.
-    private var query: String = ""
+    private(set) public var query: String = ""
+    /// Request complete URL
+    private var completeURL: URL?
     /// Request timeout.
-    private var timeout: TimeInterval = 30
+    private(set) public var timeout: TimeInterval = 30
     /// Request HTTP method.
-    private var method: HTTPMethod = .get
+    private(set) public var method: HTTPMethod = .get
     /// Request headers.
-    private var headers: [String: String] = [:]
+    private(set) public var headers: [String: String] = [:]
     /// Request body.
-    private var body: Data = Data()
+    private(set) public var body: Data = Data()
     /// Request completionHandler.
-    private var completionHandler: RequestClosure?
+    private(set) public var completionHandler: RequestClosure?
     
     /// URLSession instance.
-    private lazy var session: URLSession = {
+    private var session: URLSession {
         return URLSession.shared
-    }()
+    }
     
     /// Cannot be initialized without parameters.
     private override init() {}
@@ -87,7 +89,7 @@ public class RequestOperation: ConcurrentOperation {
     /// Creates a ReqeustOperation, ready to be added in a queue.
     ///
     /// - Parameters:
-    ///   - url: Request URL.
+    ///   - url: Request URL String.
     ///   - query: Request query.
     ///   - timeout: Request timeout.
     ///   - method: Request HTTP method.
@@ -96,7 +98,8 @@ public class RequestOperation: ConcurrentOperation {
     ///   - completionHandler: Request completion handler.
     public init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, headers: [String: String] = [:], body: Data = Data(), completionHandler: RequestClosure? = nil) {
         self.query = URLBuilder.build(query: query)
-        self.url = URL(string: url + self.query)
+        self.url = URL(string: url)
+        self.completeURL = URL(string: url + self.query)
         self.timeout = timeout
         self.method = method
         self.headers = headers
@@ -118,7 +121,7 @@ public class RequestOperation: ConcurrentOperation {
         }
         
         /// Check if the URL can be used.
-        guard let url = self.url else {
+        guard let url = self.completeURL else {
             if let completionHandler = self.completionHandler {
                 completionHandler(false, nil, nil, RequestError.urlError)
             }
@@ -157,7 +160,7 @@ public class RequestOperation: ConcurrentOperation {
                     
                     completionHandler(success, httpResponse, data, error)
                 } else {
-                    completionHandler(false, nil, nil, error)
+                    completionHandler(false, nil, data, error)
                 }
             }
             self.finish()

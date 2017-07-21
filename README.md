@@ -44,7 +44,7 @@ Here is the list of all the features:
 - [x] Create a single operation
 - [x] Create chained operations
 - [x] Create an operation block
-- [x] Manager a centralized Queuer
+- [x] Manage a centralized queue
 - [x] Create unlimited queue
 - [x] Declare how many concurrent operation a queue can handle
 - [x] Create a network request operation

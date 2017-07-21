@@ -6,7 +6,7 @@
 //  Copyright © 2017 Fabrizio Brancati. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import Foundation;
 
 //! Project version number for Queuer.
 FOUNDATION_EXPORT double QueuerVersionNumber;
