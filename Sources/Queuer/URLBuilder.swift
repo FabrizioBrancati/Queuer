@@ -34,11 +34,12 @@ internal struct URLBuilder {
     /// - Returns: Returns the query as a String.
     internal static func build(query: [String: String]) -> String {
         var finalQuery: String = ""
-        for (index, var parameter) in query.enumerated() {
+        for (index, parameter) in query.enumerated() {
             finalQuery += index == 0 ? "?" : "&"
-            parameter.key = parameter.key.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
-            parameter.value = parameter.value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
-            finalQuery += parameter.key + "=" + parameter.value
+            guard let parameterKey = parameter.key.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let parameterValue = parameter.value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
+                continue
+            }
+            finalQuery += parameterKey + "=" + parameterValue
         }
         return finalQuery
     }
