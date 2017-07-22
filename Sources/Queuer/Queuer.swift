@@ -125,10 +125,18 @@ public class Queuer {
     /// Pause the queue.
     public func pause() {
         self.queue.isSuspended = true
+        
+        for operation in self.queue.operations where operation is RequestOperation {
+            (operation as? RequestOperation)?.pause()
+        }
     }
     
     /// Resume the queue.
     public func resume() {
         self.queue.isSuspended = false
+        
+        for operation in self.queue.operations where operation is RequestOperation {
+            (operation as? RequestOperation)?.resume()
+        }
     }
 }
