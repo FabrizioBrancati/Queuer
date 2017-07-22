@@ -44,10 +44,10 @@ public class Queuer {
         return self.queue.operations
     }
     
-    /// Returns if the queue is running or is in pause.
+    /// Returns if the queue is executing or is in pause.
     /// Call `resume()` to make it running.
     /// Call `pause()` to make to pause it.
-    public var isRunning: Bool {
+    public var isExecuting: Bool {
         return !self.queue.isSuspended
     }
     

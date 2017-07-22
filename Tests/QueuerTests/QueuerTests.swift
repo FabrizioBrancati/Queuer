@@ -193,12 +193,12 @@ class QueuerTests: XCTestCase {
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
-            XCTAssertFalse(queue.isRunning)
+            XCTAssertFalse(queue.isExecuting)
             XCTAssertLessThanOrEqual(queue.operationCount, 3)
             XCTAssertNotEqual(order, [0, 1, 2])
             
             queue.resume()
-            XCTAssertTrue(queue.isRunning)
+            XCTAssertTrue(queue.isExecuting)
         })
     }
 }
