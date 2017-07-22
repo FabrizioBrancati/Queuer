@@ -196,7 +196,7 @@ public class RequestOperation: ConcurrentOperation {
     }
     
     /// Suspends the request operation.
-    public func suspend() {
+    public func pause() {
         self.task?.suspend()
     }
     
