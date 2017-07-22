@@ -45,19 +45,16 @@ class ConcurrentOperationTests: XCTestCase {
     
     func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
-        var executedBlock = false
         
         let testExpectation = expectation(description: "Init With Execution Block")
         
-        let concurrentOperation = ConcurrentOperation { 
-            executedBlock = true
+        let concurrentOperation = ConcurrentOperation {
             testExpectation.fulfill()
         }
         concurrentOperation.addToQueue(queue)
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
-            XCTAssertTrue(executedBlock)
         })
     }
     
