@@ -34,31 +34,47 @@ class QueuerTests: XCTestCase {
         ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
         ("testInitWithName", testInitWithName),
         ("testAddOperationBlock", testAddOperationBlock),
-        ("testAddOperation", testAddOperation)/*,
+        ("testAddOperation", testAddOperation),
         ("testAddChainedOperations", testAddChainedOperations),
         ("testCancelAll", testCancelAll),
-        ("testPause", testPause),
-        ("testResume", testResume)*/
+        ("testPauseAndResume", testPauseAndResume)
     ]
     
-    let queue = Queuer(name: "QueuerTests")
+    override func setUp() {
+        super.setUp()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+    }
     
     func testOperationCount() {
+        let queue = Queuer(name: "QueuerTestOperationCount")
+        
         XCTAssertEqual(queue.operationCount, 0)
         
-        ConcurrentOperation().addToQueue(queue)
-        
+        let concurrentOperation = ConcurrentOperation()
+        concurrentOperation.addToQueue(queue)
         XCTAssertEqual(queue.operationCount, 1)
+        
+        concurrentOperation.finish()
+        XCTAssertEqual(queue.operationCount, 0)
     }
     
     func testOperations() {
+        let queue = Queuer(name: "QueuerTestOperations")
+        
         let concurrentOperation = ConcurrentOperation()
         queue.addOperation(concurrentOperation)
-        
         XCTAssertTrue(queue.operations.contains(concurrentOperation))
+        
+        concurrentOperation.finish()
+        XCTAssertFalse(queue.operations.contains(concurrentOperation))
     }
     
     func testMaxConcurrentOperationCount() {
+        let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
+        
         queue.maxConcurrentOperationCount = 10
         
         XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
@@ -66,40 +82,123 @@ class QueuerTests: XCTestCase {
     
     func testInitWithName() {
         let queueName = "TestInitWithName"
-        let otherQueue = Queuer(name: queueName)
+        let queue = Queuer(name: queueName)
         
-        XCTAssertEqual(otherQueue.queue.name, queueName)
+        XCTAssertEqual(queue.queue.name, queueName)
     }
     
     func testAddOperationBlock() {
+        let queue = Queuer(name: "QueuerTestAddOperationBlock")
+        
         let testExpectation = expectation(description: "Add Operation Block")
         
-        queue.addOperationBlock {
+        queue.addOperation {
+            XCTAssertEqual(queue.operationCount, 1)
             testExpectation.fulfill()
         }
         
-        XCTAssertEqual(queue.operationCount, 1)
-        
         waitForExpectations(timeout: 5, handler: { error in
-            XCTAssertNil(error, "Error on block Operation.")
-            XCTAssertEqual(self.queue.operationCount, 0)
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
         })
     }
     
     func testAddOperation() {
+        let queue = Queuer(name: "QueuerTestAddOperation")
+        
         let testExpectation = expectation(description: "Add Operation")
         
-        let concurrentOperation = ConcurrentOperation()
-        concurrentOperation.completionBlock = {
+        let concurrentOperation = ConcurrentOperation {
+            XCTAssertEqual(queue.operationCount, 1)
             testExpectation.fulfill()
         }
         queue.addOperation(concurrentOperation)
         
-        XCTAssertEqual(queue.operationCount, 1)
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+        })
+    }
+    
+    func testAddChainedOperations() {
+        let queue = Queuer(name: "QueuerTestAddChainedOperations")
+        
+        let testExpectation = expectation(description: "Add Chained Operations")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation{
+            order.append(0)
+        }
+        let concurrentOperation2 = ConcurrentOperation {
+            order.append(1)
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
         
         waitForExpectations(timeout: 5, handler: { error in
-            XCTAssertNil(error, "Error on block Operation.")
-            XCTAssertEqual(self.queue.operationCount, 0)
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+            XCTAssertEqual(order, [0, 1, 2])
+        })
+    }
+    
+    func testCancelAll() {
+        let queue = Queuer(name: "QueuerTestCancellAll")
+        
+        let testExpectation = expectation(description: "Cancell All Operations")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation {
+            order.append(0)
+        }
+        let concurrentOperation2 = ConcurrentOperation {
+            order.append(1)
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+        }
+        
+        queue.cancelAll()
+        testExpectation.fulfill()
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+            XCTAssertNotEqual(order.count, 3)
+        })
+    }
+    
+    func testPauseAndResume() {
+        let queue = Queuer(name: "QueuerTestPauseAndResume")
+        
+        let testExpectation = expectation(description: "Pause and Resume Queuer")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation {
+            order.append(0)
+        }
+        let concurrentOperation2 = ConcurrentOperation {
+            order.append(1)
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+        }
+        
+        queue.pause()
+        testExpectation.fulfill()
+        
+        XCTAssertLessThanOrEqual(queue.operationCount, 3)
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertFalse(queue.isRunning)
+            XCTAssertLessThanOrEqual(queue.operationCount, 3)
+            XCTAssertNotEqual(order, [0, 1, 2])
+            
+            queue.resume()
+            XCTAssertTrue(queue.isRunning)
         })
     }
 }
