@@ -2,5 +2,9 @@ included:
   - Tests
   - Sources
 
+disabled_rules:
+  - line_length
+  - trailing_whitespace
+
 opt_in_rules:
   - empty_count

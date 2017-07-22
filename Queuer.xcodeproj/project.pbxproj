@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4911EC8A1F23E07900917525 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC891F23E07900917525 /* URLBuilderTests.swift */; };
+		4911EC8B1F23E07900917525 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC891F23E07900917525 /* URLBuilderTests.swift */; };
+		4911EC8C1F23E07900917525 /* URLBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC891F23E07900917525 /* URLBuilderTests.swift */; };
+		4911EC8E1F23E7F300917525 /* SemaphoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */; };
+		4911EC8F1F23E7F300917525 /* SemaphoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */; };
+		4911EC901F23E7F300917525 /* SemaphoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */; };
 		493F57021F21F040009EC8FA /* RequestOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57001F21F03C009EC8FA /* RequestOperationTests.swift */; };
 		493F57081F21F086009EC8FA /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57041F21F086009EC8FA /* ConcurrentOperation.swift */; };
 		493F57091F21F086009EC8FA /* Queuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57051F21F086009EC8FA /* Queuer.swift */; };
@@ -74,6 +80,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4911EC891F23E07900917525 /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLBuilderTests.swift; path = Tests/QueuerTests/URLBuilderTests.swift; sourceTree = SOURCE_ROOT; };
+		4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SemaphoreTests.swift; path = Tests/QueuerTests/SemaphoreTests.swift; sourceTree = SOURCE_ROOT; };
 		493F57001F21F03C009EC8FA /* RequestOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestOperationTests.swift; path = Tests/QueuerTests/RequestOperationTests.swift; sourceTree = SOURCE_ROOT; };
 		493F57041F21F086009EC8FA /* ConcurrentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConcurrentOperation.swift; path = Sources/Queuer/ConcurrentOperation.swift; sourceTree = SOURCE_ROOT; };
 		493F57051F21F086009EC8FA /* Queuer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Queuer.swift; path = Sources/Queuer/Queuer.swift; sourceTree = SOURCE_ROOT; };
@@ -183,9 +191,9 @@
 				493F57041F21F086009EC8FA /* ConcurrentOperation.swift */,
 				493F57051F21F086009EC8FA /* Queuer.swift */,
 				493F57061F21F086009EC8FA /* RequestOperation.swift */,
+				493F57071F21F086009EC8FA /* URLBuilder.swift */,
 				493F57451F222F13009EC8FA /* Semaphore.swift */,
 				493F57401F222D83009EC8FA /* SynchronousOperation.swift */,
-				493F57071F21F086009EC8FA /* URLBuilder.swift */,
 				493F57171F21F182009EC8FA /* Queuer.h */,
 				4995D73D1F21E19B00A34E6E /* Info-iOS.plist */,
 				493F57381F220AA5009EC8FA /* Info-macOS.plist */,
@@ -201,6 +209,8 @@
 				493F574A1F2298AD009EC8FA /* ConcurrentOperationTests.swift */,
 				493F574E1F229CEA009EC8FA /* QueuerTests.swift */,
 				493F57001F21F03C009EC8FA /* RequestOperationTests.swift */,
+				4911EC891F23E07900917525 /* URLBuilderTests.swift */,
+				4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */,
 				4995D7491F21E19C00A34E6E /* Info.plist */,
 			);
 			path = QueuerTests;
@@ -252,6 +262,7 @@
 				493F571C1F21F32B009EC8FA /* Frameworks */,
 				493F571D1F21F32B009EC8FA /* Headers */,
 				493F571E1F21F32B009EC8FA /* Resources */,
+				4911EC921F23E8DD00917525 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -288,6 +299,7 @@
 				4995D7351F21E19B00A34E6E /* Frameworks */,
 				4995D7361F21E19B00A34E6E /* Headers */,
 				4995D7371F21E19B00A34E6E /* Resources */,
+				4911EC911F23E86300917525 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -324,6 +336,7 @@
 				4995D7541F21EA3F00A34E6E /* Frameworks */,
 				4995D7551F21EA3F00A34E6E /* Headers */,
 				4995D7561F21EA3F00A34E6E /* Resources */,
+				4911EC941F23E8E900917525 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -342,6 +355,7 @@
 				4995D7621F21ED1B00A34E6E /* Frameworks */,
 				4995D7631F21ED1B00A34E6E /* Headers */,
 				4995D7641F21ED1B00A34E6E /* Resources */,
+				4911EC931F23E8E400917525 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -486,6 +500,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4911EC911F23E86300917525 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		4911EC921F23E8DD00917525 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		4911EC931F23E8E400917525 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+		4911EC941F23E8E900917525 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		493F571B1F21F32B009EC8FA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -504,7 +573,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4911EC8F1F23E7F300917525 /* SemaphoreTests.swift in Sources */,
 				493F574C1F2298AD009EC8FA /* ConcurrentOperationTests.swift in Sources */,
+				4911EC8B1F23E07900917525 /* URLBuilderTests.swift in Sources */,
 				493F57501F229CEA009EC8FA /* QueuerTests.swift in Sources */,
 				493F573E1F22287E009EC8FA /* RequestOperationTests.swift in Sources */,
 			);
@@ -527,7 +598,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4911EC8E1F23E7F300917525 /* SemaphoreTests.swift in Sources */,
 				493F574B1F2298AD009EC8FA /* ConcurrentOperationTests.swift in Sources */,
+				4911EC8A1F23E07900917525 /* URLBuilderTests.swift in Sources */,
 				493F574F1F229CEA009EC8FA /* QueuerTests.swift in Sources */,
 				493F573F1F222A63009EC8FA /* RequestOperationTests.swift in Sources */,
 			);
@@ -563,7 +636,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4911EC901F23E7F300917525 /* SemaphoreTests.swift in Sources */,
 				493F574D1F2298AD009EC8FA /* ConcurrentOperationTests.swift in Sources */,
+				4911EC8C1F23E07900917525 /* URLBuilderTests.swift in Sources */,
 				493F57511F229CEA009EC8FA /* QueuerTests.swift in Sources */,
 				493F57021F21F040009EC8FA /* RequestOperationTests.swift in Sources */,
 			);

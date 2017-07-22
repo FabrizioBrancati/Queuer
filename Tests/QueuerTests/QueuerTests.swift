@@ -126,7 +126,7 @@ class QueuerTests: XCTestCase {
         let testExpectation = expectation(description: "Add Chained Operations")
         var order: [Int] = []
         
-        let concurrentOperation1 = ConcurrentOperation{
+        let concurrentOperation1 = ConcurrentOperation {
             order.append(0)
         }
         let concurrentOperation2 = ConcurrentOperation {
