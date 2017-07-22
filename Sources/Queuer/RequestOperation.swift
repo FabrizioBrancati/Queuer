@@ -83,10 +83,13 @@ public class RequestOperation: ConcurrentOperation {
         return URLSession.shared
     }
     
-    /// Cannot be initialized without parameters.
-    private override init() {}
+    /// Private init with executrion block.
+    /// You can't create a RequestOperation with only an execution block.
+    ///
+    /// - Parameter block: Execution block.
+    private override init(executionBlock: (() -> Void)? = nil) {}
     
-    /// Creates a ReqeustOperation, ready to be added in a queue.
+    /// Creates a RequestOperation, ready to be added in a queue.
     ///
     /// - Parameters:
     ///   - url: Request URL String.
@@ -96,7 +99,9 @@ public class RequestOperation: ConcurrentOperation {
     ///   - headers: Request headers.
     ///   - body: Request body.
     ///   - completionHandler: Request completion handler.
-    public init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, headers: [String: String] = [:], body: Data = Data(), completionHandler: RequestClosure? = nil) {
+    public convenience init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, headers: [String: String] = [:], body: Data = Data(), completionHandler: RequestClosure? = nil) {
+        self.init()
+        
         self.query = URLBuilder.build(query: query)
         self.url = URL(string: url)
         self.completeURL = URL(string: url + self.query)
@@ -107,7 +112,7 @@ public class RequestOperation: ConcurrentOperation {
         self.completionHandler = completionHandler
     }
     
-    /// Execute the request operation asynchronously.
+    /// Executes the request operation asynchronously.
     public override func execute() {
         /// Check if the Operation has been cancelled.
         guard !self.isCancelled else {
@@ -115,6 +120,7 @@ public class RequestOperation: ConcurrentOperation {
                 completionHandler(false, nil, nil, RequestError.operationCancelled)
             }
             
+            /// Notify that the Operation has finished execution.
             self.finish()
             
             return
@@ -126,12 +132,13 @@ public class RequestOperation: ConcurrentOperation {
                 completionHandler(false, nil, nil, RequestError.urlError)
             }
             
+            /// Notify that the Operation has finished execution.
             self.finish()
             
             return
         }
         
-        /// Create the request.
+        /// Creates the request.
         var request: URLRequest = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: self.timeout)
         /// Set the HTTP method.
         request.httpMethod = method.rawValue
@@ -163,25 +170,26 @@ public class RequestOperation: ConcurrentOperation {
                     completionHandler(false, nil, data, error)
                 }
             }
+            /// Notify that the Operation has finished execution.
             self.finish()
         }
         /// Start the task.
         self.task?.resume()
     }
     
-    /// Cancel the request operation.
+    /// Cancels the request operation.
     public override func cancel() {
         super.cancel()
         
         self.task?.cancel()
     }
     
-    /// Suspend the request operation.
+    /// Suspends the request operation.
     public func suspend() {
         self.task?.suspend()
     }
     
-    /// Resume the request operation.
+    /// Resumes the request operation.
     public func resume() {
         self.task?.resume()
     }
