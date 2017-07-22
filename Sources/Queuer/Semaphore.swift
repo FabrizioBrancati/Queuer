@@ -41,6 +41,7 @@ public struct Semaphore {
     /// This function returns non-zero if a thread is woken. Otherwise, zero is returned.
     ///
     /// - Returns: Returns non-zero if a thread is woken. Otherwise, zero is returned.
+    @discardableResult
     public func `continue`() -> Int {
         return self.semaphore.signal()
     }
