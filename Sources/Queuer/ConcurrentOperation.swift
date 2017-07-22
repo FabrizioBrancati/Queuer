@@ -28,6 +28,16 @@ import Foundation
 
 /// Concurrent Operation class.
 public class ConcurrentOperation: Operation {
+    /// Operation's execution block.
+    public var executionBlock: (() -> Void)?
+    
+    /// Creates the Operation with an execution block.
+    ///
+    /// - Parameter executionBlock: Execution block.
+    public init(executionBlock: (() -> Void)? = nil) {
+        self.executionBlock = executionBlock
+    }
+    
     /// Set the Operation as asynchronous.
     public override var isAsynchronous: Bool {
         return true
@@ -70,7 +80,13 @@ public class ConcurrentOperation: Operation {
     }
     
     /// Execute the Operation.
-    public func execute() {}
+    /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
+    public func execute() {
+        if let executionBlock = executionBlock {
+            executionBlock()
+            self.finish()
+        }
+    }
     
     /// Notify the completion of async task and hence the completion of the operation.
     /// Must be called when the Operation is finished.
