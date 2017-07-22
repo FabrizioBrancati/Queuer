@@ -29,11 +29,37 @@ import XCTest
 
 class ConcurrentOperationTests: XCTestCase {
     static let allTests = [
+        ("testInitWithExecutionBlock", testInitWithExecutionBlock),
         ("testIsAsynchronous", testIsAsynchronous),
-        ("testAddToQueuer", testAddToQueuer)
+        ("testAddToSharedQueuer", testAddToSharedQueuer),
+        ("testAddToQueue", testAddToQueue)
     ]
     
-    let queue = Queuer(name: "ConcurrentOperationTest")
+    override func setUp() {
+        super.setUp()
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+    }
+    
+    func testInitWithExecutionBlock() {
+        let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
+        var executedBlock = false
+        
+        let testExpectation = expectation(description: "Init With Execution Block")
+        
+        let concurrentOperation = ConcurrentOperation { 
+            executedBlock = true
+            testExpectation.fulfill()
+        }
+        concurrentOperation.addToQueue(queue)
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(executedBlock)
+        })
+    }
     
     func testIsAsynchronous() {
         let concurrentOperation = ConcurrentOperation()
@@ -41,9 +67,18 @@ class ConcurrentOperationTests: XCTestCase {
         XCTAssertTrue(concurrentOperation.isAsynchronous)
     }
     
-    func testAddToQueuer() {
+    func testAddToSharedQueuer() {
         let concurrentOperation = ConcurrentOperation()
+        concurrentOperation.addToSharedQueuer()
         
+        XCTAssertEqual(Queuer.shared.operationCount, 1)
+        XCTAssertEqual(Queuer.shared.operations, [concurrentOperation])
+    }
+    
+    func testAddToQueue() {
+        let queue = Queuer(name: "ConcurrentOperationTestAddToQueuer")
+        
+        let concurrentOperation = ConcurrentOperation()
         concurrentOperation.addToQueue(queue)
         
         XCTAssertEqual(queue.operationCount, 1)
