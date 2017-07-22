@@ -66,7 +66,7 @@ public class RequestOperation: ConcurrentOperation {
     /// Request query.
     private(set) public var query: String = ""
     /// Request complete URL
-    private var completeURL: URL?
+    private(set) public var completeURL: URL?
     /// Request timeout.
     private(set) public var timeout: TimeInterval = 30
     /// Request HTTP method.
@@ -79,15 +79,20 @@ public class RequestOperation: ConcurrentOperation {
     private(set) public var completionHandler: RequestClosure?
     
     /// URLSession instance.
-    private var session: URLSession {
+    internal var session: URLSession {
         return URLSession.shared
     }
+    
+    /// URLRequest instance.
+    private(set) public var request: URLRequest!
     
     /// Private init with executrion block.
     /// You can't create a RequestOperation with only an execution block.
     ///
     /// - Parameter block: Execution block.
-    private override init(executionBlock: (() -> Void)? = nil) {}
+    private override init(executionBlock: (() -> Void)? = nil) {
+        super.init(executionBlock: nil)
+    }
     
     /// Creates a RequestOperation, ready to be added in a queue.
     ///
@@ -139,19 +144,19 @@ public class RequestOperation: ConcurrentOperation {
         }
         
         /// Creates the request.
-        var request: URLRequest = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: self.timeout)
+        request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: self.timeout)
         /// Set the HTTP method.
         request.httpMethod = method.rawValue
         /// Set the HTTP body.
         request.httpBody = body
         /// Set all the HTTP headers.
-        for header in headers {
-            request.value(forHTTPHeaderField: header.key) != nil ? request.setValue(header.value, forHTTPHeaderField: header.key) : request.addValue(header.value, forHTTPHeaderField: header.key)
+        for header in self.headers {
+            request.addValue(header.value, forHTTPHeaderField: header.key)
         }
         
         /// Create the task.
         self.task = self.session.dataTask(with: request) { data, response, error in
-            /// Check if the Operation has a completion handler, an HTTP response and is not cancelled.
+            /// Check if the Operation has a completion handler, has an HTTP response and has not been canceled.
             if let completionHandler = self.completionHandler {
                 if let httpResponse = response as? HTTPURLResponse {
                     var error: Error? = error
