@@ -44,6 +44,13 @@ public class Queuer {
         return self.queue.operations
     }
     
+    /// Returns if the queue is running or is in pause.
+    /// Call `resume()` to make it running.
+    /// Call `pause()` to make to pause it.
+    public var isRunning: Bool {
+        return !self.queue.isSuspended
+    }
+    
     /// Define the max concurrent operation count.
     public var maxConcurrentOperationCount: Int {
         get {
@@ -64,7 +71,7 @@ public class Queuer {
     /// Add an Operation to be executed asynchronously.
     ///
     /// - Parameter block: Block to be executed.
-    public func addOperationBlock(operation: @escaping () -> Void) {
+    public func addOperation(_ operation: @escaping () -> Void) {
         self.queue.addOperation(operation)
     }
     
@@ -110,8 +117,8 @@ public class Queuer {
     public func cancelAll() {
         self.queue.cancelAllOperations()
         
-        for operation in self.queue.operations where operation is RequestOperation {
-            (operation as? RequestOperation)?.cancel()
+        for operation in self.queue.operations {
+            operation.cancel()
         }
     }
     
