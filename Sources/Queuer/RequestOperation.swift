@@ -59,6 +59,8 @@ public class RequestOperation: ConcurrentOperation {
     /// Request closure alias.
     public typealias RequestClosure = (Bool, HTTPURLResponse?, Data?, Error?) -> Void
     
+    public static var globalCachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
+    
     /// Request task.
     private(set) public var task: URLSessionDataTask?
     /// Request URL.
@@ -71,6 +73,8 @@ public class RequestOperation: ConcurrentOperation {
     private(set) public var timeout: TimeInterval = 30
     /// Request HTTP method.
     private(set) public var method: HTTPMethod = .get
+    /// Request cache policy.
+    private(set) public var cachePolicy: URLRequest.CachePolicy = globalCachePolicy
     /// Request headers.
     private(set) public var headers: [String: String] = [:]
     /// Request body.
@@ -101,10 +105,11 @@ public class RequestOperation: ConcurrentOperation {
     ///   - query: Request query.
     ///   - timeout: Request timeout.
     ///   - method: Request HTTP method.
+    ///   - cachePolicy: Request cache policy. Use static var `globalCachePolicy` to set a global cache policy for all the RequestOperations.
     ///   - headers: Request headers.
     ///   - body: Request body.
     ///   - completionHandler: Request completion handler.
-    public convenience init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, headers: [String: String] = [:], body: Data = Data(), completionHandler: RequestClosure? = nil) {
+    public convenience init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, cachePolicy: URLRequest.CachePolicy = globalCachePolicy, headers: [String: String] = [:], body: Data = Data(), completionHandler: RequestClosure? = nil) {
         self.init()
         
         self.query = URLBuilder.build(query: query)
@@ -112,6 +117,7 @@ public class RequestOperation: ConcurrentOperation {
         self.completeURL = URL(string: url + self.query)
         self.timeout = timeout
         self.method = method
+        self.cachePolicy = cachePolicy
         self.headers = headers
         self.body = body
         self.completionHandler = completionHandler
@@ -144,7 +150,7 @@ public class RequestOperation: ConcurrentOperation {
         }
         
         /// Creates the request.
-        request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: self.timeout)
+        request = URLRequest(url: url, cachePolicy: self.cachePolicy, timeoutInterval: self.timeout)
         /// Set the HTTP method.
         request.httpMethod = method.rawValue
         /// Set the HTTP body.
