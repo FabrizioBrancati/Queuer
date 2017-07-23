@@ -47,11 +47,9 @@ class SemaphoreTests: XCTestCase {
     
     func testWithSemaphore() {
         let semaphore = Semaphore()
-        let queue = Queuer(name: "SemaphoreTestSemaphore")
-        
+        let queue = Queuer(name: "SemaphoreTestWithSemaphore")
+        let testExpectation = expectation(description: "With Semaphore")
         var testString = ""
-        
-        let testExpectation = expectation(description: "Cancel")
         
         let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
             XCTAssertNil(error)
@@ -72,11 +70,9 @@ class SemaphoreTests: XCTestCase {
     }
     
     func testWithoutSemaphore() {
-        let queue = Queuer(name: "SemaphoreTestSemaphore")
-        
+        let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
+        let testExpectation = expectation(description: "Without Semaphore")
         var testString = ""
-        
-        let testExpectation = expectation(description: "Cancel")
         
         let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
             XCTAssertNil(error)

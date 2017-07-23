@@ -51,9 +51,8 @@ class RequestOperationTests: XCTestCase {
     }
     
     func testInit() {
-        let queue = Queuer(name: "RequestOperationTestAddChainedOperations")
-        
-        let testExpectation = expectation(description: "Single Operation")
+        let queue = Queuer(name: "RequestOperationTestInit")
+        let testExpectation = expectation(description: "Init")
         
         let requestOperation: RequestOperation = RequestOperation(url: self.testAddress, query: ["test": "test", "test2": "test2"], timeout: 30, method: .get, headers: ["test": "test", "test2": "test2"], body: Data()) { _, _, _, _ in
             testExpectation.fulfill()
@@ -75,7 +74,6 @@ class RequestOperationTests: XCTestCase {
     
     func testExecute() {
         let queue = Queuer(name: "RequestOperationTestExecute")
-        
         let testExpectation = expectation(description: "Execute")
         
         let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
@@ -92,7 +90,6 @@ class RequestOperationTests: XCTestCase {
     
     func testUnsupportedURL() {
         let queue = Queuer(name: "RequestOperationTestUnsupportedURL")
-        
         let testExpectation = expectation(description: "Unsupported URL")
         
         let requestOperation: RequestOperation = RequestOperation(url: "/path/to/something") { success, _, _, error in
@@ -109,7 +106,6 @@ class RequestOperationTests: XCTestCase {
     
     func testWrongURL() {
         let queue = Queuer(name: "RequestOperationTestWrongURL")
-        
         let testExpectation = expectation(description: "Wrong URL")
         
         let requestOperation: RequestOperation = RequestOperation(url: "👎") { success, _, _, error in
@@ -126,7 +122,6 @@ class RequestOperationTests: XCTestCase {
     
     func testWithoutCompletionHandler() {
         let queue = Queuer(name: "RequestOperationTestWithoutCompletionHandler")
-        
         let requestOperation: RequestOperation = RequestOperation(url: self.testAddress)
         requestOperation.addToQueue(queue)
         
@@ -136,7 +131,6 @@ class RequestOperationTests: XCTestCase {
     
     func testCancel() {
         let queue = Queuer(name: "RequestOperationTestCancel")
-        
         let testExpectation = expectation(description: "Cancel")
         
         let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
@@ -155,8 +149,7 @@ class RequestOperationTests: XCTestCase {
     
     func testPauseAndResume() {
         let queue = Queuer(name: "RequestOperationTestPauseAndResume")
-        
-        let testExpectation = expectation(description: "Pause and Resume Queuer")
+        let testExpectation = expectation(description: "Pause and Resume")
         var order: [Int] = []
         
         let requestOperation1 = RequestOperation(url: self.testAddress) { success, _, _, error in
