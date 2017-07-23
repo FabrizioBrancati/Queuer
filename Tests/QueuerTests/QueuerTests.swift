@@ -89,7 +89,6 @@ class QueuerTests: XCTestCase {
     
     func testAddOperationBlock() {
         let queue = Queuer(name: "QueuerTestAddOperationBlock")
-        
         let testExpectation = expectation(description: "Add Operation Block")
         
         queue.addOperation {
@@ -105,7 +104,6 @@ class QueuerTests: XCTestCase {
     
     func testAddOperation() {
         let queue = Queuer(name: "QueuerTestAddOperation")
-        
         let testExpectation = expectation(description: "Add Operation")
         
         let concurrentOperation = ConcurrentOperation {
@@ -122,7 +120,6 @@ class QueuerTests: XCTestCase {
     
     func testAddChainedOperations() {
         let queue = Queuer(name: "QueuerTestAddChainedOperations")
-        
         let testExpectation = expectation(description: "Add Chained Operations")
         var order: [Int] = []
         
@@ -146,7 +143,6 @@ class QueuerTests: XCTestCase {
     
     func testCancelAll() {
         let queue = Queuer(name: "QueuerTestCancellAll")
-        
         let testExpectation = expectation(description: "Cancell All Operations")
         var order: [Int] = []
         
@@ -172,8 +168,7 @@ class QueuerTests: XCTestCase {
     
     func testPauseAndResume() {
         let queue = Queuer(name: "QueuerTestPauseAndResume")
-        
-        let testExpectation = expectation(description: "Pause and Resume Queuer")
+        let testExpectation = expectation(description: "Pause and Resume")
         var order: [Int] = []
         
         let concurrentOperation1 = ConcurrentOperation {
