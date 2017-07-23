@@ -16,12 +16,13 @@
     <a href="#swift-4">Swift 4</a> &bull;
     <a href="#features">Features</a> &bull;
     <a href="#requirements">Requirements</a> &bull;
-    <a href="#communication">Communication</a> &bull;
-    <a href="#contributing">Contributing</a> &bull;
-    <a href="#installing-and-usage">Installing and Usage</a> &bull;
+    <a href="#installing">Installing</a> &bull;
+    <a href="#usage">Usage</a> &bull;
     <a href="#documentation">Documentation</a> &bull;
     <a href="#changelog">Changelog</a> &bull;
     <a href="#example">Example</a> &bull;
+    <a href="#communication">Communication</a> &bull;
+    <a href="#contributing">Contributing</a> &bull;
     <a href="#author">Author</a> &bull;
     <a href="#license">License</a>
 </p>
@@ -37,7 +38,8 @@ Features
 ========
 
 Queuer is a queue manager, build on top of [OperationQueue](https://developer.apple.com/documentation/foundation/operationqueue) and [Dispatch](https://developer.apple.com/documentation/dispatch) (AKA GCD).<br>
-It allows you to create any synchronous and asynchronous task easily, with just a few lines.<br>
+It allows you to create any synchronous and asynchronous task easily, with just a few lines.
+
 Here is the list of all the features:
 - [x] Works on all Swift compatible platforms (even Linux)
 - [x] Easy to use and well documented
@@ -61,21 +63,8 @@ Requirements
 | 3.1       | 8.3       | 1.0.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓]      |
 | 4.0       | 9.0       | ?.?.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓]      |
 
-Communication
-=============
-
-- If you need help, use Stack Overflow.
-- If you found a bug, open an issue.
-- If you have a feature request, open an issue.
-- If you want to contribute, see [Contributing](https://github.com/FabrizioBrancati/Queuer#contributing) section.
-
-Contributing
-============
-
-See [CONTRIBUTING.md](https://github.com/FabrizioBrancati/Queuer/blob/master/.github/CONTRIBUTING.md) file.
-
-Installing and Usage
-====================
+Installing
+==========
 
 See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) section to check Swift, Xcode, Queuer and OS versions.
 
@@ -123,7 +112,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 - Import the framework with ```import Queuer```
 - Enjoy!
 
-### Swift Package Manager (Linux)
+### Swift Package Manager
 - Create a **Package.swift** file in your **project directory** and write into:
 
     ```swift
@@ -141,6 +130,83 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 - Import the framework with ```import Queuer```
 - Enjoy!
 
+Usage
+=====
+
+### Shared Queuer
+```swift
+Queuer.shared.addOperation(operation)
+```
+
+### Custom Queue
+```swift
+let queue = Queuer(name: "MyCustomQueue")
+```
+
+### Create an Operation Block
+You have three methods to add an `Operation` block:
+- Directly on the `queue`(or `Queuer.shared`)
+    ```swift
+    queue.addOperation {
+        /// Your task here
+    }
+    ```
+- Creating a `ConcurrentOperation` with a block
+    ```swift
+    let concurrentOperation = ConcurrentOperation {
+        /// Your task here
+    }
+    queue.addOperation(concurrentOperation)
+    ```
+- Creating a `SynchronousOperation` with a block
+    ```swift
+    let synchronousOperation = SynchronousOperation {
+        /// Your task here
+    }
+    queue.addOperation(concurrentOperation)
+    ```
+
+> We will see how `ConcurrentOperation` and `SynchronousOperation` works later.
+
+### Chained Operations
+Chained Operations are operations that add a dependency each other.<br>
+They follow the given array order, for example: `[A, B, C] = A -> B -> C -> completionBlock`.
+```swift
+let concurrentOperation1 = ConcurrentOperation {
+    /// Your task 1 here
+}
+let concurrentOperation2 = ConcurrentOperation {
+    /// Your task 2 here
+}
+queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+    /// Your completion task here
+}
+```
+
+### Queue States
+- Cancel all operations
+    ```swift
+    queue.cancelAll()
+    ```
+- Pause
+    ```swift
+    queue.pause()
+    ```
+- Resume
+    ```swift
+    queue.resume()
+    ```
+- Wait until all operations are finished
+    ```swift
+    queue.waitUntilAllOperationsAreFinished()
+    ```
+    > This function means that the queue will blocks the current thread until all operations are finished.
+
+### Custom `ConcurrentOperation`
+You can create your custom `ConcurrentOperation` by subclassing it.<br>
+You must override `execute()` function and call the `finish()` function inside to notify that the task has completed.<br>
+Look at [RequestOperation.swift](https://github.com/FabrizioBrancati/Queuer/blob/master/Sources/Queuer/RequestOperation.swift) if you are looking for an example.
+
 Documentation
 =============
 
@@ -156,6 +222,19 @@ Example
 =======
 
 Open and run the QueuerExample project in Example folder in this repo with Xcode and see Queuer in action!
+
+Communication
+=============
+
+- If you need help, use Stack Overflow.
+- If you found a bug, open an issue.
+- If you have a feature request, open an issue.
+- If you want to contribute, see [Contributing](https://github.com/FabrizioBrancati/Queuer#contributing) section.
+
+Contributing
+============
+
+See [CONTRIBUTING.md](https://github.com/FabrizioBrancati/Queuer/blob/master/.github/CONTRIBUTING.md) file.
 
 Author
 ======
