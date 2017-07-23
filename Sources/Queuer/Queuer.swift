@@ -139,4 +139,9 @@ public class Queuer {
             (operation as? RequestOperation)?.resume()
         }
     }
+    
+    /// Blocks the current thread until all of the receiver’s queued and executing operations finish executing.
+    public func waitUntilAllOperationsAreFinished() {
+        self.queue.waitUntilAllOperationsAreFinished()
+    }
 }

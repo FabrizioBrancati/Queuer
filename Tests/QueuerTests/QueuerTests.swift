@@ -37,7 +37,8 @@ class QueuerTests: XCTestCase {
         ("testAddOperation", testAddOperation),
         ("testAddChainedOperations", testAddChainedOperations),
         ("testCancelAll", testCancelAll),
-        ("testPauseAndResume", testPauseAndResume)
+        ("testPauseAndResume", testPauseAndResume),
+        ("testWaitUnitlAllOperationsAreFinished", testWaitUnitlAllOperationsAreFinished)
     ]
     
     override func setUp() {
@@ -183,15 +184,48 @@ class QueuerTests: XCTestCase {
         }
         
         queue.pause()
-        testExpectation.fulfill()
         
         XCTAssertLessThanOrEqual(queue.operationCount, 3)
+        testExpectation.fulfill()
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
             XCTAssertFalse(queue.isExecuting)
             XCTAssertLessThanOrEqual(queue.operationCount, 3)
             XCTAssertNotEqual(order, [0, 1, 2])
+            
+            queue.resume()
+            XCTAssertTrue(queue.isExecuting)
+        })
+    }
+    
+    func testWaitUnitlAllOperationsAreFinished() {
+        let queue = Queuer(name: "QueuerTestWaitUnitlAllOperationsAreFinished")
+        let testExpectation = expectation(description: "Wait Unitl All Operations Are Finished")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation {
+            sleep(2)
+            order.append(0)
+        }
+        let concurrentOperation2 = ConcurrentOperation {
+            order.append(1)
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+        }
+        
+        queue.waitUntilAllOperationsAreFinished()
+        
+        XCTAssertEqual(order, [0, 1, 2])
+        XCTAssertLessThanOrEqual(queue.operationCount, 3)
+        testExpectation.fulfill()
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(queue.isExecuting)
+            XCTAssertLessThanOrEqual(queue.operationCount, 3)
+            XCTAssertEqual(order, [0, 1, 2])
             
             queue.resume()
             XCTAssertTrue(queue.isExecuting)
