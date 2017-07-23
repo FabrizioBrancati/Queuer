@@ -41,9 +41,10 @@ It allows you to create any synchronous and asynchronous task easily, with just 
 Here is the list of all the features:
 - [x] Works on all Swift compatible platforms (even Linux)
 - [x] Easy to use and well documented
+- [x] Well tested (currently 98%)
+- [x] Create an operation block
 - [x] Create a single operation
 - [x] Create chained operations
-- [x] Create an operation block
 - [x] Manage a centralized queue
 - [x] Create unlimited queue
 - [x] Declare how many concurrent operation a queue can handle

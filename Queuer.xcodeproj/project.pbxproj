@@ -13,6 +13,9 @@
 		4911EC8E1F23E7F300917525 /* SemaphoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */; };
 		4911EC8F1F23E7F300917525 /* SemaphoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */; };
 		4911EC901F23E7F300917525 /* SemaphoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */; };
+		4911EC9B1F24F2EC00917525 /* SynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC991F24F2E200917525 /* SynchronousOperationTests.swift */; };
+		4911EC9C1F24F2EC00917525 /* SynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC991F24F2E200917525 /* SynchronousOperationTests.swift */; };
+		4911EC9D1F24F2EC00917525 /* SynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4911EC991F24F2E200917525 /* SynchronousOperationTests.swift */; };
 		493F57021F21F040009EC8FA /* RequestOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57001F21F03C009EC8FA /* RequestOperationTests.swift */; };
 		493F57081F21F086009EC8FA /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57041F21F086009EC8FA /* ConcurrentOperation.swift */; };
 		493F57091F21F086009EC8FA /* Queuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493F57051F21F086009EC8FA /* Queuer.swift */; };
@@ -82,6 +85,7 @@
 /* Begin PBXFileReference section */
 		4911EC891F23E07900917525 /* URLBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URLBuilderTests.swift; path = Tests/QueuerTests/URLBuilderTests.swift; sourceTree = SOURCE_ROOT; };
 		4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SemaphoreTests.swift; path = Tests/QueuerTests/SemaphoreTests.swift; sourceTree = SOURCE_ROOT; };
+		4911EC991F24F2E200917525 /* SynchronousOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SynchronousOperationTests.swift; path = Tests/QueuerTests/SynchronousOperationTests.swift; sourceTree = SOURCE_ROOT; };
 		493F57001F21F03C009EC8FA /* RequestOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestOperationTests.swift; path = Tests/QueuerTests/RequestOperationTests.swift; sourceTree = SOURCE_ROOT; };
 		493F57041F21F086009EC8FA /* ConcurrentOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConcurrentOperation.swift; path = Sources/Queuer/ConcurrentOperation.swift; sourceTree = SOURCE_ROOT; };
 		493F57051F21F086009EC8FA /* Queuer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Queuer.swift; path = Sources/Queuer/Queuer.swift; sourceTree = SOURCE_ROOT; };
@@ -211,6 +215,7 @@
 				493F57001F21F03C009EC8FA /* RequestOperationTests.swift */,
 				4911EC891F23E07900917525 /* URLBuilderTests.swift */,
 				4911EC8D1F23E7F300917525 /* SemaphoreTests.swift */,
+				4911EC991F24F2E200917525 /* SynchronousOperationTests.swift */,
 				4995D7491F21E19C00A34E6E /* Info.plist */,
 			);
 			path = QueuerTests;
@@ -576,6 +581,7 @@
 				4911EC8F1F23E7F300917525 /* SemaphoreTests.swift in Sources */,
 				493F574C1F2298AD009EC8FA /* ConcurrentOperationTests.swift in Sources */,
 				4911EC8B1F23E07900917525 /* URLBuilderTests.swift in Sources */,
+				4911EC9C1F24F2EC00917525 /* SynchronousOperationTests.swift in Sources */,
 				493F57501F229CEA009EC8FA /* QueuerTests.swift in Sources */,
 				493F573E1F22287E009EC8FA /* RequestOperationTests.swift in Sources */,
 			);
@@ -601,6 +607,7 @@
 				4911EC8E1F23E7F300917525 /* SemaphoreTests.swift in Sources */,
 				493F574B1F2298AD009EC8FA /* ConcurrentOperationTests.swift in Sources */,
 				4911EC8A1F23E07900917525 /* URLBuilderTests.swift in Sources */,
+				4911EC9D1F24F2EC00917525 /* SynchronousOperationTests.swift in Sources */,
 				493F574F1F229CEA009EC8FA /* QueuerTests.swift in Sources */,
 				493F573F1F222A63009EC8FA /* RequestOperationTests.swift in Sources */,
 			);
@@ -639,6 +646,7 @@
 				4911EC901F23E7F300917525 /* SemaphoreTests.swift in Sources */,
 				493F574D1F2298AD009EC8FA /* ConcurrentOperationTests.swift in Sources */,
 				4911EC8C1F23E07900917525 /* URLBuilderTests.swift in Sources */,
+				4911EC9B1F24F2EC00917525 /* SynchronousOperationTests.swift in Sources */,
 				493F57511F229CEA009EC8FA /* QueuerTests.swift in Sources */,
 				493F57021F21F040009EC8FA /* RequestOperationTests.swift in Sources */,
 			);

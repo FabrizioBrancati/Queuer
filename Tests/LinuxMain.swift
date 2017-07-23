@@ -4,7 +4,12 @@ import XCTest
 @testable import QueuerTests
 
 XCTMain([
-    testCase(Queuer.allTests)
+    testCase(ConcurrentOperationTests.allTests),
+    testCase(QueuerTests.allTests),
+    testCase(RequestOperationTests.allTests),
+    testCase(URLBuilderTests.allTests),
+    testCase(SemaphoreTests.allTests),
+    testCase(SynchronousOperationTests.allTests)
 ])
 
 #endif
