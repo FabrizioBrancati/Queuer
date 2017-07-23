@@ -33,6 +33,7 @@ class URLBuilderTests: XCTestCase {
         ("testWithoutParameters", testWithoutParameters),
         ("testWithSingleParameter", testBuildURLWithSingleParameter),
         ("testWithMultipleParameters", testWithMultipleParameters),
+        ("testWithEmojiCharctersInParameters", testWithEmojiCharctersInParameters),
         ("testWithStrangeCharctersInParameters", testWithStrangeCharctersInParameters)
     ]
     
@@ -62,9 +63,20 @@ class URLBuilderTests: XCTestCase {
         XCTAssertEqual(query, "?test=test&test2=test2")
     }
     
-    func testWithStrangeCharctersInParameters() {
-        let query = URLBuilder.build(query: ["test": "test", "test👎": "test👎"])
+    func testWithEmojiCharctersInParameters() {
+        let query = URLBuilder.build(query: ["test": "test", "test👍": "test👍"])
         
-        XCTAssertEqual(query, "?test=test&test%F0%9F%91%8E=test%F0%9F%91%8E")
+        XCTAssertEqual(query, "?test=test&test%F0%9F%91%8D=test%F0%9F%91%8D")
+    }
+    
+    /// Thanks to [Stack Overflow](https://stackoverflow.com/a/33558934/4032046).
+    func testWithStrangeCharctersInParameters() {
+        guard let string = String(bytes: [0xD8, 0x00] as [UInt8], encoding: String.Encoding.utf16BigEndian) else {
+            XCTFail()
+            return
+        }
+        
+        let query = URLBuilder.build(query: [string: "test", "test👍": string])
+        XCTAssertEqual(query, "")
     }
 }

@@ -108,7 +108,7 @@ class RequestOperationTests: XCTestCase {
         let queue = Queuer(name: "RequestOperationTestWrongURL")
         let testExpectation = expectation(description: "Wrong URL")
         
-        let requestOperation: RequestOperation = RequestOperation(url: "👎") { success, _, _, error in
+        let requestOperation: RequestOperation = RequestOperation(url: "👍") { success, _, _, error in
             XCTAssertEqual(error as? RequestOperation.RequestError, RequestOperation.RequestError.urlError)
             XCTAssertFalse(success)
             testExpectation.fulfill()
