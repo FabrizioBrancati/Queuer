@@ -27,8 +27,32 @@
 import Foundation
 
 public class SynchronousOperation: ConcurrentOperation {
+    let semaphore = Semaphore()
+    
     /// Set the Operation as synchronous.
     public override var isAsynchronous: Bool {
         return false
+    }
+    
+    /// Adds the Operation to `shared` Queuer.
+    public override func addToSharedQueuer() {
+        super.addToSharedQueuer()
+        
+        self.semaphore.wait()
+    }
+    
+    /// Adds the Operation to the custom queue.
+    ///
+    /// - Parameter queue: Custom queue where the Operation will be added.
+    public override func addToQueue(_ queue: Queuer) {
+        super.addToQueue(queue)
+        
+        self.semaphore.wait()
+    }
+    
+    /// Notify the completion of sync task and hence the completion of the operation.
+    /// Must be called when the Operation is finished.
+    public override func finish() {
+        self.semaphore.continue()
     }
 }
