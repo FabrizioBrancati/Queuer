@@ -35,10 +35,10 @@ internal struct URLBuilder {
     internal static func build(query: [String: String]) -> String {
         var finalQuery: String = ""
         for (index, parameter) in query.enumerated() {
-            finalQuery += index == 0 ? "?" : "&"
             guard let parameterKey = parameter.key.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let parameterValue = parameter.value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
                 continue
             }
+            finalQuery += index == 0 ? "?" : "&"
             finalQuery += parameterKey + "=" + parameterValue
         }
         return finalQuery
