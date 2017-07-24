@@ -95,13 +95,14 @@ class SynchronousOperationTests: XCTestCase {
     
     func testCancel() {
         let queue = Queuer(name: "SynchronousOperationTestCancel")
+        queue.maxConcurrentOperationCount = 1
         let testExpectation = expectation(description: "Cancel")
         var testString = ""
         
-        let cancelAllTime = DispatchTime.now() + .seconds(2)
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: cancelAllTime) {
+        let deadline = DispatchTime.now() + .seconds(2)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
             queue.cancelAll()
-            Thread.sleep(forTimeInterval: 2)
+            testExpectation.fulfill()
         }
         
         let synchronousOperation1 = SynchronousOperation {
@@ -110,8 +111,6 @@ class SynchronousOperationTests: XCTestCase {
         }
         let synchronousOperation2 = SynchronousOperation {
             testString = "Tested2"
-            
-            testExpectation.fulfill()
         }
         synchronousOperation1.addToQueue(queue)
         synchronousOperation2.addToQueue(queue)
