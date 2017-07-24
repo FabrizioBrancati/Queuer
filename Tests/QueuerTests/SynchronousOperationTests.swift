@@ -48,7 +48,7 @@ class SynchronousOperationTests: XCTestCase {
         
         let synchronousOperation1 = SynchronousOperation {
             testString = "Tested1"
-            sleep(2)
+            Thread.sleep(forTimeInterval: 2)
         }
         let synchronousOperation2 = SynchronousOperation {
             testString = "Tested2"
@@ -74,7 +74,7 @@ class SynchronousOperationTests: XCTestCase {
         
         let synchronousOperation1 = SynchronousOperation {
             testString = "Tested1"
-            sleep(2)
+            Thread.sleep(forTimeInterval: 2)
         }
         let synchronousOperation2 = SynchronousOperation {
             testString = "Tested2"

@@ -173,7 +173,7 @@ class QueuerTests: XCTestCase {
         var order: [Int] = []
         
         let concurrentOperation1 = ConcurrentOperation {
-            sleep(2)
+            Thread.sleep(forTimeInterval: 2)
             order.append(0)
         }
         let concurrentOperation2 = ConcurrentOperation {
@@ -205,7 +205,7 @@ class QueuerTests: XCTestCase {
         var order: [Int] = []
         
         let concurrentOperation1 = ConcurrentOperation {
-            sleep(2)
+            Thread.sleep(forTimeInterval: 2)
             order.append(0)
         }
         let concurrentOperation2 = ConcurrentOperation {

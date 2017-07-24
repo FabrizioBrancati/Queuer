@@ -55,7 +55,7 @@ class SemaphoreTests: XCTestCase {
             XCTAssertNil(error)
             XCTAssertTrue(success)
             testString = "Tested"
-            sleep(2)
+            Thread.sleep(forTimeInterval: 2)
             semaphore.continue()
         }
         requestOperation.addToQueue(queue)
@@ -78,7 +78,7 @@ class SemaphoreTests: XCTestCase {
             XCTAssertNil(error)
             XCTAssertTrue(success)
             testString = "Tested"
-            sleep(2)
+            Thread.sleep(forTimeInterval: 2)
             testExpectation.fulfill()
         }
         requestOperation.addToQueue(queue)
