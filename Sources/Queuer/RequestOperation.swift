@@ -105,7 +105,8 @@ public class RequestOperation: ConcurrentOperation {
     ///   - query: Request query.
     ///   - timeout: Request timeout.
     ///   - method: Request HTTP method.
-    ///   - cachePolicy: Request cache policy. Use static var `globalCachePolicy` to set a global cache policy for all the RequestOperations.
+    ///   - cachePolicy: Request cache policy. Use static var `globalCachePolicy` 
+    ///                  to set a global cache policy for all the RequestOperations.
     ///   - headers: Request headers.
     ///   - body: Request body.
     ///   - completionHandler: Request completion handler.
@@ -162,7 +163,8 @@ public class RequestOperation: ConcurrentOperation {
         
         /// Create the task.
         self.task = self.session.dataTask(with: request) { data, response, error in
-            /// Check if the Operation has a completion handler, has an HTTP response and has not been canceled.
+            /// Check if the Operation has a completion handler, has an HTTP response
+            /// and has not been canceled.
             if let completionHandler = self.completionHandler {
                 if let httpResponse = response as? HTTPURLResponse {
                     var error: Error? = error

@@ -90,7 +90,8 @@ public class Queuer {
     ///
     /// - Parameters:
     ///   - operations: Operations Array.
-    ///   - completionBlock: Completion block to be exectuted when all Operations are finished.
+    ///   - completionBlock: Completion block to be exectuted when all Operations 
+    ///                      are finished.
     public func addChainedOperations(_ operations: [Operation], completionBlock: @escaping () -> Void) {
         let completionOperation: BlockOperation = BlockOperation(block: completionBlock)
         
@@ -140,7 +141,8 @@ public class Queuer {
         }
     }
     
-    /// Blocks the current thread until all of the receiver’s queued and executing operations finish executing.
+    /// Blocks the current thread until all of the receiver’s queued and executing
+    /// operations finish executing.
     public func waitUntilAllOperationsAreFinished() {
         self.queue.waitUntilAllOperationsAreFinished()
     }
