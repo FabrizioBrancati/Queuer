@@ -134,23 +134,27 @@ Usage
 =====
 
 ### Shared Queuer
+
 ```swift
 Queuer.shared.addOperation(operation)
 ```
 
 ### Custom Queue
+
 ```swift
 let queue = Queuer(name: "MyCustomQueue")
 ```
 
 ### Create an Operation Block
 You have three methods to add an `Operation` block:
+
 - Directly on the `queue`(or `Queuer.shared`):
     ```swift
     queue.addOperation {
         /// Your task here
     }
     ```
+
 - Creating a `ConcurrentOperation` with a block:
     ```swift
     let concurrentOperation = ConcurrentOperation {
@@ -158,6 +162,7 @@ You have three methods to add an `Operation` block:
     }
     queue.addOperation(concurrentOperation)
     ```
+    
 - Creating a `SynchronousOperation` with a block:
     ```swift
     let synchronousOperation = SynchronousOperation {
@@ -281,7 +286,7 @@ Where:
 - `error` is an `Error` instance with the request error.
   May be `nil`.
 
-It can be `pause`d, `resume`d and `cancel`led.
+It can be `pause`d, `resume`d, `cancel`led and chained with other `Operation`s.
 
 Documentation
 =============
