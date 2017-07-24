@@ -21,7 +21,6 @@
     <a href="#usage">Usage</a> &bull;
     <a href="#documentation">Documentation</a> &bull;
     <a href="#changelog">Changelog</a> &bull;
-    <a href="#example">Example</a> &bull;
     <a href="#communication">Communication</a> &bull;
     <a href="#contributing">Contributing</a> &bull;
     <a href="#author">Author</a> &bull;
@@ -299,11 +298,6 @@ Changelog
 =========
 
 To see what has changed in recent versions of Queuer, see the **[CHANGELOG.md](https://github.com/FabrizioBrancati/Queuer/blob/master/CHANGELOG.md)** file.
-
-Example
-=======
-
-Open and run the QueuerExample project in Example folder in this repo with Xcode and see Queuer in action!
 
 Communication
 =============
