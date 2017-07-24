@@ -34,11 +34,10 @@ public class SynchronousOperation: ConcurrentOperation {
         return false
     }
     
-    /// Adds the Operation to `shared` Queuer.
-    public override func addToSharedQueuer() {
-        super.addToSharedQueuer()
-        
-        self.semaphore.wait()
+    /// Notify the completion of sync task and hence the completion of the operation.
+    /// Must be called when the Operation is finished.
+    public override func finish() {
+        self.semaphore.continue()
     }
     
     /// Advises the operation object that it should stop executing its task.
@@ -48,18 +47,9 @@ public class SynchronousOperation: ConcurrentOperation {
         self.semaphore.continue()
     }
     
-    /// Adds the Operation to the custom queue.
-    ///
-    /// - Parameter queue: Custom queue where the Operation will be added.
-    public override func addToQueue(_ queue: Queuer) {
-        super.addToQueue(queue)
+    public override func execute() {
+        super.execute()
         
         self.semaphore.wait()
-    }
-    
-    /// Notify the completion of sync task and hence the completion of the operation.
-    /// Must be called when the Operation is finished.
-    public override func finish() {
-        self.semaphore.continue()
     }
 }

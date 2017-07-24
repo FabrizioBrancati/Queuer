@@ -30,7 +30,8 @@ import XCTest
 class SynchronousOperationTests: XCTestCase {
     static let allTests = [
         ("testSynchronousOperation", testSynchronousOperation),
-        ("testSynchronousOperationOnSharedQueuer", testSynchronousOperationOnSharedQueuer)
+        ("testSynchronousOperationOnSharedQueuer", testSynchronousOperationOnSharedQueuer),
+        ("testCancel", testCancel)
     ]
     
     override func setUp() {
@@ -48,9 +49,9 @@ class SynchronousOperationTests: XCTestCase {
         
         let synchronousOperation1 = SynchronousOperation {
             testString = "Tested1"
-            Thread.sleep(forTimeInterval: 2)
         }
         let synchronousOperation2 = SynchronousOperation {
+            Thread.sleep(forTimeInterval: 2)
             testString = "Tested2"
             
             testExpectation.fulfill()
@@ -60,7 +61,6 @@ class SynchronousOperationTests: XCTestCase {
         
         XCTAssertFalse(synchronousOperation1.isAsynchronous)
         XCTAssertFalse(synchronousOperation2.isAsynchronous)
-        XCTAssertEqual(testString, "Tested2")
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
@@ -74,9 +74,9 @@ class SynchronousOperationTests: XCTestCase {
         
         let synchronousOperation1 = SynchronousOperation {
             testString = "Tested1"
-            Thread.sleep(forTimeInterval: 2)
         }
         let synchronousOperation2 = SynchronousOperation {
+            Thread.sleep(forTimeInterval: 2)
             testString = "Tested2"
             
             testExpectation.fulfill()
@@ -86,11 +86,42 @@ class SynchronousOperationTests: XCTestCase {
         
         XCTAssertFalse(synchronousOperation1.isAsynchronous)
         XCTAssertFalse(synchronousOperation2.isAsynchronous)
-        XCTAssertEqual(testString, "Tested2")
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
             XCTAssertEqual(testString, "Tested2")
+        })
+    }
+    
+    func testCancel() {
+        let queue = Queuer(name: "SynchronousOperationTestCancel")
+        let testExpectation = expectation(description: "Cancel")
+        var testString = ""
+        
+        let cancelAllTime = DispatchTime.now() + .seconds(2)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: cancelAllTime) {
+            queue.cancelAll()
+            Thread.sleep(forTimeInterval: 2)
+        }
+        
+        let synchronousOperation1 = SynchronousOperation {
+            testString = "Tested1"
+            Thread.sleep(forTimeInterval: 4)
+        }
+        let synchronousOperation2 = SynchronousOperation {
+            testString = "Tested2"
+            
+            testExpectation.fulfill()
+        }
+        synchronousOperation1.addToQueue(queue)
+        synchronousOperation2.addToQueue(queue)
+        
+        XCTAssertFalse(synchronousOperation1.isAsynchronous)
+        XCTAssertFalse(synchronousOperation2.isAsynchronous)
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString, "Tested1")
         })
     }
 }
