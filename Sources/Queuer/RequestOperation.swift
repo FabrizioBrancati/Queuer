@@ -196,12 +196,16 @@ public class RequestOperation: ConcurrentOperation {
     }
     
     /// Suspends the request operation.
-    public func pause() {
+    public override func pause() {
+        super.pause()
+        
         self.task?.suspend()
     }
     
     /// Resumes the request operation.
-    public func resume() {
+    public override func resume() {
+        super.resume()
+        
         self.task?.resume()
     }
 }

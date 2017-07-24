@@ -101,6 +101,14 @@ public class ConcurrentOperation: Operation {
         _finished = true
     }
     
+    /// Pause the current Operation, if it's supported.
+    /// Must be overridend by subclass to get a custom pause action.
+    public func pause() {}
+    
+    /// Resume the current Operation, if it's supported.
+    /// Must be overridend by subclass to get a custom resume action.
+    public func resume() {}
+    
     /// Adds the Operation to `shared` Queuer.
     public func addToSharedQueuer() {
         Queuer.shared.addOperation(self)
