@@ -95,21 +95,23 @@ public class Queuer {
     public func addChainedOperations(_ operations: [Operation], completionBlock: @escaping () -> Void) {
         let completionOperation: BlockOperation = BlockOperation(block: completionBlock)
         
-        if !operations.isEmpty {
-            var previousOperation: Operation?
-            
-            for operation: Operation in operations {
-                if let previousOperation = previousOperation {
-                    operation.addDependency(previousOperation)
-                }
-                
-                previousOperation = operation
-                
-                self.addOperation(operation)
+        guard !operations.isEmpty else {
+            return
+        }
+        
+        var previousOperation: Operation?
+        
+        for operation: Operation in operations {
+            if let previousOperation = previousOperation {
+                operation.addDependency(previousOperation)
             }
             
-            completionOperation.addDependency(operations[operations.count - 1])
+            previousOperation = operation
+            
+            self.addOperation(operation)
         }
+        
+        completionOperation.addDependency(operations[operations.count - 1])
         
         self.addOperation(completionOperation)
     }
