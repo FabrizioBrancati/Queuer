@@ -274,7 +274,17 @@ let requestOperation: RequestOperation = RequestOperation(url: self.testAddress)
 }
 requestOperation.addToQueue(queue)
 ```
-Where:
+Allowed parameters in `RequestOperation` `init` function:
+- `url` is a `String` representing the request URL
+- `query` is `Dictionary` representing the request query parameters to be added to the `url` with `?` and `&` characters
+- `timeout` is the request timeout
+- `method` is the request method, you can choose to one of: `connect`, `delete`, `get`, `head`, `options`, `patch`, `post` and `put`
+- `cachePolicy` is the request cache policy, referrer to [CachePolicy documentation](https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy)
+- `headers` is a `Dictionary` representing the request headers
+- `body` is a `Data` representing the request body
+- `completionHandler` is the request response handler
+
+Response handler variables:
 - `success` is a `Bool` indicating if the request was successful.
   It's successful if its status is between 200 and 399, it wasn't cancelled and did't get any other network error.
 - `respose` is an `HTTPURLResponse` instance.
