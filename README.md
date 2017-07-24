@@ -215,6 +215,14 @@ You can create your custom `ConcurrentOperation` by subclassing it.<br>
 You must override `execute()` function and call the `finish()` function inside it, when the task has finished its job to notify the queue.<br>
 Look at [RequestOperation.swift](https://github.com/FabrizioBrancati/Queuer/blob/master/Sources/Queuer/RequestOperation.swift) if you are looking for an example.
 
+For convenience it has an `init` function with a completion block:
+```swift
+let concurrentOperation = ConcurrentOperation {
+    /// Your task here
+}
+concurrentOperation.addToQueue(queue)
+```
+
 ### Synchronous Task
 There are three methods to create synchronous tasks or even queue:
 - Setting `maxConcurrentOperationCount` of the queue to `1`.<br>
@@ -222,11 +230,36 @@ There are three methods to create synchronous tasks or even queue:
 - Using a `Semaphore` and waiting until a task has finished its job
 - Using a `SynchronousOperation`.<br>
   It's a subclass of `ConcurrentOperation` that handles synchronous tasks.<br>
-  It's now so awesome as it seems to be and is always better to create an asynchronous task, but some times it may be useful
+  It's not awesome as it seems to be and is always better to create an asynchronous task, but some times it may be useful
+
+For convenience it has an `init` function with a completion block:
+```swift
+let synchronousOperation = SynchronousOperation {
+  /// Your task here
+}
+synchronousOperation.addToQueue(queue)
+```
 
 ### Semaphore
 A `Semaphore` is a struct that uses the GDC's `DispatchSemaphore` to create a semaphore on the function and wait until it finish its job.<br>
 I recommend you to use a `defer { semaphore.continue() }` right after the `Semaphore` creation and `wait()` call.
+
+```swift
+let semaphore = Semaphore()
+semaphore.continue()
+/// Your task here
+semaphore.wait()
+```
+
+It's more useful if used inside an asynchronous task:
+```swift
+let concurrentOperation = ConcurrentOperation {
+    /// Your task here
+    semaphore.continue()
+}
+concurrentOperation.addToQueue(queue)
+semaphore.wait()
+```
 
 Documentation
 =============
