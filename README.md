@@ -5,6 +5,7 @@
 [![codebeat](https://codebeat.co/badges/ba18628d-f16b-4cd4-81f7-f75e81d97b38)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
+[![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 <br>
 [![Language](https://img.shields.io/badge/language-Swift%203.1%20/%204.0-orange.svg)](https://swift.org/)
@@ -162,7 +163,7 @@ You have three methods to add an `Operation` block:
     }
     queue.addOperation(concurrentOperation)
     ```
-    
+
 - Creating a `SynchronousOperation` with a block:
     ```swift
     let synchronousOperation = SynchronousOperation {
