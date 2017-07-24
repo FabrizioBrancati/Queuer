@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.org/FabrizioBrancati/Queuer)
 [![Codecov](https://codecov.io/gh/FabrizioBrancati/Queuer/branch/master/graph/badge.svg)](https://codecov.io/gh/FabrizioBrancati/Queuer)
-[![codebeat](https://codebeat.co/badges/ba18628d-f16b-4cd4-81f7-f75e81d97b38)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer)
+[![codebeat](https://codebeat.co/badges/486633d3-3dfd-4115-9046-a4077bc32c56)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
 [![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
@@ -274,7 +274,17 @@ let requestOperation: RequestOperation = RequestOperation(url: self.testAddress)
 }
 requestOperation.addToQueue(queue)
 ```
-Where:
+Allowed parameters in `RequestOperation` `init` function:
+- `url` is a `String` representing the request URL
+- `query` is `Dictionary` representing the request query parameters to be added to the `url` with `?` and `&` characters
+- `timeout` is the request timeout
+- `method` is the request method, you can choose to one of: `connect`, `delete`, `get`, `head`, `options`, `patch`, `post` and `put`
+- `cachePolicy` is the request cache policy, referrer to [CachePolicy documentation](https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy)
+- `headers` is a `Dictionary` representing the request headers
+- `body` is a `Data` representing the request body
+- `completionHandler` is the request response handler
+
+Response handler variables:
 - `success` is a `Bool` indicating if the request was successful.
   It's successful if its status is between 200 and 399, it wasn't cancelled and did't get any other network error.
 - `respose` is an `HTTPURLResponse` instance.
