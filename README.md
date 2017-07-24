@@ -143,7 +143,7 @@ Queuer.shared.addOperation(operation)
 let queue = Queuer(name: "MyCustomQueue")
 ```
 
-### Create an Operation Block
+### Create a Task Block
 You have three methods to add an `Operation` block:
 - Directly on the `queue`(or `Queuer.shared`)
     ```swift
@@ -168,7 +168,7 @@ You have three methods to add an `Operation` block:
 
 > We will see how `ConcurrentOperation` and `SynchronousOperation` works later.
 
-### Chained Operations
+### Chained Tasks
 Chained Operations are operations that add a dependency each other.<br>
 They follow the given array order, for example: `[A, B, C] = A -> B -> C -> completionBlock`.
 ```swift
@@ -184,28 +184,49 @@ queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
 ```
 
 ### Queue States
-- Cancel all operations
+- Cancel all operations in queue
     ```swift
     queue.cancelAll()
     ```
-- Pause
+- Pause queue
     ```swift
     queue.pause()
     ```
-- Resume
+    > By calling `pause()` you will not be sure that every operation will be paused.
+      If the Operation is already started it will not be on pause until it's a custom Operation that overrides `pause()` function or is a `RequestOperation`.
+
+- Resume queue
     ```swift
     queue.resume()
     ```
+    > To have a complete `pause` and `resume` states you must create a custom Operation that overrides `pause()` and `resume()` function or use a `RequestOperation`.
+
 - Wait until all operations are finished
     ```swift
     queue.waitUntilAllOperationsAreFinished()
     ```
     > This function means that the queue will blocks the current thread until all operations are finished.
 
-### Custom `ConcurrentOperation`
+### Asynchronous Task
+`ConcurrentOperation` is a class created to be subclassed.
+It allows synchronous and asynchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
+
 You can create your custom `ConcurrentOperation` by subclassing it.<br>
-You must override `execute()` function and call the `finish()` function inside to notify that the task has completed.<br>
+You must override `execute()` function and call the `finish()` function inside it, when the task has finished its job to notify the queue.<br>
 Look at [RequestOperation.swift](https://github.com/FabrizioBrancati/Queuer/blob/master/Sources/Queuer/RequestOperation.swift) if you are looking for an example.
+
+### Synchronous Task
+There are three methods to create synchronous tasks or even queue:
+- Setting `maxConcurrentOperationCount` of the queue to `1`.<br>
+  By setting that property to `1` you will be sure that only one task at time will be executed
+- Using a `Semaphore` and waiting until a task has finished its job
+- Using a `SynchronousOperation`.<br>
+  It's a subclass of `ConcurrentOperation` that handles synchronous tasks.<br>
+  It's now so awesome as it seems to be and is always better to create an asynchronous task, but some times it may be useful
+
+### Semaphore
+A `Semaphore` is a struct that uses the GDC's `DispatchSemaphore` to create a semaphore on the function and wait until it finish its job.<br>
+I recommend you to use a `defer { semaphore.continue() }` right after the `Semaphore` creation and `wait()` call.
 
 Documentation
 =============
