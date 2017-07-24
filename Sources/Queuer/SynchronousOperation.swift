@@ -41,6 +41,13 @@ public class SynchronousOperation: ConcurrentOperation {
         self.semaphore.wait()
     }
     
+    /// Advises the operation object that it should stop executing its task.
+    public override func cancel() {
+        super.cancel()
+        
+        self.semaphore.continue()
+    }
+    
     /// Adds the Operation to the custom queue.
     ///
     /// - Parameter queue: Custom queue where the Operation will be added.
