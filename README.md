@@ -247,7 +247,7 @@ Open and run the QueuerExample project in Example folder in this repo with Xcode
 Communication
 =============
 
-- If you need help, use Stack Overflow.
+- If you need help, open an issue.
 - If you found a bug, open an issue.
 - If you have a feature request, open an issue.
 - If you want to contribute, see [Contributing](https://github.com/FabrizioBrancati/Queuer#contributing) section.

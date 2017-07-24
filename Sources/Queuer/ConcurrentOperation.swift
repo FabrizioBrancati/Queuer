@@ -31,11 +31,6 @@ public class ConcurrentOperation: Operation {
     /// Operation's execution block.
     public var executionBlock: (() -> Void)?
     
-    /// Creating a ConcurrentOperation without even an execution block is now allowed.
-    private override init() {
-        super.init()
-    }
-    
     /// Creates the Operation with an execution block.
     ///
     /// - Parameter executionBlock: Execution block.
