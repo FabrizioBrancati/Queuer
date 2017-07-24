@@ -59,6 +59,8 @@ public class RequestOperation: ConcurrentOperation {
     /// Request closure alias.
     public typealias RequestClosure = (Bool, HTTPURLResponse?, Data?, Error?) -> Void
     
+    /// Global cache policy for all request.
+    /// Also cache policy can be set per request.
     public static var globalCachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
     
     /// Request task.

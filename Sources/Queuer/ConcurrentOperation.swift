@@ -26,7 +26,7 @@
 
 import Foundation
 
-/// Concurrent Operation class.
+/// It allows asynchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
 public class ConcurrentOperation: Operation {
     /// Operation's execution block.
     public var executionBlock: (() -> Void)?
