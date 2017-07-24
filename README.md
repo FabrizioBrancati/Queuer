@@ -143,22 +143,22 @@ Queuer.shared.addOperation(operation)
 let queue = Queuer(name: "MyCustomQueue")
 ```
 
-### Create a Task Block
+### Create an Operation Block
 You have three methods to add an `Operation` block:
-- Directly on the `queue`(or `Queuer.shared`)
+- Directly on the `queue`(or `Queuer.shared`):
     ```swift
     queue.addOperation {
         /// Your task here
     }
     ```
-- Creating a `ConcurrentOperation` with a block
+- Creating a `ConcurrentOperation` with a block:
     ```swift
     let concurrentOperation = ConcurrentOperation {
         /// Your task here
     }
     queue.addOperation(concurrentOperation)
     ```
-- Creating a `SynchronousOperation` with a block
+- Creating a `SynchronousOperation` with a block:
     ```swift
     let synchronousOperation = SynchronousOperation {
         /// Your task here
@@ -168,7 +168,7 @@ You have three methods to add an `Operation` block:
 
 > We will see how `ConcurrentOperation` and `SynchronousOperation` works later.
 
-### Chained Tasks
+### Chained Operations
 Chained Operations are operations that add a dependency each other.<br>
 They follow the given array order, for example: `[A, B, C] = A -> B -> C -> completionBlock`.
 ```swift
@@ -184,30 +184,30 @@ queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
 ```
 
 ### Queue States
-- Cancel all operations in queue
+- Cancel all operations in queue:
     ```swift
     queue.cancelAll()
     ```
-- Pause queue
+- Pause queue:
     ```swift
     queue.pause()
     ```
     > By calling `pause()` you will not be sure that every operation will be paused.
       If the Operation is already started it will not be on pause until it's a custom Operation that overrides `pause()` function or is a `RequestOperation`.
 
-- Resume queue
+- Resume queue:
     ```swift
     queue.resume()
     ```
     > To have a complete `pause` and `resume` states you must create a custom Operation that overrides `pause()` and `resume()` function or use a `RequestOperation`.
 
-- Wait until all operations are finished
+- Wait until all operations are finished:
     ```swift
     queue.waitUntilAllOperationsAreFinished()
     ```
     > This function means that the queue will blocks the current thread until all operations are finished.
 
-### Asynchronous Task
+### Asynchronous Operation
 `ConcurrentOperation` is a class created to be subclassed.
 It allows synchronous and asynchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
 
@@ -223,14 +223,14 @@ let concurrentOperation = ConcurrentOperation {
 concurrentOperation.addToQueue(queue)
 ```
 
-### Synchronous Task
+### Synchronous Operation
 There are three methods to create synchronous tasks or even queue:
 - Setting `maxConcurrentOperationCount` of the queue to `1`.<br>
-  By setting that property to `1` you will be sure that only one task at time will be executed
-- Using a `Semaphore` and waiting until a task has finished its job
+  By setting that property to `1` you will be sure that only one task at time will be executed.
+- Using a `Semaphore` and waiting until a task has finished its job.
 - Using a `SynchronousOperation`.<br>
   It's a subclass of `ConcurrentOperation` that handles synchronous tasks.<br>
-  It's not awesome as it seems to be and is always better to create an asynchronous task, but some times it may be useful
+  It's not awesome as it seems to be and is always better to create an asynchronous task, but some times it may be useful.
 
 For convenience it has an `init` function with a completion block:
 ```swift
@@ -260,6 +260,28 @@ let concurrentOperation = ConcurrentOperation {
 concurrentOperation.addToQueue(queue)
 semaphore.wait()
 ```
+
+### Request Operation
+`RequestOperation` allows you to easily create a network request and add it to a queue:
+```swift
+let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, response, data, error in
+
+}
+requestOperation.addToQueue(queue)
+```
+Where:
+- `success` is a `Bool` indicating if the request was successful.
+  It's successful if its status is between 200 and 399, it wasn't cancelled and did't get any other network error.
+- `respose` is an `HTTPURLResponse` instance.
+  It contains all the response headers and the status code.
+  May be `nil`.
+- `data` is a `Data` instance with the request body.
+  You must convert, to a JSON or String in example, it in order to use.
+  May be `nil`.
+- `error` is an `Error` instance with the request error.
+  May be `nil`.
+
+It can be `pause`d, `resume`d and `cancel`led.
 
 Documentation
 =============
