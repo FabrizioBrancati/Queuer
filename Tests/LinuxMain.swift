@@ -6,7 +6,6 @@ import XCTest
 XCTMain([
     testCase(ConcurrentOperationTests.allTests),
     testCase(QueuerTests.allTests),
-    testCase(RequestOperationTests.allTests),
     testCase(URLBuilderTests.allTests),
     testCase(SemaphoreTests.allTests),
     testCase(SynchronousOperationTests.allTests)
