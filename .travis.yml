@@ -4,7 +4,6 @@ env:
     - MACOS_SCHEME="Queuer macOS"
     - TVOS_SCHEME="Queuer tvOS"
     - WATCHOS_SCHEME="Queuer watchOS"
-    - EXAMPLE_SCHEME="Queuer Example"
 
 matrix:
   include:
@@ -63,10 +62,6 @@ matrix:
       language: objective-c
       osx_image: xcode8.3
       env: PROJ="Queuer.xcodeproj"                DESTINATION="arch=x86_64"                      SCHEME="$MACOS_SCHEME"   RUN_TESTS="YES" LINT="NO"  CODECOV="NO"  EXAMPLE="NO"
-    - os: osx
-      language: objective-c
-      osx_image: xcode8.3
-      env: PROJ="Example/QueuerExample.xcodeproj" DESTINATION="OS=10.3.1,name=iPhone 7 Plus"     SCHEME="$EXAMPLE_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"  EXAMPLE="YES"
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -91,7 +86,7 @@ script:
 
   - if [ "$SPM" == "YES" ]; then
       swift build;
-      swift test;
+      swift test --parallel;
     fi
 
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -106,10 +101,6 @@ script:
       xcodebuild clean build -project "$PROJ" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release | xcpretty;
     fi
 
-  - if [ "$EXAMPLE" == "YES" ]; then
-      xcodebuild clean build -project "$PROJ" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO | xcpretty;
-    fi
-
   - if [ "$LINT" == "YES" ]; then
       swiftlint;
       pod lib lint --verbose;
@@ -118,5 +109,5 @@ script:
 
 after_success:
   - if [ "$CODECOV" == "YES" ]; then
-      bash <(curl -s https://codecov.io/bash);
+      bash <(curl -s https://codecov.io/bash) -X xcodeplist;
     fi

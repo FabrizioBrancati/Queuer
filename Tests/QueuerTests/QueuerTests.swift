@@ -25,6 +25,7 @@
 //  SOFTWARE.
 
 import XCTest
+import Dispatch
 @testable import Queuer
 
 class QueuerTests: XCTestCase {
@@ -35,7 +36,10 @@ class QueuerTests: XCTestCase {
         ("testInitWithName", testInitWithName),
         ("testAddOperationBlock", testAddOperationBlock),
         ("testAddOperation", testAddOperation),
+        ("testAddOperations", testAddOperations),
         ("testAddChainedOperations", testAddChainedOperations),
+        ("testAddChainedOperationsEmpty", testAddChainedOperationsEmpty),
+        ("testAddChainedOperationsWithoutCompletion", testAddChainedOperationsWithoutCompletion),
         ("testCancelAll", testCancelAll),
         ("testPauseAndResume", testPauseAndResume),
         ("testWaitUnitlAllOperationsAreFinished", testWaitUnitlAllOperationsAreFinished)
@@ -51,15 +55,21 @@ class QueuerTests: XCTestCase {
     
     func testOperationCount() {
         let queue = Queuer(name: "QueuerTestOperationCount")
+        let testExpectation = expectation(description: "Operation Count")
         
         XCTAssertEqual(queue.operationCount, 0)
         
-        let concurrentOperation = ConcurrentOperation()
+        let concurrentOperation = ConcurrentOperation {
+            Thread.sleep(forTimeInterval: 2)
+            testExpectation.fulfill()
+        }
         concurrentOperation.addToQueue(queue)
         XCTAssertEqual(queue.operationCount, 1)
         
-        concurrentOperation.finish()
-        XCTAssertEqual(queue.operationCount, 0)
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+        })
     }
     
     func testOperations() {
@@ -119,6 +129,32 @@ class QueuerTests: XCTestCase {
         })
     }
     
+    func testAddOperations() {
+        let queue = Queuer(name: "QueuerTestAddOperations")
+        let testExpectation = expectation(description: "Add Operations")
+        var check = 0
+        
+        let concurrentOperation1 = ConcurrentOperation {
+            check += 1
+        }
+        let concurrentOperation2 = ConcurrentOperation {
+            check += 1
+        }
+        queue.addOperation(concurrentOperation1)
+        queue.addOperation(concurrentOperation2)
+        
+        let deadline = DispatchTime.now() + .seconds(2)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+            XCTAssertEqual(check, 2)
+        })
+    }
+    
     func testAddChainedOperations() {
         let queue = Queuer(name: "QueuerTestAddChainedOperations")
         let testExpectation = expectation(description: "Add Chained Operations")
@@ -137,8 +173,42 @@ class QueuerTests: XCTestCase {
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
-            XCTAssertEqual(queue.operationCount, 0)
             XCTAssertEqual(order, [0, 1, 2])
+        })
+    }
+    
+    func testAddChainedOperationsEmpty() {
+        let queue = Queuer(name: "QueuerTestAddChainedOperationsEmpty")
+        let testExpectation = expectation(description: "Add Chained Operations Empty")
+        
+        queue.addChainedOperations([]) {
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+        })
+    }
+    
+    func testAddChainedOperationsWithoutCompletion() {
+        let queue = Queuer(name: "QueuerTestAddChainedOperationsWithoutCompletion")
+        let testExpectation = expectation(description: "Add Chained Operations Without Completion")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation {
+            order.append(0)
+        }
+        let concurrentOperation2 = ConcurrentOperation {
+            order.append(1)
+            testExpectation.fulfill()
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2])
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+            XCTAssertEqual(order, [0, 1])
         })
     }
     
@@ -158,11 +228,14 @@ class QueuerTests: XCTestCase {
         }
         
         queue.cancelAll()
-        testExpectation.fulfill()
+        
+        let deadline = DispatchTime.now() + .seconds(2)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+            testExpectation.fulfill()
+        }
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
-            XCTAssertEqual(queue.operationCount, 0)
             XCTAssertNotEqual(order.count, 3)
         })
     }

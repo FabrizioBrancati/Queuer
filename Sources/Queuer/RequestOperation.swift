@@ -24,6 +24,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#if !os(Linux)
+
 import Foundation
 
 /// HTTP Method enum.
@@ -213,3 +215,5 @@ public class RequestOperation: ConcurrentOperation {
         self.task?.resume()
     }
 }
+
+#endif

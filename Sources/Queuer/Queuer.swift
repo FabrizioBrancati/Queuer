@@ -86,43 +86,35 @@ public class Queuer {
     ///
     /// Example:
     ///
-    ///     [A, B, C] = A -> B -> C -> completionBlock.
+    ///     [A, B, C] = A -> B -> C -> completionHandler.
     ///
     /// - Parameters:
     ///   - operations: Operations Array.
-    ///   - completionBlock: Completion block to be exectuted when all Operations 
-    ///                      are finished.
-    public func addChainedOperations(_ operations: [Operation], completionBlock: @escaping () -> Void) {
-        let completionOperation: BlockOperation = BlockOperation(block: completionBlock)
-        
-        guard !operations.isEmpty else {
-            return
-        }
-        
-        var previousOperation: Operation?
-        
-        for operation: Operation in operations {
-            if let previousOperation = previousOperation {
-                operation.addDependency(previousOperation)
+    ///   - completionHandler: Completion block to be exectuted when all Operations
+    ///                        are finished.
+    public func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
+        for (index, operation) in operations.enumerated() {
+            if index > 0 {
+                operation.addDependency(operations[index - 1])
             }
-            
-            previousOperation = operation
             
             self.addOperation(operation)
         }
         
-        completionOperation.addDependency(operations[operations.count - 1])
+        guard let completionHandler = completionHandler else {
+            return
+        }
         
+        let completionOperation = BlockOperation(block: completionHandler)
+        if !operations.isEmpty {
+            completionOperation.addDependency(operations[operations.count - 1])
+        }
         self.addOperation(completionOperation)
     }
     
     /// Cancel all Operations in queue.
     public func cancelAll() {
         self.queue.cancelAllOperations()
-        
-        for operation in self.queue.operations {
-            operation.cancel()
-        }
     }
     
     /// Pause the queue.

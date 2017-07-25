@@ -25,6 +25,7 @@
 //  SOFTWARE.
 
 import XCTest
+import Dispatch
 @testable import Queuer
 
 class SynchronousOperationTests: XCTestCase {
