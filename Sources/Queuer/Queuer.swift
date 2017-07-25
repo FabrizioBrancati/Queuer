@@ -93,14 +93,10 @@ public class Queuer {
     ///   - completionHandler: Completion block to be exectuted when all Operations
     ///                        are finished.
     public func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
-        var previousOperation: Operation?
-        
-        for operation: Operation in operations {
-            if let previousOperation = previousOperation {
-                operation.addDependency(previousOperation)
+        for (index, operation) in operations.enumerated() {
+            if index > 0 {
+                operation.addDependency(operations[index - 1])
             }
-            
-            previousOperation = operation
             
             self.addOperation(operation)
         }
@@ -108,12 +104,11 @@ public class Queuer {
         guard let completionHandler = completionHandler else {
             return
         }
-        let completionOperation = BlockOperation(block: completionHandler)
         
+        let completionOperation = BlockOperation(block: completionHandler)
         if !operations.isEmpty {
             completionOperation.addDependency(operations[operations.count - 1])
         }
-        
         self.addOperation(completionOperation)
     }
     

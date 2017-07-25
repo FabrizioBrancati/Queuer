@@ -25,6 +25,7 @@
 //  SOFTWARE.
 
 import XCTest
+import Dispatch
 @testable import Queuer
 
 class QueuerTests: XCTestCase {
@@ -201,8 +202,11 @@ class QueuerTests: XCTestCase {
         }
         
         queue.cancelAll()
-        Thread.sleep(forTimeInterval: 2)
-        testExpectation.fulfill()
+        
+        let deadline = DispatchTime.now() + .seconds(2)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+            testExpectation.fulfill()
+        }
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
