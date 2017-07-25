@@ -96,6 +96,7 @@ public class Queuer {
         let completionOperation: BlockOperation = BlockOperation(block: completionBlock)
         
         guard !operations.isEmpty else {
+            self.addOperation(completionOperation)
             return
         }
         
@@ -112,8 +113,6 @@ public class Queuer {
         }
         
         completionOperation.addDependency(operations[operations.count - 1])
-        
-        self.addOperation(completionOperation)
     }
     
     /// Cancel all Operations in queue.
