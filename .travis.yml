@@ -109,5 +109,5 @@ script:
 
 after_success:
   - if [ "$CODECOV" == "YES" ]; then
-      bash <(curl -s https://codecov.io/bash);
+      bash <(curl -s https://codecov.io/bash) -X xcodeplist;
     fi
