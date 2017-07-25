@@ -86,7 +86,7 @@ script:
 
   - if [ "$SPM" == "YES" ]; then
       swift build;
-      swift test;
+      swift test --parallel;
     fi
 
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
