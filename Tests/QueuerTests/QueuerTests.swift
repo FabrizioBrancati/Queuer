@@ -51,15 +51,21 @@ class QueuerTests: XCTestCase {
     
     func testOperationCount() {
         let queue = Queuer(name: "QueuerTestOperationCount")
+        let testExpectation = expectation(description: "Operation Count")
         
         XCTAssertEqual(queue.operationCount, 0)
         
-        let concurrentOperation = ConcurrentOperation()
+        let concurrentOperation = ConcurrentOperation {
+            Thread.sleep(forTimeInterval: 2)
+            testExpectation.fulfill()
+        }
         concurrentOperation.addToQueue(queue)
         XCTAssertEqual(queue.operationCount, 1)
         
-        concurrentOperation.finish()
-        XCTAssertEqual(queue.operationCount, 0)
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+        })
     }
     
     func testOperations() {
