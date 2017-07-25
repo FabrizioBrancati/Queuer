@@ -164,6 +164,7 @@ class QueuerTests: XCTestCase {
         }
         
         queue.cancelAll()
+        Thread.sleep(forTimeInterval: 2)
         testExpectation.fulfill()
         
         waitForExpectations(timeout: 5, handler: { error in
