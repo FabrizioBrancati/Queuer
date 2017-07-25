@@ -36,6 +36,7 @@ class QueuerTests: XCTestCase {
         ("testInitWithName", testInitWithName),
         ("testAddOperationBlock", testAddOperationBlock),
         ("testAddOperation", testAddOperation),
+        ("testAddOperations", testAddOperations),
         ("testAddChainedOperations", testAddChainedOperations),
         ("testAddChainedOperationsEmpty", testAddChainedOperationsEmpty),
         ("testAddChainedOperationsWithoutCompletion", testAddChainedOperationsWithoutCompletion),
@@ -128,6 +129,32 @@ class QueuerTests: XCTestCase {
         })
     }
     
+    func testAddOperations() {
+        let queue = Queuer(name: "QueuerTestAddOperations")
+        let testExpectation = expectation(description: "Add Operations")
+        var check = 0
+        
+        let concurrentOperation1 = ConcurrentOperation {
+            check += 1
+        }
+        let concurrentOperation2 = ConcurrentOperation {
+            check += 1
+        }
+        queue.addOperation(concurrentOperation1)
+        queue.addOperation(concurrentOperation2)
+        
+        let deadline = DispatchTime.now() + .seconds(2)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(queue.operationCount, 0)
+            XCTAssertEqual(check, 2)
+        })
+    }
+    
     func testAddChainedOperations() {
         let queue = Queuer(name: "QueuerTestAddChainedOperations")
         let testExpectation = expectation(description: "Add Chained Operations")
@@ -146,7 +173,6 @@ class QueuerTests: XCTestCase {
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
-            XCTAssertEqual(queue.operationCount, 0)
             XCTAssertEqual(order, [0, 1, 2])
         })
     }
@@ -210,7 +236,6 @@ class QueuerTests: XCTestCase {
         
         waitForExpectations(timeout: 5, handler: { error in
             XCTAssertNil(error)
-            XCTAssertEqual(queue.operationCount, 0)
             XCTAssertNotEqual(order.count, 3)
         })
     }
