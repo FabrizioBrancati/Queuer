@@ -10,14 +10,16 @@
 		493F57291F21F32B009EC8FA /* Queuer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 493F57201F21F32B009EC8FA /* Queuer.framework */; };
 		4995D7431F21E19C00A34E6E /* Queuer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995D7391F21E19B00A34E6E /* Queuer.framework */; };
 		4995D76F1F21ED1C00A34E6E /* Queuer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4995D7661F21ED1B00A34E6E /* Queuer.framework */; };
-		49C7BCC31F26938F00F4FFBC /* LinuxMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCAD1F26938F00F4FFBC /* LinuxMain.swift */; };
+		49B28E2C1F27EDCB00D0819A /* Queuer.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C7BCC11F26938F00F4FFBC /* Queuer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		49B28E2D1F27EDCC00D0819A /* Queuer.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C7BCC11F26938F00F4FFBC /* Queuer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		49B28E2E1F27EDCC00D0819A /* Queuer.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C7BCC11F26938F00F4FFBC /* Queuer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		49C7BCCE1F26938F00F4FFBC /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCBB1F26938F00F4FFBC /* ConcurrentOperation.swift */; };
 		49C7BCCF1F26938F00F4FFBC /* Queuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCBC1F26938F00F4FFBC /* Queuer.swift */; };
 		49C7BCD01F26938F00F4FFBC /* RequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCBD1F26938F00F4FFBC /* RequestOperation.swift */; };
 		49C7BCD11F26938F00F4FFBC /* Semaphore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCBE1F26938F00F4FFBC /* Semaphore.swift */; };
 		49C7BCD21F26938F00F4FFBC /* SynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCBF1F26938F00F4FFBC /* SynchronousOperation.swift */; };
 		49C7BCD31F26938F00F4FFBC /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCC01F26938F00F4FFBC /* URLBuilder.swift */; };
-		49C7BCD41F26938F00F4FFBC /* Queuer.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C7BCC11F26938F00F4FFBC /* Queuer.h */; };
+		49C7BCD41F26938F00F4FFBC /* Queuer.h in Headers */ = {isa = PBXBuildFile; fileRef = 49C7BCC11F26938F00F4FFBC /* Queuer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		49C7BCD51F26939900F4FFBC /* ConcurrentOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCBB1F26938F00F4FFBC /* ConcurrentOperation.swift */; };
 		49C7BCD61F26939900F4FFBC /* Queuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCBC1F26938F00F4FFBC /* Queuer.swift */; };
 		49C7BCD71F26939900F4FFBC /* RequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCBD1F26938F00F4FFBC /* RequestOperation.swift */; };
@@ -89,7 +91,6 @@
 		4995D7661F21ED1B00A34E6E /* Queuer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Queuer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4995D76E1F21ED1C00A34E6E /* QueuerTests tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "QueuerTests tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		49C7BCAC1F26938F00F4FFBC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		49C7BCAD1F26938F00F4FFBC /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		49C7BCAF1F26938F00F4FFBC /* ConcurrentOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcurrentOperationTests.swift; sourceTree = "<group>"; };
 		49C7BCB01F26938F00F4FFBC /* QueuerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueuerTests.swift; sourceTree = "<group>"; };
 		49C7BCB11F26938F00F4FFBC /* RequestOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestOperationTests.swift; sourceTree = "<group>"; };
@@ -192,7 +193,6 @@
 			isa = PBXGroup;
 			children = (
 				49C7BCAC1F26938F00F4FFBC /* Info.plist */,
-				49C7BCAD1F26938F00F4FFBC /* LinuxMain.swift */,
 				49C7BCAE1F26938F00F4FFBC /* QueuerTests */,
 			);
 			path = Tests;
@@ -244,6 +244,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49B28E2C1F27EDCB00D0819A /* Queuer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +260,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49B28E2E1F27EDCC00D0819A /* Queuer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,6 +268,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49B28E2D1F27EDCC00D0819A /* Queuer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,23 +427,27 @@
 					};
 					4995D7381F21E19B00A34E6E = {
 						CreatedOnToolsVersion = 8.3.3;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Manual;
 					};
 					4995D7411F21E19C00A34E6E = {
 						CreatedOnToolsVersion = 8.3.3;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Manual;
 					};
 					4995D7571F21EA3F00A34E6E = {
 						CreatedOnToolsVersion = 8.3.3;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Manual;
 					};
 					4995D7651F21ED1B00A34E6E = {
 						CreatedOnToolsVersion = 8.3.3;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Manual;
 					};
 					4995D76D1F21ED1C00A34E6E = {
 						CreatedOnToolsVersion = 8.3.3;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -611,7 +618,6 @@
 				49C7BCCF1F26938F00F4FFBC /* Queuer.swift in Sources */,
 				49C7BCD31F26938F00F4FFBC /* URLBuilder.swift in Sources */,
 				49C7BCD11F26938F00F4FFBC /* Semaphore.swift in Sources */,
-				49C7BCC31F26938F00F4FFBC /* LinuxMain.swift in Sources */,
 				49C7BCD01F26938F00F4FFBC /* RequestOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -941,7 +947,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -961,7 +967,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.FabrizioBrancati.Queuer-iOS";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -977,7 +983,8 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -993,7 +1000,8 @@
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1014,7 +1022,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1037,7 +1045,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1060,7 +1068,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1083,7 +1091,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1101,7 +1109,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 10.2;
 			};
 			name = Debug;
@@ -1118,7 +1127,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 10.2;
 			};
 			name = Release;
