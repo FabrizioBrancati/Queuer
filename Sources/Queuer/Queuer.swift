@@ -86,20 +86,13 @@ public class Queuer {
     ///
     /// Example:
     ///
-    ///     [A, B, C] = A -> B -> C -> completionBlock.
+    ///     [A, B, C] = A -> B -> C -> completionHandler.
     ///
     /// - Parameters:
     ///   - operations: Operations Array.
-    ///   - completionBlock: Completion block to be exectuted when all Operations 
-    ///                      are finished.
-    public func addChainedOperations(_ operations: [Operation], completionBlock: @escaping () -> Void) {
-        let completionOperation: BlockOperation = BlockOperation(block: completionBlock)
-        
-        guard !operations.isEmpty else {
-            self.addOperation(completionOperation)
-            return
-        }
-        
+    ///   - completionHandler: Completion block to be exectuted when all Operations
+    ///                        are finished.
+    public func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
         var previousOperation: Operation?
         
         for operation: Operation in operations {
@@ -112,7 +105,14 @@ public class Queuer {
             self.addOperation(operation)
         }
         
-        completionOperation.addDependency(operations[operations.count - 1])
+        guard let completionHandler = completionHandler else {
+            return
+        }
+        let completionOperation = BlockOperation(block: completionHandler)
+        
+        if !operations.isEmpty {
+            completionOperation.addDependency(operations[operations.count - 1])
+        }
         
         self.addOperation(completionOperation)
     }
