@@ -42,7 +42,8 @@ It allows you to create any synchronous and asynchronous task easily, with just 
 
 Here is the list of all the features:
 - [x] Works on all Swift compatible platforms (even Linux `*`)
-- [x] Easy to use and well documented
+- [x] Easy to use
+- [x] Well documented
 - [x] Well tested (currently 99% code coverage)
 - [x] Create an operation block
 - [x] Create a single operation
