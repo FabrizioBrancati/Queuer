@@ -2,10 +2,10 @@
 
 [![Build Status](https://travis-ci.org/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.org/FabrizioBrancati/Queuer)
 [![Codecov](https://codecov.io/gh/FabrizioBrancati/Queuer/branch/master/graph/badge.svg)](https://codecov.io/gh/FabrizioBrancati/Queuer)
+[![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
 [![codebeat](https://codebeat.co/badges/486633d3-3dfd-4115-9046-a4077bc32c56)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
-[![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 <br>
 [![Language](https://img.shields.io/badge/language-Swift%203.1%20/%204.0-orange.svg)](https://swift.org/)
@@ -55,7 +55,7 @@ Here is the list of all the features:
 - [ ] Create a network upload operation `*`
 - [ ] Ability to restore uncompleted network operations `*`
 
-`*` Currently, URLSession `shared` is not yet implemented on Linux.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
 Requirements
 ============
@@ -253,9 +253,9 @@ I recommend you to use a `defer { semaphore.continue() }` right after the `Semap
 
 ```swift
 let semaphore = Semaphore()
-semaphore.continue()
-/// Your task here
 semaphore.wait()
+defer { semaphore.continue() }
+/// Your task here
 ```
 
 It's more useful if used inside an asynchronous task:
