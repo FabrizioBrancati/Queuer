@@ -41,7 +41,7 @@ Queuer is a queue manager, build on top of [OperationQueue](https://developer.ap
 It allows you to create any synchronous and asynchronous task easily, with just a few lines.
 
 Here is the list of all the features:
-- [x] Works on all Swift compatible platforms (even Linux)
+- [x] Works on all Swift compatible platforms (even Linux `*`)
 - [x] Easy to use and well documented
 - [x] Well tested (currently 99% code coverage)
 - [x] Create an operation block
@@ -50,10 +50,12 @@ Here is the list of all the features:
 - [x] Manage a centralized queue
 - [x] Create unlimited queue
 - [x] Declare how many concurrent operation a queue can handle
-- [x] Create a network request operation
-- [ ] Create a network download operation
-- [ ] Create a network upload operation
-- [ ] Ability to restore uncompleted network operations
+- [x] Create a network request operation `*`
+- [ ] Create a network download operation `*`
+- [ ] Create a network upload operation `*`
+- [ ] Ability to restore uncompleted network operations `*`
+
+`*` Currently, URLSession `shared` is not yet implemented on Linux.
 
 Requirements
 ============

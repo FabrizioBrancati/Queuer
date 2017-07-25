@@ -33,12 +33,8 @@ class SemaphoreTests: XCTestCase {
         ("testWithoutSemaphore", testWithoutSemaphore)
     ]
     
-    let testAddress: String = "https://www.google.com"
-    
     override func setUp() {
         super.setUp()
-        
-        RequestOperation.globalCachePolicy = .reloadIgnoringLocalCacheData
     }
     
     override func tearDown() {
@@ -51,14 +47,12 @@ class SemaphoreTests: XCTestCase {
         let testExpectation = expectation(description: "With Semaphore")
         var testString = ""
         
-        let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
-            XCTAssertNil(error)
-            XCTAssertTrue(success)
-            testString = "Tested"
+        let concurrentOperation = ConcurrentOperation {
             Thread.sleep(forTimeInterval: 2)
+            testString = "Tested"
             semaphore.continue()
         }
-        requestOperation.addToQueue(queue)
+        concurrentOperation.addToQueue(queue)
         
         semaphore.wait()
         XCTAssertEqual(testString, "Tested")
@@ -74,14 +68,12 @@ class SemaphoreTests: XCTestCase {
         let testExpectation = expectation(description: "Without Semaphore")
         var testString = ""
         
-        let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
-            XCTAssertNil(error)
-            XCTAssertTrue(success)
-            testString = "Tested"
+        let concurrentOperation = ConcurrentOperation {
             Thread.sleep(forTimeInterval: 2)
+            testString = "Tested"
             testExpectation.fulfill()
         }
-        requestOperation.addToQueue(queue)
+        concurrentOperation.addToQueue(queue)
         
         XCTAssertEqual(testString, "")
         
