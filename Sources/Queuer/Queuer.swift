@@ -119,10 +119,6 @@ public class Queuer {
     /// Cancel all Operations in queue.
     public func cancelAll() {
         self.queue.cancelAllOperations()
-        
-        for operation in self.queue.operations {
-            operation.cancel()
-        }
     }
     
     /// Pause the queue.
