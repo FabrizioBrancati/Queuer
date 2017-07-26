@@ -25,6 +25,21 @@ All notable changes to this project will be documented in this file.<br>
 
 ---
 
+## Swift 4
+### Added
+- Added support to Swift 4 and Xcode 9
+
+### Improved
+- Nothing
+
+### Fixed
+- Nothing
+
+### Changed
+- Nothing
+
+---
+
 ## [1.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.0.0) - First Queue
 ### 26 Jul 2017
 ### Added
