@@ -43,7 +43,7 @@ It allows you to create any synchronous and asynchronous task easily, with just 
 Here is the list of all the features:
 - [x] Works on all Swift compatible platforms (even Linux `*`)
 - [x] Easy to use
-- [x] Well documented
+- [x] Well documented (100% documented)
 - [x] Well tested (currently 99% code coverage)
 - [x] Create an operation block
 - [x] Create a single operation
@@ -63,8 +63,10 @@ Requirements
 
 | **Swift** | **Xcode** | **Queuer** | **iOS** | **macOS** | **tvOS** | **watchOS** | **Linux** |
 |-----------|-----------|------------|---------|-----------|----------|-------------|-----------|
-| 3.1       | 8.3       | 1.0.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓]      |
-| 4.0       | 9.0       | ?.?.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓]      |
+| 3.1       | 8.3       | 1.0.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+| 4.0       | 9.0       | ?.?.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
 Installing
 ==========
@@ -269,7 +271,7 @@ concurrentOperation.addToQueue(queue)
 semaphore.wait()
 ```
 
-### Request Operation
+### Request Operation `*`
 `RequestOperation` allows you to easily create a network request and add it to a queue:
 ```swift
 let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, response, data, error in
@@ -300,6 +302,8 @@ Response handler variables:
   May be `nil`.
 
 It can be `pause`d, `resume`d, `cancel`led and chained with other `Operation`s.
+
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
 Documentation
 =============
