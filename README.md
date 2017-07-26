@@ -63,8 +63,10 @@ Requirements
 
 | **Swift** | **Xcode** | **Queuer** | **iOS** | **macOS** | **tvOS** | **watchOS** | **Linux** |
 |-----------|-----------|------------|---------|-----------|----------|-------------|-----------|
-| 3.1       | 8.3       | 1.0.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓]      |
-| 4.0       | 9.0       | ?.?.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓]      |
+| 3.1       | 8.3       | 1.0.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+| 4.0       | 9.0       | ?.?.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
 Installing
 ==========
@@ -269,7 +271,7 @@ concurrentOperation.addToQueue(queue)
 semaphore.wait()
 ```
 
-### Request Operation
+### Request Operation `*`
 `RequestOperation` allows you to easily create a network request and add it to a queue:
 ```swift
 let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, response, data, error in
@@ -300,6 +302,8 @@ Response handler variables:
   May be `nil`.
 
 It can be `pause`d, `resume`d, `cancel`led and chained with other `Operation`s.
+
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
 Documentation
 =============
