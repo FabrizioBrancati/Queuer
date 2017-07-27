@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name              = 'Queuer'
   s.module_name       = 'Queuer'
   s.version           = '1.0.0'
-  s.summary           = 'Queuer. Next task, please.'
+  s.summary           = 'Queuer is a queue manager, build on top of OperationQueue and Dispatch (aka GCD).'
   s.homepage          = 'https://github.com/FabrizioBrancati/Queuer'
   s.screenshots       = 'https://github.fabriziobrancati.com/queuer/resources/queuer-screenshot.png'
   s.authors           = { 'Fabrizio Brancati' => 'fabrizio.brancati@gmail.com' }
