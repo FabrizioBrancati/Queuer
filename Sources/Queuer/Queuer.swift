@@ -44,6 +44,16 @@ public class Queuer {
         return self.queue.operations
     }
     
+    /// The default service level to apply to operations executed using the queue.
+    public var qualityOfService: QualityOfService {
+        get {
+            return self.queue.qualityOfService
+        }
+        set {
+            self.queue.qualityOfService = newValue
+        }
+    }
+    
     /// Returns if the queue is executing or is in pause.
     /// Call `resume()` to make it running.
     /// Call `pause()` to make to pause it.
@@ -64,8 +74,10 @@ public class Queuer {
     /// Creates a new queue.
     ///
     /// - Parameter name: Custom queue name.
-    public init(name: String) {
+    public init(name: String, maxConcurrentOperationCount: Int = Int.max, qualityOfService: QualityOfService = .default) {
         self.queue.name = name
+        self.maxConcurrentOperationCount = maxConcurrentOperationCount
+        self.qualityOfService = qualityOfService
     }
     
     /// Add an Operation to be executed asynchronously.

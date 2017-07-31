@@ -150,6 +150,11 @@ Queuer.shared.addOperation(operation)
 let queue = Queuer(name: "MyCustomQueue")
 ```
 
+You can even create a queue by defining the `maxConcurrentOperationCount` and the `qualityOfService` properties:
+```swift
+let queue = Queuer(name: "MyCustomQueue", maxConcurrentOperationCount: Int.max, qualityOfService: .default)
+```
+
 ### Create an Operation Block
 You have three methods to add an `Operation` block:
 

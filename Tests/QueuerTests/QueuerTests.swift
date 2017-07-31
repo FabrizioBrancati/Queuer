@@ -33,7 +33,8 @@ class QueuerTests: XCTestCase {
         ("testOperationCount", testOperationCount),
         ("testOperations", testOperations),
         ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
-        ("testInitWithName", testInitWithName),
+        ("testQualityOfService", testQualityOfService),
+        ("testInitWithNameMaxConcurrentOperationCountQualityOfService", testInitWithNameMaxConcurrentOperationCountQualityOfService),
         ("testAddOperationBlock", testAddOperationBlock),
         ("testAddOperation", testAddOperation),
         ("testAddOperations", testAddOperations),
@@ -91,11 +92,21 @@ class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
     }
     
-    func testInitWithName() {
-        let queueName = "TestInitWithName"
-        let queue = Queuer(name: queueName)
+    func testQualityOfService() {
+        let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
+        
+        queue.qualityOfService = .background
+        
+        XCTAssertEqual(queue.qualityOfService, .background)
+    }
+    
+    func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
+        let queueName = "TestInitWithNameMaxConcurrentOperationCountQualityOfService"
+        let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10, qualityOfService: .background)
         
         XCTAssertEqual(queue.queue.name, queueName)
+        XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
+        XCTAssertEqual(queue.queue.qualityOfService, .background)
     }
     
     func testAddOperationBlock() {
