@@ -26,6 +26,9 @@
 
 import Foundation
 import Dispatch
+#if os(Linux)
+    import CoreFoundation
+#endif
 
 /// Queuer class.
 public class Queuer {
