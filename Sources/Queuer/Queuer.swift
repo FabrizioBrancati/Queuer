@@ -25,6 +25,7 @@
 //  SOFTWARE.
 
 import Foundation
+import Dispatch
 
 /// Queuer class.
 public class Queuer {
