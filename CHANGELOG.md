@@ -15,10 +15,10 @@ All notable changes to this project will be documented in this file.<br>
 
 ## Master
 ### Added
-- Nothing
+- Added `qualityOfService` property on Queuer class
 
 ### Improved
-- Nothing
+- Improved the `init` function on Queuer class with `maxConcurrentOperationCount` and `qualityOfService` properties, both with a default value, so no changes are required
 
 ### Fixed
 - Nothing

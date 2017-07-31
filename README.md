@@ -37,7 +37,7 @@ If you need Swift 4 support, please switch to [swift-4](https://github.com/Fabri
 Features
 ========
 
-Queuer is a queue manager, build on top of [OperationQueue](https://developer.apple.com/documentation/foundation/operationqueue) and [Dispatch](https://developer.apple.com/documentation/dispatch) (AKA GCD).<br>
+Queuer is a queue manager, built on top of [OperationQueue](https://developer.apple.com/documentation/foundation/operationqueue) and [Dispatch](https://developer.apple.com/documentation/dispatch) (aka GCD).<br>
 It allows you to create any synchronous and asynchronous task easily, with just a few lines.
 
 Here is the list of all the features:
@@ -148,6 +148,11 @@ Queuer.shared.addOperation(operation)
 
 ```swift
 let queue = Queuer(name: "MyCustomQueue")
+```
+
+You can even create a queue by defining the `maxConcurrentOperationCount` and the `qualityOfService` properties:
+```swift
+let queue = Queuer(name: "MyCustomQueue", maxConcurrentOperationCount: Int.max, qualityOfService: .default)
 ```
 
 ### Create an Operation Block
