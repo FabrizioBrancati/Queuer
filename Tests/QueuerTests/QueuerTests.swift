@@ -34,7 +34,7 @@ class QueuerTests: XCTestCase {
         ("testOperations", testOperations),
         ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
         ("testQualityOfService", testQualityOfService),
-        ("testInitWithNameMaxConcurrentOperationCountQualityOfService", testInitWithNameMaxConcurrentOperationCountQualityOfService),
+        ("testInitWithNameMaxConcurrentOperationCount", testInitWithNameMaxConcurrentOperationCount),
         ("testAddOperationBlock", testAddOperationBlock),
         ("testAddOperation", testAddOperation),
         ("testAddOperations", testAddOperations),
@@ -100,14 +100,24 @@ class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.qualityOfService, .background)
     }
     
-    func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
-        let queueName = "TestInitWithNameMaxConcurrentOperationCountQualityOfService"
-        let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10, qualityOfService: .background)
+    func testInitWithNameMaxConcurrentOperationCount() {
+        let queueName = "TestInitWithNameMaxConcurrentOperationCount"
+        let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10)
         
         XCTAssertEqual(queue.queue.name, queueName)
         XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
-        XCTAssertEqual(queue.queue.qualityOfService, .background)
     }
+    
+    #if !os(Linux)
+        func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
+            let queueName = "TestInitWithNameMaxConcurrentOperationCountQualityOfService"
+            let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10, qualityOfService: .background)
+            
+            XCTAssertEqual(queue.queue.name, queueName)
+            XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
+            XCTAssertEqual(queue.queue.qualityOfService, .background)
+        }
+    #endif
     
     func testAddOperationBlock() {
         let queue = Queuer(name: "QueuerTestAddOperationBlock")

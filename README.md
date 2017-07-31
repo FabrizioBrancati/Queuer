@@ -150,10 +150,11 @@ Queuer.shared.addOperation(operation)
 let queue = Queuer(name: "MyCustomQueue")
 ```
 
-You can even create a queue by defining the `maxConcurrentOperationCount` and the `qualityOfService` properties:
+You can even create a queue by defining the `maxConcurrentOperationCount` and the `qualityOfService` `*` properties:
 ```swift
 let queue = Queuer(name: "MyCustomQueue", maxConcurrentOperationCount: Int.max, qualityOfService: .default)
 ```
+> `*` Currently, `QualityOfService` property is not directly supported since there are not qos class promotions available outside of darwin targets.
 
 ### Create an Operation Block
 You have three methods to add an `Operation` block:
