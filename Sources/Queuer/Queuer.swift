@@ -44,15 +44,17 @@ public class Queuer {
         return self.queue.operations
     }
     
-    /// The default service level to apply to operations executed using the queue.
-    public var qualityOfService: QualityOfService {
-        get {
-            return self.queue.qualityOfService
+    #if !os(Linux)
+        /// The default service level to apply to operations executed using the queue.
+        public var qualityOfService: QualityOfService {
+            get {
+                return self.queue.qualityOfService
+            }
+            set {
+                self.queue.qualityOfService = newValue
+            }
         }
-        set {
-            self.queue.qualityOfService = newValue
-        }
-    }
+    #endif
     
     /// Returns if the queue is executing or is in pause.
     /// Call `resume()` to make it running.
@@ -71,14 +73,29 @@ public class Queuer {
         }
     }
     
-    /// Creates a new queue.
-    ///
-    /// - Parameter name: Custom queue name.
-    public init(name: String, maxConcurrentOperationCount: Int = Int.max, qualityOfService: QualityOfService = .default) {
-        self.queue.name = name
-        self.maxConcurrentOperationCount = maxConcurrentOperationCount
-        self.qualityOfService = qualityOfService
-    }
+    #if os(Linux)
+        /// Creates a new queue.
+        ///
+        /// - Parameters:
+        ///   - name: Custom queue name.
+        ///   - maxConcurrentOperationCount: The max concurrent operation count.
+        public init(name: String, maxConcurrentOperationCount: Int = Int.max) {
+            self.queue.name = name
+            self.maxConcurrentOperationCount = maxConcurrentOperationCount
+        }
+    #else
+        /// Creates a new queue.
+        ///
+        /// - Parameters:
+        ///   - name: Custom queue name.
+        ///   - maxConcurrentOperationCount: The max concurrent operation count.
+        ///   - qualityOfService: The default service level to apply to operations executed using the queue.
+        public init(name: String, maxConcurrentOperationCount: Int = Int.max, qualityOfService: QualityOfService = .default) {
+            self.queue.name = name
+            self.maxConcurrentOperationCount = maxConcurrentOperationCount
+            self.qualityOfService = qualityOfService
+        }
+    #endif
     
     /// Add an Operation to be executed asynchronously.
     ///
