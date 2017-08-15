@@ -82,7 +82,7 @@ open class ConcurrentOperation: Operation {
     
     /// Execute the Operation.
     /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
-    public func execute() {
+    open func execute() {
         if let executionBlock = executionBlock {
             executionBlock()
             self.finish()
@@ -98,11 +98,11 @@ open class ConcurrentOperation: Operation {
     
     /// Pause the current Operation, if it's supported.
     /// Must be overridend by subclass to get a custom pause action.
-    public func pause() {}
+    open func pause() {}
     
     /// Resume the current Operation, if it's supported.
     /// Must be overridend by subclass to get a custom resume action.
-    public func resume() {}
+    open func resume() {}
     
     /// Adds the Operation to `shared` Queuer.
     public func addToSharedQueuer() {
