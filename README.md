@@ -4,11 +4,12 @@
 [![Codecov](https://codecov.io/gh/FabrizioBrancati/Queuer/branch/master/graph/badge.svg)](https://codecov.io/gh/FabrizioBrancati/Queuer)
 [![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
 [![codebeat](https://codebeat.co/badges/486633d3-3dfd-4115-9046-a4077bc32c56)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master)
+[![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 <br>
-[![Language](https://img.shields.io/badge/language-Swift%203.1%20/%204.0-orange.svg)](https://swift.org/)
+[![Language](https://img.shields.io/badge/language-Swift%203.1%20/%203.2%20/%204.0-orange.svg)](https://swift.org/)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-ffc713.svg)][Documentation]
 
 ---
@@ -61,10 +62,10 @@ Here is the list of all the features:
 Requirements
 ============
 
-| **Swift** | **Xcode** | **Queuer** | **iOS** | **macOS** | **tvOS** | **watchOS** | **Linux** |
-|-----------|-----------|------------|---------|-----------|----------|-------------|-----------|
-| 3.1       | 8.3       | 1.0.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
-| 4.0       | 9.0       | ?.?.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+| **Swift**  | **Xcode** | **Queuer** | **iOS** | **macOS** | **tvOS** | **watchOS** | **Linux** |
+|------------|-----------|------------|---------|-----------|----------|-------------|-----------|
+| 3.1....3.2 | 8.3...9.0 | 1.0.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+| 4.0        | 9.0       | ?.?.0      | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 
 > `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
