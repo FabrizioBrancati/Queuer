@@ -27,7 +27,7 @@
 import Foundation
 
 /// It allows asynchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
-public class ConcurrentOperation: Operation {
+open class ConcurrentOperation: Operation {
     /// Operation's execution block.
     public var executionBlock: (() -> Void)?
     
@@ -40,7 +40,7 @@ public class ConcurrentOperation: Operation {
     }
     
     /// Set the Operation as asynchronous.
-    public override var isAsynchronous: Bool {
+    open override var isAsynchronous: Bool {
         return true
     }
     
@@ -55,7 +55,7 @@ public class ConcurrentOperation: Operation {
     }
     
     /// Set if the Operation is executing.
-    override public var isExecuting: Bool {
+    open override var isExecuting: Bool {
         return _executing
     }
     
@@ -70,12 +70,12 @@ public class ConcurrentOperation: Operation {
     }
     
     /// Set if the Operation is finished.
-    public override var isFinished: Bool {
+    open override var isFinished: Bool {
         return _finished
     }
     
     /// Start the Operation.
-    public override func start() {
+    open override func start() {
         _executing = true
         execute()
     }
