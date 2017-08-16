@@ -40,7 +40,7 @@ class RequestOperationTests: XCTestCase {
         ("testPauseAndResume", testPauseAndResume)
     ]
     
-    let testAddress: String = "https://www.google.com"
+    let testAddress: String = "https://www.fabriziobrancati.com"
     
     override func setUp() {
         super.setUp()

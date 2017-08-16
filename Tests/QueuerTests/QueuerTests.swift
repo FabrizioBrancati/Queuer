@@ -80,6 +80,7 @@ class QueuerTests: XCTestCase {
         XCTAssertTrue(queue.operations.contains(concurrentOperation))
         
         concurrentOperation.finish()
+        Thread.sleep(forTimeInterval: 2)
         XCTAssertFalse(queue.operations.contains(concurrentOperation))
     }
     
@@ -241,6 +242,7 @@ class QueuerTests: XCTestCase {
         
         let concurrentOperation1 = ConcurrentOperation {
             order.append(0)
+            Thread.sleep(forTimeInterval: 2)
         }
         let concurrentOperation2 = ConcurrentOperation {
             order.append(1)
