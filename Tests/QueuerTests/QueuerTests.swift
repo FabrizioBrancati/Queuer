@@ -74,14 +74,19 @@ class QueuerTests: XCTestCase {
     
     func testOperations() {
         let queue = Queuer(name: "QueuerTestOperations")
+        let testExpectation = expectation(description: "Operations")
         
-        let concurrentOperation = ConcurrentOperation()
+        let concurrentOperation = ConcurrentOperation {
+            Thread.sleep(forTimeInterval: 2)
+            testExpectation.fulfill()
+        }
         queue.addOperation(concurrentOperation)
         XCTAssertTrue(queue.operations.contains(concurrentOperation))
         
-        concurrentOperation.finish()
-        Thread.sleep(forTimeInterval: 2)
-        XCTAssertFalse(queue.operations.contains(concurrentOperation))
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertFalse(queue.operations.contains(concurrentOperation))
+        })
     }
     
     func testMaxConcurrentOperationCount() {
