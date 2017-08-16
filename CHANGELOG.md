@@ -19,9 +19,11 @@ All notable changes to this project will be documented in this file.<br>
 
 ### Improved
 - Improved the `init` function on Queuer class with `maxConcurrentOperationCount` and `qualityOfService` properties, both with a default value, so no changes are required
+- Updated SwiftLint to 0.21.0
 
 ### Fixed
-- Nothing
+- Now `ConcurrentOperation` is subclassable with `open` instead of `public` Access Control [#2](https://github.com/FabrizioBrancati/Queuer/issue/2)
+- Fixed tests that sometimes fails
 
 ---
 
