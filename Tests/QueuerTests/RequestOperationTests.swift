@@ -40,7 +40,7 @@ class RequestOperationTests: XCTestCase {
         ("testPauseAndResume", testPauseAndResume)
     ]
     
-    let testAddress: String = "https://www.google.com"
+    let testAddress: String = "https://www.fabriziobrancati.com"
     
     override func setUp() {
         super.setUp()
@@ -135,7 +135,7 @@ class RequestOperationTests: XCTestCase {
         let queue = Queuer(name: "RequestOperationTestCancel")
         let testExpectation = expectation(description: "Cancel")
         
-        let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
+        let requestOperation: RequestOperation = RequestOperation(url: "http://fakehttpaddress.com/") { success, _, _, error in
             XCTAssertEqual(error as? RequestOperation.RequestError, RequestOperation.RequestError.operationCancelled)
             XCTAssertFalse(success)
             testExpectation.fulfill()
