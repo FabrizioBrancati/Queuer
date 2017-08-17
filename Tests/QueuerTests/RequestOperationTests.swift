@@ -135,7 +135,7 @@ class RequestOperationTests: XCTestCase {
         let queue = Queuer(name: "RequestOperationTestCancel")
         let testExpectation = expectation(description: "Cancel")
         
-        let requestOperation: RequestOperation = RequestOperation(url: "http://fakehttpaddress.com/") { success, _, _, _ in
+        let requestOperation: RequestOperation = RequestOperation(url: "http://fakehttpaddress.com/", cachePolicy: .reloadIgnoringLocalCacheData) { success, _, _, _ in
             // Currently there is no easy way to check in time if the operation was cancelled befere completed.
             // XCTAssertEqual(error as? RequestOperation.RequestError, RequestOperation.RequestError.operationCancelled)
             XCTAssertFalse(success)
