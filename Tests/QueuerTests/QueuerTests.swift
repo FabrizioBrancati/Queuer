@@ -189,6 +189,7 @@ class QueuerTests: XCTestCase {
         var order: [Int] = []
         
         let concurrentOperation1 = ConcurrentOperation {
+            Thread.sleep(forTimeInterval: 2)
             order.append(0)
         }
         let concurrentOperation2 = ConcurrentOperation {
@@ -245,11 +246,11 @@ class QueuerTests: XCTestCase {
         let testExpectation = expectation(description: "Cancell All Operations")
         var order: [Int] = []
         
-        let concurrentOperation1 = ConcurrentOperation {
-            order.append(0)
+        let concurrentOperation1 = SynchronousOperation {
             Thread.sleep(forTimeInterval: 2)
+            order.append(0)
         }
-        let concurrentOperation2 = ConcurrentOperation {
+        let concurrentOperation2 = SynchronousOperation {
             order.append(1)
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
@@ -258,7 +259,7 @@ class QueuerTests: XCTestCase {
         
         queue.cancelAll()
         
-        let deadline = DispatchTime.now() + .seconds(1)
+        let deadline = DispatchTime.now() + .milliseconds(500)
         DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
             testExpectation.fulfill()
         }
