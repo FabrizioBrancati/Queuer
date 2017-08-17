@@ -258,7 +258,7 @@ class QueuerTests: XCTestCase {
         
         queue.cancelAll()
         
-        let deadline = DispatchTime.now() + .seconds(2)
+        let deadline = DispatchTime.now() + .seconds(1)
         DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
             testExpectation.fulfill()
         }
