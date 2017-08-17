@@ -57,15 +57,15 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode9
-      env: PROJ="Queuer.xcodeproj"                DESTINATION="OS=4.0,name=Apple Watch - 42mm"   SCHEME="$WATCHOS_SCHEME" RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
+      env: PROJ="Queuer.xcodeproj"                DESTINATION="OS=4.0,name=Apple Watch - 42mm"   SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
       osx_image: xcode9
-      env: PROJ="Queuer.xcodeproj"                DESTINATION="OS=3.2,name=Apple Watch - 42mm"   SCHEME="$WATCHOS_SCHEME" RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
+      env: PROJ="Queuer.xcodeproj"                DESTINATION="OS=3.2,name=Apple Watch - 42mm"   SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
       osx_image: xcode9
-      env: PROJ="Queuer.xcodeproj"                DESTINATION="OS=2.0,name=Apple Watch - 38mm"   SCHEME="$WATCHOS_SCHEME" RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
+      env: PROJ="Queuer.xcodeproj"                DESTINATION="OS=2.0,name=Apple Watch - 38mm"   SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
       osx_image: xcode9
