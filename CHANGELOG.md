@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.<br>
 ## Master
 ### Added
 - Added `qualityOfService` property on Queuer class
+- Added `ddChainedOperations(_ operations: Operation..., completionHandler:` convenience function on Queuer class
 
 ### Improved
 - Improved the `init` function on Queuer class with `maxConcurrentOperationCount` and `qualityOfService` properties, both with a default value, so no changes are required

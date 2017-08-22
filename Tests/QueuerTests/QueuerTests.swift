@@ -38,6 +38,7 @@ class QueuerTests: XCTestCase {
         ("testAddOperation", testAddOperation),
         ("testAddOperations", testAddOperations),
         ("testAddChainedOperations", testAddChainedOperations),
+        ("testAddChainedOperationsList", testAddChainedOperationsList),
         ("testAddChainedOperationsEmpty", testAddChainedOperationsEmpty),
         ("testAddChainedOperationsWithoutCompletion", testAddChainedOperationsWithoutCompletion),
         ("testCancelAll", testCancelAll),
@@ -196,6 +197,29 @@ class QueuerTests: XCTestCase {
             order.append(1)
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0, 1, 2])
+        })
+    }
+    
+    func testAddChainedOperationsList() {
+        let queue = Queuer(name: "QueuerTestAddChainedOperationsList")
+        let testExpectation = expectation(description: "Add Chained Operations List")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation {
+            Thread.sleep(forTimeInterval: 2)
+            order.append(0)
+        }
+        let concurrentOperation2 = ConcurrentOperation {
+            order.append(1)
+        }
+        queue.addChainedOperations(concurrentOperation1, concurrentOperation2) {
             order.append(2)
             testExpectation.fulfill()
         }
