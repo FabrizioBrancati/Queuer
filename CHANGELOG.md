@@ -9,11 +9,25 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ### 1.x Releases
+- `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
 ---
 
 ## Master
+### Added
+- Nothing
+
+### Improved
+- Nothing
+
+### Fixed
+- Nothing
+
+---
+
+## [1.1.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.1.0) - Quality Of Service
+### 1 Sep 2017
 ### Added
 - Added `qualityOfService` property on Queuer class
 
