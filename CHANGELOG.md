@@ -9,22 +9,20 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ### 1.x Releases
+- `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
 ---
 
 ## Master
 ### Added
-- Added `qualityOfService` property on Queuer class
-- Added `ddChainedOperations(_ operations: Operation..., completionHandler:` convenience function on Queuer class
+- Nothing
 
 ### Improved
-- Improved the `init` function on Queuer class with `maxConcurrentOperationCount` and `qualityOfService` properties, both with a default value, so no changes are required
-- Updated SwiftLint to 0.21.0
+- Nothing
 
 ### Fixed
-- Now `ConcurrentOperation` is subclassable with `open` instead of `public` Access Control [#2](https://github.com/FabrizioBrancati/Queuer/issue/2)
-- Fixed tests that sometimes fails
+- Nothing
 
 ---
 
@@ -40,6 +38,22 @@ All notable changes to this project will be documented in this file.<br>
 
 ### Changed
 - Nothing
+
+---
+
+## [1.1.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.1.0) - Quality Of Service
+### 1 Sep 2017
+### Added
+- Added `qualityOfService` property on Queuer class
+- Added `ddChainedOperations(_ operations: Operation..., completionHandler:` convenience function on Queuer class
+
+### Improved
+- Improved the `init` function on Queuer class with `maxConcurrentOperationCount` and `qualityOfService` properties, both with a default value, so no changes are required
+- Updated SwiftLint to 0.21.0
+
+### Fixed
+- Now `ConcurrentOperation` is subclassable with `open` instead of `public` Access Control [#2](https://github.com/FabrizioBrancati/Queuer/issue/2)
+- Fixed tests that sometimes fails
 
 ---
 
