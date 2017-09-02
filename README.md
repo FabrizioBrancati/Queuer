@@ -126,8 +126,14 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 
     let package = Package(
         name: "Project",
+        products: [
+            .executable(name: "Project", targets: ["Project"])
+        ],
         dependencies: [
-            .Package(url: "https://github.com/FabrizioBrancati/Queuer.git", majorVersion: 1)
+            .package(url: "https://github.com/FabrizioBrancati/Queuer.git", .upToNextMajor(from: "1.0.0"))
+        ],
+        targets: [
+            .target(name: "Project", dependencies: ["BFKit"])
         ]
     )
     ```
