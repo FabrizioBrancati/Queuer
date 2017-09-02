@@ -31,7 +31,8 @@ All notable changes to this project will be documented in this file.<br>
 - Added support to Swift 4 and Xcode 9
 
 ### Improved
-- Nothing
+- Using new Xcode 9 build system
+- Updated SwiftLint to 0.22.0
 
 ### Fixed
 - Nothing

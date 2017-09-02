@@ -5,6 +5,7 @@ included:
 disabled_rules:
   - line_length
   - trailing_whitespace
+  - type_body_length
 
 opt_in_rules:
   - empty_count
