@@ -57,7 +57,7 @@ Here is the list of all the features:
 - [ ] Create a network upload operation `*`
 - [ ] Ability to restore uncompleted network operations `*`
 
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
 
 Requirements
 ============
@@ -67,7 +67,7 @@ Requirements
 | 3.1...3.2 | 8.3...9.0 | 1.0.0...1.1.0 | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 | 4.0       | 9.0       | ?.?.0         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
 
 Installing
 ==========
