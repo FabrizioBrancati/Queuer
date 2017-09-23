@@ -9,13 +9,12 @@
 [![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 <br>
-[![Language](https://img.shields.io/badge/language-Swift%203.1%20/%203.2%20/%204.0-orange.svg)](https://swift.org/)
+[![Language](https://img.shields.io/badge/language-Swift%204.0-orange.svg)](https://swift.org/)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-ffc713.svg)][Documentation]
 
 ---
 
 <p align="center">
-    <a href="#swift-4">Swift 4</a> &bull;
     <a href="#features">Features</a> &bull;
     <a href="#requirements">Requirements</a> &bull;
     <a href="#installing">Installing</a> &bull;
@@ -29,11 +28,6 @@
 </p>
 
 ---
-
-Swift 4
-=======
-
-If you need Swift 4 support, please switch to [swift-4](https://github.com/FabrizioBrancati/Queuer/tree/swift-4) branch.
 
 Features
 ========
@@ -65,7 +59,7 @@ Requirements
 | **Swift** | **Xcode** | **Queuer**    | **iOS** | **macOS** | **tvOS** | **watchOS** | **Linux** |
 |-----------|-----------|---------------|---------|-----------|----------|-------------|-----------|
 | 3.1...3.2 | 8.3...9.0 | 1.0.0...1.1.0 | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
-| 4.0       | 9.0       | ?.?.0         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+| 4.0       | 9.0       | 1.2.0         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 
 > `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
 

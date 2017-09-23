@@ -9,36 +9,20 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ### 1.x Releases
+- `1.2.x` Releases - [1.2.0](#120---swift-4-support)
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
 ---
 
-## Master
-### Added
-- Nothing
-
-### Improved
-- Nothing
-
-### Fixed
-- Nothing
-
----
-
-## Swift 4
+## [1.1.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.1.0) - Swift 4 Support
+### 23 Sep 2017
 ### Added
 - Added support to Swift 4 and Xcode 9
 
 ### Improved
 - Using new Xcode 9 build system
 - Updated SwiftLint to 0.22.0
-
-### Fixed
-- Nothing
-
-### Changed
-- Nothing
 
 ---
 
