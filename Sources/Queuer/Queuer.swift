@@ -141,6 +141,20 @@ public class Queuer {
         self.addOperation(completionOperation)
     }
     
+    /// Add an Array of chained Operations.
+    ///
+    /// Example:
+    ///
+    ///     [A, B, C] = A -> B -> C -> completionHandler.
+    ///
+    /// - Parameters:
+    ///   - operations: Operations list.
+    ///   - completionHandler: Completion block to be exectuted when all Operations
+    ///                        are finished.
+    public func addChainedOperations(_ operations: Operation..., completionHandler: (() -> Void)? = nil) {
+        self.addChainedOperations(operations, completionHandler: completionHandler)
+    }
+    
     /// Cancel all Operations in queue.
     public func cancelAll() {
         self.queue.cancelAllOperations()

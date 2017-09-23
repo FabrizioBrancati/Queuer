@@ -72,7 +72,7 @@ class URLBuilderTests: XCTestCase {
     /// Thanks to [Stack Overflow](https://stackoverflow.com/a/33558934/4032046).
     func testWithStrangeCharctersInParameters() {
         guard let string = String(bytes: [0xD8, 0x00] as [UInt8], encoding: String.Encoding.utf16BigEndian) else {
-            XCTFail()
+            XCTFail("`testWithStrangeCharctersInParameters` error")
             return
         }
         

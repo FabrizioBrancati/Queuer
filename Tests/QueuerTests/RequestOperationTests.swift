@@ -95,7 +95,7 @@ class RequestOperationTests: XCTestCase {
         let testExpectation = expectation(description: "Unsupported URL")
         
         let requestOperation: RequestOperation = RequestOperation(url: "/path/to/something") { success, _, _, error in
-            XCTAssertEqual(error?.localizedDescription, "unsupported URL")
+            XCTAssertTrue(error is URLError)
             XCTAssertFalse(success)
             testExpectation.fulfill()
         }

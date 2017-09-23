@@ -26,10 +26,27 @@ All notable changes to this project will be documented in this file.<br>
 
 ---
 
+## Swift 4
+### Added
+- Added support to Swift 4 and Xcode 9
+
+### Improved
+- Using new Xcode 9 build system
+- Updated SwiftLint to 0.22.0
+
+### Fixed
+- Nothing
+
+### Changed
+- Nothing
+
+---
+
 ## [1.1.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.1.0) - Quality Of Service
 ### 1 Sep 2017
 ### Added
 - Added `qualityOfService` property on Queuer class
+- Added `ddChainedOperations(_ operations: Operation..., completionHandler:` convenience function on Queuer class
 
 ### Improved
 - Improved the `init` function on Queuer class with `maxConcurrentOperationCount` and `qualityOfService` properties, both with a default value, so no changes are required
