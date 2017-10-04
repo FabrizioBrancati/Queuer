@@ -127,7 +127,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
             .package(url: "https://github.com/FabrizioBrancati/Queuer.git", .upToNextMajor(from: "1.0.0"))
         ],
         targets: [
-            .target(name: "Project", dependencies: ["BFKit"])
+            .target(name: "Project", dependencies: ["Queuer"])
         ]
     )
     ```
