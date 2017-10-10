@@ -28,5 +28,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "Queuer"
+    name: "Queuer",
+    products: [
+        .library(name: "Queuer", targets: ["Queuer"])
+    ],
+    targets: [
+        .target(name: "Queuer", dependencies: []),
+        .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
+    ]
 )
