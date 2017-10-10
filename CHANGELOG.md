@@ -15,6 +15,12 @@ All notable changes to this project will be documented in this file.<br>
 
 ---
 
+## Master
+### Fixed
+- Removed alert on Xcode 9 that shows the ability to convert the code to Swift 4 even it's already written in Swift 4
+
+---
+
 ## [1.2.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.2.0) - Swift 4 Support
 ### 23 Sep 2017
 ### Added
