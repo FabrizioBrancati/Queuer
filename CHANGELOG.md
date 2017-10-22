@@ -9,13 +9,14 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ### 1.x Releases
-- `1.2.x` Releases - [1.2.0](#120---swift-4-support)
+- `1.2.x` Releases - [1.2.0](#120---swift-4-support) | [1.2.1](#121---unwanted-alert)
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
 ---
 
-## Master
+## [1.2.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.2.1) - Unwanted Alert
+### 22 Oct 2017
 ### Fixed
 - Removed alert on Xcode 9 that shows the ability to convert the code to Swift 4 even it's already written in Swift 4
 
