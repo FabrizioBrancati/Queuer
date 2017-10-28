@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.org/FabrizioBrancati/Queuer)
 [![Codecov](https://codecov.io/gh/FabrizioBrancati/Queuer/branch/master/graph/badge.svg)](https://codecov.io/gh/FabrizioBrancati/Queuer)
 [![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
-[![codebeat badge](https://codebeat.co/badges/50844e60-f4f2-4f9f-a688-5ccc976b7c8c)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master)
+[![codebeat badge](https://codebeat.co/badges/50844e60-f4f2-4f9f-a688-5ccc976b7c8c)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master-9833cda0-af64-433d-a08a-cd0d50d6b579)
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
