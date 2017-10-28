@@ -15,6 +15,12 @@ All notable changes to this project will be documented in this file.<br>
 
 ---
 
+## Master
+### Improved
+- Updated SwiftLint to 0.23.1
+
+---
+
 ## [1.2.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.2.1) - Unwanted Alert
 ### 22 Oct 2017
 ### Fixed
