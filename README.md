@@ -9,7 +9,7 @@
 [![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 <br>
-[![Language](https://img.shields.io/badge/language-Swift%204.0-orange.svg)](https://swift.org/)
+[![Language](https://img.shields.io/badge/language-Swift%204.0%20/%204.1-orange.svg)](https://swift.org/)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-ffc713.svg)][Documentation]
 
 ---
@@ -59,7 +59,7 @@ Requirements
 | **Swift** | **Xcode** | **Queuer**    | **iOS** | **macOS** | **tvOS** | **watchOS** | **Linux** |
 |-----------|-----------|---------------|---------|-----------|----------|-------------|-----------|
 | 3.1...3.2 | 8.3...9.0 | 1.0.0...1.1.0 | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
-| 4.0       | 9.0       | 1.2.1         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+| 4.0...4.1 | 9.0...9.1 | 1.2.1         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 
 > `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
 
@@ -258,7 +258,7 @@ synchronousOperation.addToQueue(queue)
 ```
 
 ### Semaphore
-A `Semaphore` is a struct that uses the GDC's `DispatchSemaphore` to create a semaphore on the function and wait until it finish its job.<br>
+A `Semaphore` is a struct that uses the GCD's `DispatchSemaphore` to create a semaphore on the function and wait until it finish its job.<br>
 I recommend you to use a `defer { semaphore.continue() }` right after the `Semaphore` creation and `wait()` call.
 
 ```swift
