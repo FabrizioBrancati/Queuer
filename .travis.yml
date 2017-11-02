@@ -33,7 +33,7 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode9.1
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.0,name=iPhone 7 Plus"              SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="YES" CODECOV="NO"
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.1,name=iPhone 7 Plus"              SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="YES" CODECOV="NO"
     - os: osx
       language: objective-c
       osx_image: xcode9.1
@@ -61,7 +61,7 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode9.1
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=4.0,name=Apple Watch Series 2 - 42mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=4.1,name=Apple Watch Series 2 - 42mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
       osx_image: xcode9.1
