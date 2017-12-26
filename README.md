@@ -103,12 +103,26 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
     /usr/local/bin/carthage copy-frameworks
     ```
 
-    and add the paths to the Queuer framework under **Input Files**
+    Add the paths to the Queuer framework under **Input Files**
 
     ```sh
     $(SRCROOT)/Carthage/Build/iOS/Queuer.framework
     ```
+
+    Add the paths to the copied frameworks to the **Output Files**
+
+    ```sh
+    $(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Queuer.framework
+    ```
+
     This script works around an [App Store submission bug](http://www.openradar.me/radar?id=6409498411401216) triggered by universal binaries and ensures that necessary bitcode-related files are copied when archiving
+- **(Optional)** Add Build Phase with the following contents
+
+    ```sh
+    /usr/local/bin/carthage outdated --xcode-warnings
+    ```
+    
+    To automatically warn you when one of your dependencies is out of date
 - Import the framework with ```import Queuer```
 - Enjoy!
 
