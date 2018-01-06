@@ -3,7 +3,7 @@
 //  Queuer
 //
 //  Created by Fabrizio on 21/07/17.
-//  Copyright © 2017 Fabrizio Brancati. All rights reserved.
+//  Copyright © 2017 - 2018 Fabrizio Brancati. All rights reserved.
 //
 
 @import Foundation;
