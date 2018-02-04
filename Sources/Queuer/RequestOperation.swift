@@ -102,11 +102,6 @@ open class RequestOperation: ConcurrentOperation {
         super.init(executionBlock: nil)
     }
     
-    /// Basic init function.
-    public init() {
-        super.init()
-    }
-    
     /// Creates a RequestOperation, ready to be added in a queue.
     ///
     /// - Parameters:
@@ -119,8 +114,8 @@ open class RequestOperation: ConcurrentOperation {
     ///   - headers: Request headers. Defatult is nil.
     ///   - body: Request body. Default is nil.
     ///   - completionHandler: Request completion handler. Default is nil.
-    public convenience init(url: String, query: [String: String]? = nil, timeout: TimeInterval = 30, method: HTTPMethod = .get, cachePolicy: URLRequest.CachePolicy = globalCachePolicy, headers: [String: String]? = nil, body: Data? = nil, completionHandler: RequestClosure? = nil) {
-        self.init()
+    public init(url: String, query: [String: String]? = nil, timeout: TimeInterval = 30, method: HTTPMethod = .get, cachePolicy: URLRequest.CachePolicy = globalCachePolicy, headers: [String: String]? = nil, body: Data? = nil, completionHandler: RequestClosure? = nil) {
+        super.init()
         
         let query = URLBuilder.build(query: query)
         
