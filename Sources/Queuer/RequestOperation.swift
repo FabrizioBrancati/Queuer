@@ -82,7 +82,7 @@ public class RequestOperation: ConcurrentOperation {
     /// Request headers.
     private(set) public var headers: [String: String] = [:]
     /// Request body.
-    private(set) public var body: Data = Data()
+    private(set) public var body: Data?
     /// Request completionHandler.
     private(set) public var completionHandler: RequestClosure?
     
@@ -106,15 +106,15 @@ public class RequestOperation: ConcurrentOperation {
     ///
     /// - Parameters:
     ///   - url: Request URL String.
-    ///   - query: Request query.
-    ///   - timeout: Request timeout.
-    ///   - method: Request HTTP method.
+    ///   - query: Request query. Default is `[:]`.
+    ///   - timeout: Request timeout. Default is 30 seconds.
+    ///   - method: Request HTTP method. Default is `.get`.
     ///   - cachePolicy: Request cache policy. Use static var `globalCachePolicy` 
     ///                  to set a global cache policy for all the RequestOperations.
-    ///   - headers: Request headers.
-    ///   - body: Request body.
-    ///   - completionHandler: Request completion handler.
-    public convenience init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, cachePolicy: URLRequest.CachePolicy = globalCachePolicy, headers: [String: String] = [:], body: Data = Data(), completionHandler: RequestClosure? = nil) {
+    ///   - headers: Request headers. Defatult is `[:]`.
+    ///   - body: Request body. Default is empty data.
+    ///   - completionHandler: Request completion handler. Default is nil.
+    public convenience init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, cachePolicy: URLRequest.CachePolicy = globalCachePolicy, headers: [String: String] = [:], body: Data? = nil, completionHandler: RequestClosure? = nil) {
         self.init()
         
         self.query = URLBuilder.build(query: query)
@@ -159,11 +159,11 @@ public class RequestOperation: ConcurrentOperation {
         /// Set the HTTP method.
         request.httpMethod = method.rawValue
         /// Set the HTTP body.
-        request.httpBody = body
-        /// Set all the HTTP headers.
-        for header in self.headers {
-            request.addValue(header.value, forHTTPHeaderField: header.key)
+        if let body = body {
+            request.httpBody = body
         }
+        /// Set all the HTTP headers.
+        self.headers.forEach { request.addValue($1, forHTTPHeaderField: $0) }
         
         /// Create the task.
         self.task = self.session.dataTask(with: request) { data, response, error in
