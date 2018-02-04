@@ -31,5 +31,3 @@ FOUNDATION_EXPORT double QueuerVersionNumber;
 
 //! Project version string for Queuer.
 FOUNDATION_EXPORT const unsigned char QueuerVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <Queuer/PublicHeader.h>
