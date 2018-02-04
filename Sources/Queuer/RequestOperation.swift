@@ -70,7 +70,7 @@ public class RequestOperation: ConcurrentOperation {
     /// Request URL.
     private(set) public var url: URL?
     /// Request query.
-    private(set) public var query: String = ""
+    private(set) public var query: String?
     /// Request complete URL
     private(set) public var completeURL: URL?
     /// Request timeout.
@@ -80,7 +80,7 @@ public class RequestOperation: ConcurrentOperation {
     /// Request cache policy.
     private(set) public var cachePolicy: URLRequest.CachePolicy = globalCachePolicy
     /// Request headers.
-    private(set) public var headers: [String: String] = [:]
+    private(set) public var headers: [String: String]?
     /// Request body.
     private(set) public var body: Data?
     /// Request completionHandler.
@@ -92,7 +92,7 @@ public class RequestOperation: ConcurrentOperation {
     }
     
     /// URLRequest instance.
-    private(set) public var request: URLRequest!
+    private var request: URLRequest!
     
     /// Private init with executrion block.
     /// You can't create a RequestOperation with only an execution block.
@@ -106,20 +106,22 @@ public class RequestOperation: ConcurrentOperation {
     ///
     /// - Parameters:
     ///   - url: Request URL String.
-    ///   - query: Request query. Default is `[:]`.
+    ///   - query: Request query. Default is nil.
     ///   - timeout: Request timeout. Default is 30 seconds.
     ///   - method: Request HTTP method. Default is `.get`.
     ///   - cachePolicy: Request cache policy. Use static var `globalCachePolicy` 
     ///                  to set a global cache policy for all the RequestOperations.
-    ///   - headers: Request headers. Defatult is `[:]`.
-    ///   - body: Request body. Default is empty data.
+    ///   - headers: Request headers. Defatult is nil.
+    ///   - body: Request body. Default is nil.
     ///   - completionHandler: Request completion handler. Default is nil.
     public convenience init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, cachePolicy: URLRequest.CachePolicy = globalCachePolicy, headers: [String: String] = [:], body: Data? = nil, completionHandler: RequestClosure? = nil) {
         self.init()
         
-        self.query = URLBuilder.build(query: query)
+        let query = URLBuilder.build(query: query)
+        
+        self.query = query
         self.url = URL(string: url)
-        self.completeURL = URL(string: url + self.query)
+        self.completeURL = URL(string: url + query)
         self.timeout = timeout
         self.method = method
         self.cachePolicy = cachePolicy
@@ -132,7 +134,7 @@ public class RequestOperation: ConcurrentOperation {
     public override func execute() {
         /// Check if the Operation has been cancelled.
         guard !self.isCancelled else {
-            if let completionHandler = self.completionHandler {
+            if let completionHandler = completionHandler {
                 completionHandler(false, nil, nil, RequestError.operationCancelled)
             }
             
@@ -144,12 +146,12 @@ public class RequestOperation: ConcurrentOperation {
         
         /// Check if the URL can be used.
         guard let url = self.completeURL else {
-            if let completionHandler = self.completionHandler {
+            if let completionHandler = completionHandler {
                 completionHandler(false, nil, nil, RequestError.urlError)
             }
             
             /// Notify that the Operation has finished execution.
-            self.finish()
+            finish()
             
             return
         }
@@ -163,56 +165,60 @@ public class RequestOperation: ConcurrentOperation {
             request.httpBody = body
         }
         /// Set all the HTTP headers.
-        self.headers.forEach { request.addValue($1, forHTTPHeaderField: $0) }
+        if let headers = headers {
+            headers.forEach { request.addValue($1, forHTTPHeaderField: $0) }
+        }
         
         /// Create the task.
-        self.task = self.session.dataTask(with: request) { data, response, error in
+        task = session.dataTask(with: request) { [weak self] data, response, error in
             /// Check if the Operation has a completion handler, has an HTTP response
             /// and has not been canceled.
-            if let completionHandler = self.completionHandler {
-                if let httpResponse = response as? HTTPURLResponse {
-                    var error: Error? = error
-                    /// Set `success` to true if the HTTP status code
-                    /// is greater or equal than 200 and less than 400
-                    /// and has not been cancelled.
-                    let success: Bool = httpResponse.statusCode >= 200 && httpResponse.statusCode < 400 && !self.isCancelled
-                    
-                    /// Check again if the request has not been cancelled.
-                    if self.isCancelled {
-                        error = RequestError.operationCancelled
+            if let strongSelf = self {
+                if let completionHandler = strongSelf.completionHandler {
+                    if let httpResponse = response as? HTTPURLResponse {
+                        var error: Error? = error
+                        /// Set `success` to true if the HTTP status code
+                        /// is greater or equal than 200 and less than 400
+                        /// and has not been cancelled.
+                        let success: Bool = httpResponse.statusCode >= 200 && httpResponse.statusCode < 400 && !weakSelf.isCancelled
+                        
+                        /// Check again if the request has not been cancelled.
+                        if strongSelf.isCancelled {
+                            error = RequestError.operationCancelled
+                        }
+                        
+                        completionHandler(success, httpResponse, data, error)
+                    } else {
+                        completionHandler(false, nil, data, error)
                     }
-                    
-                    completionHandler(success, httpResponse, data, error)
-                } else {
-                    completionHandler(false, nil, data, error)
                 }
+                /// Notify that the Operation has finished execution.
+                strongSelf.finish()
             }
-            /// Notify that the Operation has finished execution.
-            self.finish()
         }
         /// Start the task.
-        self.task?.resume()
+        task?.resume()
     }
     
     /// Cancels the request operation.
     public override func cancel() {
         super.cancel()
         
-        self.task?.cancel()
+        task?.cancel()
     }
     
     /// Suspends the request operation.
     public override func pause() {
         super.pause()
         
-        self.task?.suspend()
+        task?.suspend()
     }
     
     /// Resumes the request operation.
     public override func resume() {
         super.resume()
         
-        self.task?.resume()
+        task?.resume()
     }
 }
 

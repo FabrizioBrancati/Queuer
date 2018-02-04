@@ -66,7 +66,7 @@ class RequestOperationTests: XCTestCase {
         XCTAssertEqual(requestOperation.completeURL, URL(string: self.testAddress + "?test=test&test2=test2"))
         XCTAssertEqual(requestOperation.timeout, 30)
         XCTAssertEqual(requestOperation.method, .get)
-        XCTAssertEqual(requestOperation.headers, ["test": "test", "test2": "test2"])
+        XCTAssertEqual(requestOperation.headers ?? [:], ["test": "test", "test2": "test2"])
         XCTAssertEqual(requestOperation.body, Data())
         
         waitForExpectations(timeout: 5, handler: { error in
