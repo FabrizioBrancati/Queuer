@@ -32,7 +32,11 @@ internal struct URLBuilder {
     ///
     /// - Parameter query: Query dictionary.
     /// - Returns: Returns the query as a String.
-    internal static func build(query: [String: String]) -> String {
+    internal static func build(query: [String: String]?) -> String {
+        guard let query = query else {
+            return ""
+        }
+        
         var finalQuery: String = ""
         for (index, parameter) in query.enumerated() {
             guard let parameterKey = parameter.key.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let parameterValue = parameter.value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
