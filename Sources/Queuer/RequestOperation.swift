@@ -180,7 +180,7 @@ public class RequestOperation: ConcurrentOperation {
                         /// Set `success` to true if the HTTP status code
                         /// is greater or equal than 200 and less than 400
                         /// and has not been cancelled.
-                        let success: Bool = httpResponse.statusCode >= 200 && httpResponse.statusCode < 400 && !weakSelf.isCancelled
+                        let success: Bool = httpResponse.statusCode >= 200 && httpResponse.statusCode < 400 && !strongSelf.isCancelled
                         
                         /// Check again if the request has not been cancelled.
                         if strongSelf.isCancelled {
