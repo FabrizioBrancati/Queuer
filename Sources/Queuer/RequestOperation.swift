@@ -98,7 +98,7 @@ open class RequestOperation: ConcurrentOperation {
     /// You can't create a RequestOperation with only an execution block.
     ///
     /// - Parameter block: Execution block.
-    private override init(executionBlock: (() -> Void)? = nil) {
+    internal override init(executionBlock: (() -> Void)? = nil) {
         super.init(executionBlock: nil)
     }
     

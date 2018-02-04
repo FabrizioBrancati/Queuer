@@ -31,7 +31,7 @@ import XCTest
 
 class RequestOperationTests: XCTestCase {
     static let allTests = [
-        ("testInit", testInit),
+        ("testInitFull", testInitFull),
         ("testExecute", testExecute),
         ("testUnsupportedURL", testUnsupportedURL),
         ("testWrongURL", testWrongURL),
@@ -54,7 +54,22 @@ class RequestOperationTests: XCTestCase {
     
     func testInit() {
         let queue = Queuer(name: "RequestOperationTestInit")
-        let testExpectation = expectation(description: "Init")
+        
+        let requestOperation: RequestOperation = RequestOperation()
+        requestOperation.addToQueue(queue)
+        
+        XCTAssertNil(requestOperation.url?.absoluteString)
+        XCTAssertNil(requestOperation.query)
+        XCTAssertNil(requestOperation.completeURL)
+        XCTAssertEqual(requestOperation.timeout, 30)
+        XCTAssertEqual(requestOperation.method, .get)
+        XCTAssertEqual(requestOperation.headers ?? [:], [:])
+        XCTAssertNil(requestOperation.body)
+    }
+    
+    func testInitFull() {
+        let queue = Queuer(name: "RequestOperationTestInitFull")
+        let testExpectation = expectation(description: "InitFull")
         
         let requestOperation: RequestOperation = RequestOperation(url: self.testAddress, query: ["test": "test", "test2": "test2"], timeout: 30, method: .get, headers: ["test": "test", "test2": "test2"], body: Data()) { _, _, _, _ in
             testExpectation.fulfill()
