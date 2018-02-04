@@ -36,22 +36,22 @@ public class Queuer {
     
     /// Total Operation count in queue.
     public var operationCount: Int {
-        return self.queue.operationCount
+        return queue.operationCount
     }
     
     /// Operations currently in queue.
     public var operations: [Operation] {
-        return self.queue.operations
+        return queue.operations
     }
     
     #if !os(Linux)
         /// The default service level to apply to operations executed using the queue.
         public var qualityOfService: QualityOfService {
             get {
-                return self.queue.qualityOfService
+                return queue.qualityOfService
             }
             set {
-                self.queue.qualityOfService = newValue
+                queue.qualityOfService = newValue
             }
         }
     #endif
@@ -60,16 +60,16 @@ public class Queuer {
     /// Call `resume()` to make it running.
     /// Call `pause()` to make to pause it.
     public var isExecuting: Bool {
-        return !self.queue.isSuspended
+        return !queue.isSuspended
     }
     
     /// Define the max concurrent operation count.
     public var maxConcurrentOperationCount: Int {
         get {
-            return self.queue.maxConcurrentOperationCount
+            return queue.maxConcurrentOperationCount
         }
         set {
-            self.queue.maxConcurrentOperationCount = newValue
+            queue.maxConcurrentOperationCount = newValue
         }
     }
     
@@ -80,7 +80,7 @@ public class Queuer {
         ///   - name: Custom queue name.
         ///   - maxConcurrentOperationCount: The max concurrent operation count.
         public init(name: String, maxConcurrentOperationCount: Int = Int.max) {
-            self.queue.name = name
+            queue.name = name
             self.maxConcurrentOperationCount = maxConcurrentOperationCount
         }
     #else
@@ -91,7 +91,7 @@ public class Queuer {
         ///   - maxConcurrentOperationCount: The max concurrent operation count.
         ///   - qualityOfService: The default service level to apply to operations executed using the queue.
         public init(name: String, maxConcurrentOperationCount: Int = Int.max, qualityOfService: QualityOfService = .default) {
-            self.queue.name = name
+            queue.name = name
             self.maxConcurrentOperationCount = maxConcurrentOperationCount
             self.qualityOfService = qualityOfService
         }
@@ -101,14 +101,14 @@ public class Queuer {
     ///
     /// - Parameter block: Block to be executed.
     public func addOperation(_ operation: @escaping () -> Void) {
-        self.queue.addOperation(operation)
+        queue.addOperation(operation)
     }
     
     /// Add an Operation to be executed asynchronously.
     ///
     /// - Parameter operation: Operation to be executed.
     public func addOperation(_ operation: Operation) {
-        self.queue.addOperation(operation)
+        queue.addOperation(operation)
     }
     
     /// Add an Array of chained Operations.
@@ -127,7 +127,7 @@ public class Queuer {
                 operation.addDependency(operations[index - 1])
             }
             
-            self.addOperation(operation)
+            addOperation(operation)
         }
         
         guard let completionHandler = completionHandler else {
@@ -138,7 +138,7 @@ public class Queuer {
         if !operations.isEmpty {
             completionOperation.addDependency(operations[operations.count - 1])
         }
-        self.addOperation(completionOperation)
+        addOperation(completionOperation)
     }
     
     /// Add an Array of chained Operations.
@@ -152,28 +152,28 @@ public class Queuer {
     ///   - completionHandler: Completion block to be exectuted when all Operations
     ///                        are finished.
     public func addChainedOperations(_ operations: Operation..., completionHandler: (() -> Void)? = nil) {
-        self.addChainedOperations(operations, completionHandler: completionHandler)
+        addChainedOperations(operations, completionHandler: completionHandler)
     }
     
     /// Cancel all Operations in queue.
     public func cancelAll() {
-        self.queue.cancelAllOperations()
+        queue.cancelAllOperations()
     }
     
     /// Pause the queue.
     public func pause() {
-        self.queue.isSuspended = true
+        queue.isSuspended = true
         
-        for operation in self.queue.operations where operation is ConcurrentOperation {
+        for operation in queue.operations where operation is ConcurrentOperation {
             (operation as? ConcurrentOperation)?.pause()
         }
     }
     
     /// Resume the queue.
     public func resume() {
-        self.queue.isSuspended = false
+        queue.isSuspended = false
         
-        for operation in self.queue.operations where operation is ConcurrentOperation {
+        for operation in queue.operations where operation is ConcurrentOperation {
             (operation as? ConcurrentOperation)?.resume()
         }
     }
@@ -181,6 +181,6 @@ public class Queuer {
     /// Blocks the current thread until all of the receiver’s queued and executing
     /// operations finish executing.
     public func waitUntilAllOperationsAreFinished() {
-        self.queue.waitUntilAllOperationsAreFinished()
+        queue.waitUntilAllOperationsAreFinished()
     }
 }

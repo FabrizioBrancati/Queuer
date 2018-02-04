@@ -41,13 +41,13 @@ public struct Semaphore {
     /// - Parameter poolSize: The starting value for the semaphore.
     ///                       Passing a value less than zero will cause NULL to be returned.
     public init(poolSize: Int = 0) {
-        self.semaphore = DispatchSemaphore(value: poolSize)
+        semaphore = DispatchSemaphore(value: poolSize)
     }
     
     /// Wait for a `continue` function call.
     @discardableResult
     public func wait() -> DispatchTimeoutResult {
-        return self.semaphore.wait(timeout: .distantFuture)
+        return semaphore.wait(timeout: .distantFuture)
     }
     
     /// This function returns non-zero if a thread is woken. Otherwise, zero is returned.
@@ -55,6 +55,6 @@ public struct Semaphore {
     /// - Returns: Returns non-zero if a thread is woken. Otherwise, zero is returned.
     @discardableResult
     public func `continue`() -> Int {
-        return self.semaphore.signal()
+        return semaphore.signal()
     }
 }

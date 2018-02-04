@@ -39,14 +39,14 @@ public class SynchronousOperation: ConcurrentOperation {
     /// Notify the completion of sync task and hence the completion of the operation.
     /// Must be called when the Operation is finished.
     public override func finish() {
-        self.semaphore.continue()
+        semaphore.continue()
     }
     
     /// Advises the operation object that it should stop executing its task.
     public override func cancel() {
         super.cancel()
         
-        self.semaphore.continue()
+        semaphore.continue()
     }
     
     /// Execute the Operation.
@@ -54,6 +54,6 @@ public class SynchronousOperation: ConcurrentOperation {
     public override func execute() {
         super.execute()
         
-        self.semaphore.wait()
+        semaphore.wait()
     }
 }
