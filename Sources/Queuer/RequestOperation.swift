@@ -102,6 +102,11 @@ open class RequestOperation: ConcurrentOperation {
         super.init(executionBlock: nil)
     }
     
+    /// Basic init function.
+    public init() {
+        super.init()
+    }
+    
     /// Creates a RequestOperation, ready to be added in a queue.
     ///
     /// - Parameters:
