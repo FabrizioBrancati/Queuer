@@ -49,7 +49,7 @@ public enum HTTPMethod: String {
 }
 
 /// RequestOperation helps you to create network operation with an easy interface.
-public class RequestOperation: ConcurrentOperation {
+open class RequestOperation: ConcurrentOperation {
     /// Custom HTTP errors.
     public enum RequestError: Error {
         /// URL doesn't exist.
@@ -131,7 +131,7 @@ public class RequestOperation: ConcurrentOperation {
     }
     
     /// Executes the request operation asynchronously.
-    public override func execute() {
+    open override func execute() {
         /// Check if the Operation has been cancelled.
         guard !self.isCancelled else {
             if let completionHandler = completionHandler {
@@ -201,21 +201,21 @@ public class RequestOperation: ConcurrentOperation {
     }
     
     /// Cancels the request operation.
-    public override func cancel() {
+    open override func cancel() {
         super.cancel()
         
         task?.cancel()
     }
     
     /// Suspends the request operation.
-    public override func pause() {
+    open override func pause() {
         super.pause()
         
         task?.suspend()
     }
     
     /// Resumes the request operation.
-    public override func resume() {
+    open override func resume() {
         super.resume()
         
         task?.resume()

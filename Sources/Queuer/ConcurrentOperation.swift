@@ -91,7 +91,7 @@ open class ConcurrentOperation: Operation {
     
     /// Notify the completion of async task and hence the completion of the operation.
     /// Must be called when the Operation is finished.
-    public func finish() {
+    open func finish() {
         _executing = false
         _finished = true
     }
