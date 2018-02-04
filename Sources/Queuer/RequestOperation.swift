@@ -114,7 +114,7 @@ open class RequestOperation: ConcurrentOperation {
     ///   - headers: Request headers. Defatult is nil.
     ///   - body: Request body. Default is nil.
     ///   - completionHandler: Request completion handler. Default is nil.
-    public convenience init(url: String, query: [String: String] = [:], timeout: TimeInterval = 30, method: HTTPMethod = .get, cachePolicy: URLRequest.CachePolicy = globalCachePolicy, headers: [String: String] = [:], body: Data? = nil, completionHandler: RequestClosure? = nil) {
+    public convenience init(url: String, query: [String: String] = nil, timeout: TimeInterval = 30, method: HTTPMethod = .get, cachePolicy: URLRequest.CachePolicy = globalCachePolicy, headers: [String: String] = nil, body: Data? = nil, completionHandler: RequestClosure? = nil) {
         self.init()
         
         let query = URLBuilder.build(query: query)
