@@ -15,9 +15,18 @@ All notable changes to this project will be documented in this file.<br>
 
 ---
 
-## Master
+## Develop
+### Added
+- Added support to CocoaPods 1.4.0
+
 ### Improved
-- Updated SwiftLint to 0.23.1
+- Updated SwiftLint to 0.24.2
+- `body`, `headers` and `query` parameters in RequestOperation class may now be `nil`
+- RequestOperation class and all of its functions are now `open`
+
+### Fixed
+- Now SPM uses Swift 4
+- Removed `self` captures
 
 ---
 
