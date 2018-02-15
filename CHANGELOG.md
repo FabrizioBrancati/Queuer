@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.<br>
 - RequestOperation class and all of its functions are now `open`
 
 ### Fixed
-- Now SPM uses Swift 4
+- Now Swift Package Manager uses Swift 4
 - Removed `self` captures
 
 ---
