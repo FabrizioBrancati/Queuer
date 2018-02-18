@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ### 1.x Releases
+- `1.3.x` Releases - [1.3.0](#130---open-everything)
 - `1.2.x` Releases - [1.2.0](#120---swift-4-support) | [1.2.1](#121---unwanted-alert)
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
@@ -16,8 +17,13 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ## Develop
+
+---
+
+## [1.3.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/v1.3.0) - Open Everything
+### 18 Feb 2017
 ### Added
-- Added support to CocoaPods 1.4.0
+- Added `swift_version` property in podspec file for CocoaPods 1.4.0
 - Added Hound CI
 
 ### Improved
@@ -27,7 +33,7 @@ All notable changes to this project will be documented in this file.<br>
 - Updated SwiftLint to 0.25.0
 
 ### Fixed
-- Now Swift Package Manager correctly builds BFKit-Swift with Swift 4
+- Now Swift Package Manager correctly builds Queuer with Swift 4
 - Removed `self` captures
 
 ---

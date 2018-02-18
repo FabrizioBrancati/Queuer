@@ -2,7 +2,7 @@
 
 # Creates documentation using Jazzy.
 
-FRAMEWORK_VERSION=1.2.1
+FRAMEWORK_VERSION=1.3.0
 
 jazzy \
   --clean \
