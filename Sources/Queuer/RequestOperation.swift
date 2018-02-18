@@ -89,7 +89,7 @@ open class RequestOperation: ConcurrentOperation {
     /// URLSession instance.
     open var session: URLSession {
         let configuration = URLSessionConfiguration.default
-        if #available(iOS 11, *) {
+        if #available(iOS 11, macOS 10.13, tvOS 11, watchOS 4, *) {
             configuration.waitsForConnectivity = true
         }
         return URLSession(configuration: configuration)
