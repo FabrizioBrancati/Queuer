@@ -87,8 +87,12 @@ open class RequestOperation: ConcurrentOperation {
     private(set) public var completionHandler: RequestClosure?
     
     /// URLSession instance.
-    internal var session: URLSession {
-        return URLSession.shared
+    open var session: URLSession {
+        let configuration = URLSessionConfiguration.default
+        if #available(iOS 11, *) {
+            configuration.waitsForConnectivity = true
+        }
+        return URLSession(configuration: configuration)
     }
     
     /// URLRequest instance.

@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.<br>
 ### Improved
 - `body`, `headers` and `query` parameters in RequestOperation class may now be `nil`
 - RequestOperation class and all of its functions are now `open`
+- `session` object in RequestOperation class in now open and has `waitsForConnectivity` sets to `true` for iOS 11 or later by default
 - Updated SwiftLint to 0.25.0
 
 ### Fixed
