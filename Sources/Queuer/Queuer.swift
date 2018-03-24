@@ -31,8 +31,8 @@ public class Queuer {
     /// Shared Queuer.
     public static let shared: Queuer = Queuer(name: "Queuer")
     
-    /// Private OperationQueue.
-    internal let queue: OperationQueue = OperationQueue()
+    /// Queuer OperationQueue.
+    public let queue: OperationQueue = OperationQueue()
     
     /// Total Operation count in queue.
     public var operationCount: Int {
