@@ -11,8 +11,9 @@ Pod::Spec.new do |s|
   s.source            = { :git => 'https://github.com/FabrizioBrancati/Queuer.git', :tag => s.version }
   s.documentation_url = 'https://github.fabriziobrancati.com/documentation/Queuer/'
 
+  s.swift_version = '4.1'
+
   s.source_files  = 'Sources/**/*.swift'
-  s.swift_version = '4.0'
 
   s.ios.deployment_target     = '8.0'
   s.osx.deployment_target     = '10.10'

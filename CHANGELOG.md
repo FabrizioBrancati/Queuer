@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ## [1.3.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.3.1) - Swift 4.1 Support
-### 1 Apr 2018
+### 2 Apr 2018
 ### Added
 - Added support to Xcode 9.3 and Swift 4.1
 
