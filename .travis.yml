@@ -14,55 +14,55 @@ matrix:
       env: SPM="YES"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: SPM="YES"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.2,name=iPhone X"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  CODECOV="YES"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.1,name=iPhone 7 Plus"              SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="YES" CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=10.3.1,name=iPhone 6"                 SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=9.0,name=iPhone 5s"                    SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=8.1,name=iPhone 4S"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.2,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=10.2,name=Apple TV 1080p"             SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=9.0,name=Apple TV 1080p"              SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=4.2,name=Apple Watch Series 3 - 42mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=3.2,name=Apple Watch Series 2 - 42mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=2.0,name=Apple Watch - 38mm"          SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
-      osx_image: xcode9.2
+      osx_image: xcode9.3beta
       env: PROJ="Queuer.xcodeproj" DESTINATION="arch=x86_64"                             SCHEME="$MACOS_SCHEME"   RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
 
 before_install:
