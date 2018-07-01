@@ -44,17 +44,15 @@ public class Queuer {
         return queue.operations
     }
     
-    #if !os(Linux)
-        /// The default service level to apply to operations executed using the queue.
-        public var qualityOfService: QualityOfService {
-            get {
-                return queue.qualityOfService
-            }
-            set {
-                queue.qualityOfService = newValue
-            }
+    /// The default service level to apply to operations executed using the queue.
+    public var qualityOfService: QualityOfService {
+        get {
+            return queue.qualityOfService
         }
-    #endif
+        set {
+            queue.qualityOfService = newValue
+        }
+    }
     
     /// Returns if the queue is executing or is in pause.
     /// Call `resume()` to make it running.
@@ -73,29 +71,17 @@ public class Queuer {
         }
     }
     
-    #if os(Linux)
-        /// Creates a new queue.
-        ///
-        /// - Parameters:
-        ///   - name: Custom queue name.
-        ///   - maxConcurrentOperationCount: The max concurrent operation count.
-        public init(name: String, maxConcurrentOperationCount: Int = Int.max) {
-            queue.name = name
-            self.maxConcurrentOperationCount = maxConcurrentOperationCount
-        }
-    #else
-        /// Creates a new queue.
-        ///
-        /// - Parameters:
-        ///   - name: Custom queue name.
-        ///   - maxConcurrentOperationCount: The max concurrent operation count.
-        ///   - qualityOfService: The default service level to apply to operations executed using the queue.
-        public init(name: String, maxConcurrentOperationCount: Int = Int.max, qualityOfService: QualityOfService = .default) {
-            queue.name = name
-            self.maxConcurrentOperationCount = maxConcurrentOperationCount
-            self.qualityOfService = qualityOfService
-        }
-    #endif
+    /// Creates a new queue.
+    ///
+    /// - Parameters:
+    ///   - name: Custom queue name.
+    ///   - maxConcurrentOperationCount: The max concurrent operation count.
+    ///   - qualityOfService: The default service level to apply to operations executed using the queue.
+    public init(name: String, maxConcurrentOperationCount: Int = Int.max, qualityOfService: QualityOfService = .default) {
+        queue.name = name
+        self.maxConcurrentOperationCount = maxConcurrentOperationCount
+        self.qualityOfService = qualityOfService
+    }
     
     /// Add an Operation to be executed asynchronously.
     ///

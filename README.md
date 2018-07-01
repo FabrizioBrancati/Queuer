@@ -51,7 +51,7 @@ Here is the list of all the features:
 - [ ] Create a network upload operation `*`
 - [ ] Ability to restore uncompleted network operations `*`
 
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` enum is available on all platforms, but it may not be implemented on all platforms.
 
 Requirements
 ============
@@ -62,7 +62,7 @@ Requirements
 | 4.0       | 9.0...9.2 | 1.3.0         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 | 4.1       | 9.3       | 1.3.1         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` enum is available on all platforms, but it may not be implemented on all platforms.
 
 Installing
 ==========
@@ -171,7 +171,7 @@ You can even create a queue by defining the `maxConcurrentOperationCount` and th
 ```swift
 let queue = Queuer(name: "MyCustomQueue", maxConcurrentOperationCount: Int.max, qualityOfService: .default)
 ```
-> `*` Currently, `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
+> `*` `QualityOfService` enum is available on all platforms, but it may not be implemented on all platforms.
 
 ### Create an Operation Block
 You have three methods to add an `Operation` block:

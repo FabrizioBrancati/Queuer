@@ -34,7 +34,9 @@ internal class QueuerTests: XCTestCase {
         ("testOperationCount", testOperationCount),
         ("testOperations", testOperations),
         ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
+        ("testQualityOfService", testQualityOfService),
         ("testInitWithNameMaxConcurrentOperationCount", testInitWithNameMaxConcurrentOperationCount),
+        ("testInitWithNameMaxConcurrentOperationCountQualityOfService", testInitWithNameMaxConcurrentOperationCountQualityOfService),
         ("testAddOperationBlock", testAddOperationBlock),
         ("testAddOperation", testAddOperation),
         ("testAddOperations", testAddOperations),
@@ -91,15 +93,13 @@ internal class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
     }
     
-    #if !os(Linux)
-        internal func testQualityOfService() {
-            let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
-            
-            queue.qualityOfService = .background
-            
-            XCTAssertEqual(queue.qualityOfService, .background)
-        }
-    #endif
+    internal func testQualityOfService() {
+        let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
+        
+        queue.qualityOfService = .background
+        
+        XCTAssertEqual(queue.qualityOfService, .background)
+    }
     
     internal func testInitWithNameMaxConcurrentOperationCount() {
         let queueName = "TestInitWithNameMaxConcurrentOperationCount"
@@ -109,16 +109,14 @@ internal class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
     }
     
-    #if !os(Linux)
-        internal func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
-            let queueName = "TestInitWithNameMaxConcurrentOperationCountQualityOfService"
-            let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10, qualityOfService: .background)
-            
-            XCTAssertEqual(queue.queue.name, queueName)
-            XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
-            XCTAssertEqual(queue.queue.qualityOfService, .background)
-        }
-    #endif
+    internal func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
+        let queueName = "TestInitWithNameMaxConcurrentOperationCountQualityOfService"
+        let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10, qualityOfService: .background)
+        
+        XCTAssertEqual(queue.queue.name, queueName)
+        XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
+        XCTAssertEqual(queue.queue.qualityOfService, .background)
+    }
     
     internal func testAddOperationBlock() {
         let queue = Queuer(name: "QueuerTestAddOperationBlock")
