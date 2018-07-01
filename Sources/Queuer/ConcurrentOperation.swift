@@ -36,11 +36,12 @@ open class ConcurrentOperation: Operation {
     /// - Parameter executionBlock: Execution block.
     public init(executionBlock: (() -> Void)? = nil) {
         super.init()
+        
         self.executionBlock = executionBlock
     }
     
     /// Set the Operation as asynchronous.
-    open override var isAsynchronous: Bool {
+    override open var isAsynchronous: Bool {
         return true
     }
     
@@ -55,7 +56,7 @@ open class ConcurrentOperation: Operation {
     }
     
     /// Set if the Operation is executing.
-    open override var isExecuting: Bool {
+    override open var isExecuting: Bool {
         return _executing
     }
     
@@ -70,12 +71,12 @@ open class ConcurrentOperation: Operation {
     }
     
     /// Set if the Operation is finished.
-    open override var isFinished: Bool {
+    override open var isFinished: Bool {
         return _finished
     }
     
     /// Start the Operation.
-    open override func start() {
+    override open func start() {
         _executing = true
         execute()
     }

@@ -27,7 +27,7 @@
 import Foundation
 
 /// URL builder struct.
-internal struct URLBuilder {
+internal enum URLBuilder {
     /// Builds the query as a string, ready to be added in the URL.
     ///
     /// - Parameter query: Query dictionary.

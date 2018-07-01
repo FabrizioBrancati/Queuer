@@ -48,6 +48,7 @@ public enum HTTPMethod: String {
     case put = "PUT"
 }
 
+@available(*, deprecated: 1.3.2, message: "RequestOperation is deprecated and will be removed in Queuer 2. Please do not rely on this class.")
 /// RequestOperation helps you to create network operation with an easy interface.
 open class RequestOperation: ConcurrentOperation {
     /// Custom HTTP errors.
@@ -66,25 +67,25 @@ open class RequestOperation: ConcurrentOperation {
     public static var globalCachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
     
     /// Request task.
-    private(set) public var task: URLSessionDataTask?
+    public private(set) var task: URLSessionDataTask?
     /// Request URL.
-    private(set) public var url: URL?
+    public private(set) var url: URL?
     /// Request query.
-    private(set) public var query: String?
+    public private(set) var query: String?
     /// Request complete URL
-    private(set) public var completeURL: URL?
+    public private(set) var completeURL: URL?
     /// Request timeout.
-    private(set) public var timeout: TimeInterval = 30
+    public private(set) var timeout: TimeInterval = 30
     /// Request HTTP method.
-    private(set) public var method: HTTPMethod = .get
+    public private(set) var method: HTTPMethod = .get
     /// Request cache policy.
-    private(set) public var cachePolicy: URLRequest.CachePolicy = globalCachePolicy
+    public private(set) var cachePolicy: URLRequest.CachePolicy = globalCachePolicy
     /// Request headers.
-    private(set) public var headers: [String: String]?
+    public private(set) var headers: [String: String]?
     /// Request body.
-    private(set) public var body: Data?
+    public private(set) var body: Data?
     /// Request completionHandler.
-    private(set) public var completionHandler: RequestClosure?
+    public private(set) var completionHandler: RequestClosure?
     
     /// URLSession instance.
     open var session: URLSession {
@@ -96,13 +97,13 @@ open class RequestOperation: ConcurrentOperation {
     }
     
     /// URLRequest instance.
-    private var request: URLRequest!
+    private var request: URLRequest! // swiftlint:disable:this implicitly_unwrapped_optional
     
     /// Private init with executrion block.
     /// You can't create a RequestOperation with only an execution block.
     ///
     /// - Parameter block: Execution block.
-    internal override init(executionBlock: (() -> Void)? = nil) {
+    override internal init(executionBlock: (() -> Void)? = nil) {
         super.init(executionBlock: nil)
     }
     
@@ -135,7 +136,7 @@ open class RequestOperation: ConcurrentOperation {
     }
     
     /// Executes the request operation asynchronously.
-    open override func execute() {
+    override open func execute() {
         /// Check if the Operation has been cancelled.
         guard !self.isCancelled else {
             if let completionHandler = completionHandler {
@@ -205,21 +206,21 @@ open class RequestOperation: ConcurrentOperation {
     }
     
     /// Cancels the request operation.
-    open override func cancel() {
+    override open func cancel() {
         super.cancel()
         
         task?.cancel()
     }
     
     /// Suspends the request operation.
-    open override func pause() {
+    override open func pause() {
         super.pause()
         
         task?.suspend()
     }
     
     /// Resumes the request operation.
-    open override func resume() {
+    override open func resume() {
         super.resume()
         
         task?.resume()

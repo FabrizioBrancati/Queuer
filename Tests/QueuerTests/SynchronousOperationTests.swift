@@ -24,26 +24,18 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import XCTest
 import Dispatch
 @testable import Queuer
+import XCTest
 
-class SynchronousOperationTests: XCTestCase {
-    static let allTests = [
+internal class SynchronousOperationTests: XCTestCase {
+    internal static let allTests = [
         ("testSynchronousOperation", testSynchronousOperation),
         ("testSynchronousOperationOnSharedQueuer", testSynchronousOperationOnSharedQueuer),
         ("testCancel", testCancel)
     ]
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    func testSynchronousOperation() {
+    internal func testSynchronousOperation() {
         let queue = Queuer(name: "SynchronousOperationTestSynchronousOperation")
         let testExpectation = expectation(description: "Synchronous Operation")
         var testString = ""
@@ -63,13 +55,13 @@ class SynchronousOperationTests: XCTestCase {
         XCTAssertFalse(synchronousOperation1.isAsynchronous)
         XCTAssertFalse(synchronousOperation2.isAsynchronous)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(testString, "Tested2")
-        })
+        }
     }
     
-    func testSynchronousOperationOnSharedQueuer() {
+    internal func testSynchronousOperationOnSharedQueuer() {
         let testExpectation = expectation(description: "Synchronous Operation")
         var testString = ""
         
@@ -88,13 +80,13 @@ class SynchronousOperationTests: XCTestCase {
         XCTAssertFalse(synchronousOperation1.isAsynchronous)
         XCTAssertFalse(synchronousOperation2.isAsynchronous)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(testString, "Tested2")
-        })
+        }
     }
     
-    func testCancel() {
+    internal func testCancel() {
         let queue = Queuer(name: "SynchronousOperationTestCancel")
         queue.maxConcurrentOperationCount = 1
         let testExpectation = expectation(description: "Cancel")
@@ -119,9 +111,9 @@ class SynchronousOperationTests: XCTestCase {
         XCTAssertFalse(synchronousOperation1.isAsynchronous)
         XCTAssertFalse(synchronousOperation2.isAsynchronous)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(testString, "Tested1")
-        })
+        }
     }
 }

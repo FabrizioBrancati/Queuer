@@ -1,11 +1,179 @@
 included:
-  - Tests
   - Sources
-
-disabled_rules:
-  - line_length
-  - trailing_whitespace
-  - type_body_length
+  - Tests
 
 opt_in_rules:
+  - array_init
+  - attributes
+  - closure_end_indentation
+  - closure_spacing
+  - conditional_returns_on_newline
+  - contains_over_first_not_nil
+  - convenience_type
   - empty_count
+  - empty_string
+  - empty_xctest_method
+  - explicit_acl
+  - explicit_init
+  - fallthrough
+  - fatal_error_message
+  - file_name
+  - first_where
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - joined_default_parameter
+  - let_var_whitespace
+  - literal_expression_end_indentation
+  - lower_acl_than_parent
+  - mark
+  - modifier_order
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_parameters
+  - nimble_operator
+  - no_fallthrough_only
+  - number_separator
+  - object_literal
+  - operator_usage_whitespace
+  - overridden_super_call
+  - override_in_extension
+  - pattern_matching_keywords
+  - private_action
+  - private_outlet
+  - prohibited_super_call
+  - quick_discouraged_call
+  - quick_discouraged_focused_test
+  - quick_discouraged_pending_test
+  - redundant_nil_coalescing
+  - single_test_class
+  - sorted_first_last
+  - sorted_imports
+  - switch_case_on_newline
+  - trailing_closure
+  - unavailable_function
+  - unneeded_parentheses_in_closure_argument
+  - untyped_error_in_catch
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
+
+disabled_rules:
+  - trailing_whitespace
+  - line_length
+  - file_length
+
+identifier_name:
+  excluded:
+    - id
+number_separator:
+  minimum_length: 5
+
+custom_rules:
+  comments_space:
+    included: ".*.swift"
+    name: "Space After Comment"
+    regex: "(^ *//\\w+)"
+    message: "There should be a space after //"
+    severity: warning
+  double_space:
+    include: "*.swift"
+    name: "Double space"
+    regex: "([a-z,A-Z] \\s+)"
+    message: "Double space between keywords"
+    match_kinds: keyword
+    severity: warning
+  empty_line_after_guard:
+    included: ".*.swift"
+    name: "Empty Line After Guard"
+    regex: "(^ *guard[ a-zA-Z0-9=?.\\(\\),><!]*\\{[ a-zA-Z0-9=?.\\(\\),><!]*\\}\n *(?!(?:return|guard))\\S+)"
+    message: "There should be an empty line after a guard"
+    severity: warning
+  empty_line_after_super:
+    included: ".*.swift"
+    name: "Empty Line After Super"
+    regex: "(^ *super\\.[ a-zA-Z0-9=?.\\(\\)\\{\\}:,><!]*\n *(?!(?:\\}|return))\\S+)"
+    message: "There should be an empty line after super"
+    severity: warning
+  hardcoded_credential:
+    included: ".*.swift"
+    name: "Credentials should not be hard-coded"
+    regex: 'let \s*(?:token|password|Token|Password)\s*= ".+"'
+    message: "Because it is easy to extract strings from a compiled application, credentials should never be hard-coded."
+    severity: warning
+  if_as_guard:
+    included: ".*.swift"
+    name: "If as Guard"
+    regex: '\n *if [^\{]+\{\s*(?:return|break|continue)[^\n]*\n *\}(?! *else)'
+    message: "Don't use an if statement to just return/break/continue – use guard for such cases instead."
+    severity: warning
+  ip_address:
+    included: ".*.swift"
+    name: "IP addresses should not be hardcoded"
+    regex: '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
+    message: "Hardcoding an IP address into source code is a bad idea"
+    severity: warning
+  late_force_unwrapping:
+    included: ".*.swift"
+    name: "Late Force Unwrapping"
+    regex: '\(\S+\?\.\S+\)!'
+    message: "Don't use ? first to force unwrap later – directly unwrap within the parantheses."
+    severity: warning
+  missing_docs:
+    included: ".*.swift"
+    name: "Missing Docs"
+    regex: '\n *(?!\/\/\/)(\/\/)?[^\n\/]*\n *(?:@\S+ )*(?:public|open)'
+    message: "Types, properties and methods with public or open access level should be documented."
+    severity: warning
+  redundant_parentheses:
+    included: ".*.swift"
+    name: "Redundant Parentheses"
+    regex: 'if \(.*\) \{'
+    message: "Condition should not be enclosed within parentheses."
+    severity: warning
+  single_line_return:
+    included: ".*.swift"
+    name: "Single Line Return"
+    regex: '\.\S+ *\{(?: *return|[^\n\}]+ in return) [^\}]+\}'
+    message: "Remove the 'return' when returning from a single line closure."
+    severity: warning
+  unnecessary_case_break:
+    included: ".*.swift"
+    name: "Unnecessary Case Break"
+    regex: '(case |default)(?:[^\n\}]+\n){2,}\s*break *\n|\n *\n *break(?:\n *\n|\n *\})'
+    message: "Don't use break in switch cases – Swift breaks by default."
+    severity: warning
+  unnecessary_nil_assignment:
+    included: ".*.swift"
+    name: "Unnecessary Nil Assignment"
+    regex: 'var \S+\s*:\s*[^\s]+\?\s*=\s*nil'
+    message: "Don't assign nil as a value when defining an optional type – it's nil by default."
+    severity: warning
+  unnecessary_type:
+    included: ".*.swift"
+    name: "Unnecessary Type"
+    regex: "[ a-zA-Z0-9]*(?:let|var) [ a-zA-Z0-9]*: ([a-zA-Z0-9]*)[\\? ]*= \\1"
+    message: "Type Definition Not Needed"
+    severity: warning
+  upper_camel_case:
+    included: ".*.swift"
+    name: "Upper Camel Case"
+    regex: "$[^//](?:protocol|class|struct|enum) [a-z]+[a-zA-Z]*"
+    message: "Class, Struct and Enum names should be UpperCamelCase."
+    severity: warning
+  useless_if:
+    included: ".*.swift"
+    name: "Useless If"
+    regex: 'if[ (]*?(:?true|false)[ )]*?\{'
+    message: "`if` statements with conditions that are always false have the effect of making blocks of code non-functional."
+    severity: warning
+  vertical_whitespaces_around_mark:
+    included: ".*.swift"
+    name: "Vertical Whitespaces Around MARK:"
+    regex: '\/\/\s*MARK:[^\n]*(\n)(?!\n)|(\n\n\n)[ \t]*\/\/\s*MARK:|[^\s{]\n[^\n\/]*\/\/\s*MARK:'
+    message: "Include a single vertical whitespace (empty line) before and after MARK: comments."
+    severity: warning
+  vertical_whitespace_opening_braces:
+    included: ".*.swift"
+    name: "Vertical Whitespace after Opening Braces"
+    regex: '[{(\[][ \t]*\n[ \t]*\n'
+    message: "Don't include vertical whitespace (empty line) after opening braces."
+    severity: warning

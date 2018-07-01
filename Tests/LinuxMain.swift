@@ -1,7 +1,7 @@
 #if os(Linux)
 
-import XCTest
 @testable import QueuerTests
+import XCTest
 
 XCTMain([
     testCase(ConcurrentOperationTests.allTests),

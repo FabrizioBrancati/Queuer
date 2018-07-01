@@ -25,11 +25,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import XCTest
 @testable import Queuer
+import XCTest
 
-class URLBuilderTests: XCTestCase {
-    static let allTests = [
+internal class URLBuilderTests: XCTestCase {
+    internal static let allTests = [
         ("testWithoutParameters", testWithoutParameters),
         ("testWithSingleParameter", testBuildURLWithSingleParameter),
         ("testWithMultipleParameters", testWithMultipleParameters),
@@ -37,40 +37,32 @@ class URLBuilderTests: XCTestCase {
         //("testWithStrangeCharctersInParameters", testWithStrangeCharctersInParameters)
     ]
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    func testWithoutParameters() {
+    internal func testWithoutParameters() {
         let query = URLBuilder.build(query: [:])
         
         XCTAssertEqual(query, "")
     }
     
-    func testBuildURLWithSingleParameter() {
+    internal func testBuildURLWithSingleParameter() {
         let query = URLBuilder.build(query: ["test": "test"])
         
         XCTAssertEqual(query, "?test=test")
     }
     
-    func testWithMultipleParameters() {
+    internal func testWithMultipleParameters() {
         let query = URLBuilder.build(query: ["test": "test", "test2": "test2"])
         
         XCTAssert(query == "?test=test&test2=test2" || query == "?test2=test2&test=test")
     }
     
-    func testWithEmojiCharctersInParameters() {
+    internal func testWithEmojiCharctersInParameters() {
         let query = URLBuilder.build(query: ["test": "test", "test👍": "test👍"])
         
         XCTAssert(query == "?test=test&test%F0%9F%91%8D=test%F0%9F%91%8D" || query == "?test%F0%9F%91%8D=test%F0%9F%91%8D&test=test")
     }
     
-    /// Thanks to [Stack Overflow](https://stackoverflow.com/a/33558934/4032046).
-    func testWithStrangeCharctersInParameters() {
+    /// Thanks to [Stack Overflow](https://stackoverflow.com/a/33558934/4032046 ).
+    internal func testWithStrangeCharctersInParameters() {
         guard let string = String(bytes: [0xD8, 0x00] as [UInt8], encoding: String.Encoding.utf16BigEndian) else {
             XCTFail("`testWithStrangeCharctersInParameters` error")
             return

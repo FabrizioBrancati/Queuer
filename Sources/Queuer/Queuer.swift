@@ -29,10 +29,10 @@ import Foundation
 /// Queuer class.
 public class Queuer {
     /// Shared Queuer.
-    public static let shared: Queuer = Queuer(name: "Queuer")
+    public static let shared = Queuer(name: "Queuer")
     
     /// Queuer OperationQueue.
-    public let queue: OperationQueue = OperationQueue()
+    public let queue = OperationQueue()
     
     /// Total Operation count in queue.
     public var operationCount: Int {

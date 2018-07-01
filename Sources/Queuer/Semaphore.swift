@@ -24,8 +24,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import Foundation
 import Dispatch
+import Foundation
 
 /// DispatchSemaphore struct wrapper.
 public struct Semaphore {
@@ -44,16 +44,16 @@ public struct Semaphore {
         semaphore = DispatchSemaphore(value: poolSize)
     }
     
-    /// Wait for a `continue` function call.
     @discardableResult
+    /// Wait for a `continue` function call.
     public func wait() -> DispatchTimeoutResult {
         return semaphore.wait(timeout: .distantFuture)
     }
     
+    @discardableResult
     /// This function returns non-zero if a thread is woken. Otherwise, zero is returned.
     ///
     /// - Returns: Returns non-zero if a thread is woken. Otherwise, zero is returned.
-    @discardableResult
     public func `continue`() -> Int {
         return semaphore.signal()
     }
