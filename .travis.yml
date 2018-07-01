@@ -14,7 +14,7 @@ matrix:
       env: SPM="YES"
     - os: osx
       language: objective-c
-      osx_image: xcode9.3beta
+      osx_image: xcode9.4
       env: SPM="YES"
     - os: osx
       language: objective-c
