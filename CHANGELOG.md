@@ -17,6 +17,8 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ## Develop
+### Improved
+- Updated SwiftLint to 0.26.0
 
 ---
 
