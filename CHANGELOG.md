@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.<br>
 ## Develop
 ### Added
 - Added `QualityOfService` on Linux
+- Deprecated `RequestOperation`, it will be removed in Queuer 2
 
 ### Improved
 - Updated SwiftLint to 0.26.0

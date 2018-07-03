@@ -48,7 +48,7 @@ public enum HTTPMethod: String {
     case put = "PUT"
 }
 
-@available(*, deprecated: 1.3.2, message: "RequestOperation is deprecated and will be removed in Queuer 2. Please do not rely on this class.")
+@available(*, deprecated: 1.3.2, message: "RequestOperation is deprecated and will be removed in Queuer 2.")
 /// RequestOperation helps you to create network operation with an easy interface.
 open class RequestOperation: ConcurrentOperation {
     /// Custom HTTP errors.
