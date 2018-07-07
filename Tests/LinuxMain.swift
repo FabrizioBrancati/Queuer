@@ -25,7 +25,6 @@
 //  SOFTWARE.
 
 #if os(Linux)
-
 @testable import QueuerTests
 import XCTest
 
@@ -36,5 +35,4 @@ XCTMain([
     testCase(SemaphoreTests.allTests),
     testCase(SynchronousOperationTests.allTests)
 ])
-
 #endif
