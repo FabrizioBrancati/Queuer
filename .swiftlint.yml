@@ -18,6 +18,7 @@ opt_in_rules:
   - fallthrough
   - fatal_error_message
   - file_name
+  - file_header
   - first_where
   - force_unwrapping
   - implicitly_unwrapped_optional
@@ -66,6 +67,33 @@ identifier_name:
     - id
 number_separator:
   minimum_length: 5
+file_header:
+  required_pattern: |
+                    \/\/
+                    \/\/  SWIFTLINT_CURRENT_FILENAME
+                    \/\/  Queuer
+                    \/\/
+                    \/\/  MIT License
+                    \/\/
+                    \/\/  Copyright \(c\) 2017 - 2018 Fabrizio Brancati
+                    \/\/
+                    \/\/  Permission is hereby granted, free of charge, to any person obtaining a copy
+                    \/\/  of this software and associated documentation files \(the "Software"\), to deal
+                    \/\/  in the Software without restriction, including without limitation the rights
+                    \/\/  to use, copy, modify, merge, publish, distribute, sublicense, and\/or sell
+                    \/\/  copies of the Software, and to permit persons to whom the Software is
+                    \/\/  furnished to do so, subject to the following conditions:
+                    \/\/
+                    \/\/  The above copyright notice and this permission notice shall be included in all
+                    \/\/  copies or substantial portions of the Software\.
+                    \/\/
+                    \/\/  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                    \/\/  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+                    \/\/  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL THE
+                    \/\/  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+                    \/\/  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                    \/\/  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                    \/\/  SOFTWARE\.
 
 custom_rules:
   comments_space:
@@ -120,13 +148,13 @@ custom_rules:
   missing_docs:
     included: ".*.swift"
     name: "Missing Docs"
-    regex: '\n *(?!\/\/\/)(\/\/)?[^\n\/]*\n *(?:@\S+ )*(?:public|open)'
+    regex: '\n *(?!\/\/\/)(\/\/)?[^\n\/]*\n *(?:@\S+ )*(?!override)(?:public|open)'
     message: "Types, properties and methods with public or open access level should be documented."
     severity: warning
   redundant_parentheses:
     included: ".*.swift"
     name: "Redundant Parentheses"
-    regex: 'if \(.*\) \{'
+    regex: '(if|guard) \(.*\) \{'
     message: "Condition should not be enclosed within parentheses."
     severity: warning
   single_line_return:
@@ -176,4 +204,10 @@ custom_rules:
     name: "Vertical Whitespace after Opening Braces"
     regex: '[{(\[][ \t]*\n[ \t]*\n'
     message: "Don't include vertical whitespace (empty line) after opening braces."
+    severity: warning
+  vertical_whitespace_closing_braces:
+    included: ".*.swift"
+    name: "Vertical Whitespace after Opening Braces"
+    regex: '[\}(\[][ \t]*\n[ \t]*\n\}'
+    message: "Don't include vertical whitespace (empty line) after closing braces."
     severity: warning

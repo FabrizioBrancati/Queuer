@@ -1,6 +1,5 @@
 //
 //  URLBuilderTests.swift
-//  QueuerTests.swift
 //  Queuer
 //
 //  MIT License

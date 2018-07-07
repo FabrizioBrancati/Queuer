@@ -1,5 +1,5 @@
 //
-//  SmaphoreTests.swift
+//  SemaphoreTests.swift
 //  Queuer
 //
 //  MIT License
