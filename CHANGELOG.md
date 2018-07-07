@@ -9,14 +9,15 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ### 1.x Releases
-- `1.3.x` Releases - [1.3.0](#130---open-everything) | [1.3.1](#131---swift-41-support)
+- `1.3.x` Releases - [1.3.0](#130---open-everything) | [1.3.1](#131---swift-41-support) | [1.3.2](#132---linux-quality)
 - `1.2.x` Releases - [1.2.0](#120---swift-4-support) | [1.2.1](#121---unwanted-alert)
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
 ---
 
-## Develop
+## [1.3.2](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.3.2) - Linux Quality
+### 7 Jul 2018
 ### Added
 - Added `QualityOfService` on Linux
 - Deprecated `RequestOperation`, it will be removed in Queuer 2

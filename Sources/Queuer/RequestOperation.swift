@@ -48,7 +48,7 @@ public enum HTTPMethod: String {
     case put = "PUT"
 }
 
-@available(*, deprecated: 1.3.2, message: "RequestOperation is deprecated and will be removed in Queuer 2.")
+@available(*, deprecated: 1.3.2, message: "`RequestOperation` is deprecated and will be removed in Queuer 2.")
 /// RequestOperation helps you to create network operation with an easy interface.
 open class RequestOperation: ConcurrentOperation {
     /// Custom HTTP errors.
@@ -114,7 +114,7 @@ open class RequestOperation: ConcurrentOperation {
     ///   - query: Request query. Default is nil.
     ///   - timeout: Request timeout. Default is 30 seconds.
     ///   - method: Request HTTP method. Default is `.get`.
-    ///   - cachePolicy: Request cache policy. Use static var `globalCachePolicy` 
+    ///   - cachePolicy: Request cache policy. Use static var `globalCachePolicy`
     ///                  to set a global cache policy for all the RequestOperations.
     ///   - headers: Request headers. Defatult is nil.
     ///   - body: Request body. Default is nil.
