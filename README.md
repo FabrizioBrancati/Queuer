@@ -46,10 +46,8 @@ Here is the list of all the features:
 - [x] Manage a centralized queue
 - [x] Create unlimited queue
 - [x] Declare how many concurrent operation a queue can handle
-- [x] Create a network request operation `*`
-- [ ] Create a network download operation `*`
-- [ ] Create a network upload operation `*`
-- [ ] Ability to restore uncompleted network operations `*`
+- [ ] Ability to restore uncompleted operations `*`
+- [ ] Wrappers for other frameworks (like Alamofire, Moya, ecc) maybe with pod subspecs
 
 > `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
