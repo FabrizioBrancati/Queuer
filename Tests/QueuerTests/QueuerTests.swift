@@ -24,16 +24,19 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import XCTest
 import Dispatch
 @testable import Queuer
+import XCTest
 
-class QueuerTests: XCTestCase {
-    static let allTests = [
+// swiftlint:disable type_body_length
+internal class QueuerTests: XCTestCase {
+    internal static let allTests = [
         ("testOperationCount", testOperationCount),
         ("testOperations", testOperations),
         ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
+        ("testQualityOfService", testQualityOfService),
         ("testInitWithNameMaxConcurrentOperationCount", testInitWithNameMaxConcurrentOperationCount),
+        ("testInitWithNameMaxConcurrentOperationCountQualityOfService", testInitWithNameMaxConcurrentOperationCountQualityOfService),
         ("testAddOperationBlock", testAddOperationBlock),
         ("testAddOperation", testAddOperation),
         ("testAddOperations", testAddOperations),
@@ -46,15 +49,7 @@ class QueuerTests: XCTestCase {
         ("testWaitUnitlAllOperationsAreFinished", testWaitUnitlAllOperationsAreFinished)
     ]
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    func testOperationCount() {
+    internal func testOperationCount() {
         let queue = Queuer(name: "QueuerTestOperationCount")
         let testExpectation = expectation(description: "Operation Count")
         
@@ -67,13 +62,13 @@ class QueuerTests: XCTestCase {
         concurrentOperation.addToQueue(queue)
         XCTAssertEqual(queue.operationCount, 1)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(queue.operationCount, 0)
-        })
+        }
     }
     
-    func testOperations() {
+    internal func testOperations() {
         let queue = Queuer(name: "QueuerTestOperations")
         let testExpectation = expectation(description: "Operations")
         
@@ -84,13 +79,13 @@ class QueuerTests: XCTestCase {
         queue.addOperation(concurrentOperation)
         XCTAssertTrue(queue.operations.contains(concurrentOperation))
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertFalse(queue.operations.contains(concurrentOperation))
-        })
+        }
     }
     
-    func testMaxConcurrentOperationCount() {
+    internal func testMaxConcurrentOperationCount() {
         let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
         
         queue.maxConcurrentOperationCount = 10
@@ -98,17 +93,15 @@ class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
     }
     
-    #if !os(Linux)
-        func testQualityOfService() {
-            let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
-            
-            queue.qualityOfService = .background
-            
-            XCTAssertEqual(queue.qualityOfService, .background)
-        }
-    #endif
+    internal func testQualityOfService() {
+        let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
+        
+        queue.qualityOfService = .background
+        
+        XCTAssertEqual(queue.qualityOfService, .background)
+    }
     
-    func testInitWithNameMaxConcurrentOperationCount() {
+    internal func testInitWithNameMaxConcurrentOperationCount() {
         let queueName = "TestInitWithNameMaxConcurrentOperationCount"
         let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10)
         
@@ -116,18 +109,16 @@ class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
     }
     
-    #if !os(Linux)
-        func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
-            let queueName = "TestInitWithNameMaxConcurrentOperationCountQualityOfService"
-            let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10, qualityOfService: .background)
-            
-            XCTAssertEqual(queue.queue.name, queueName)
-            XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
-            XCTAssertEqual(queue.queue.qualityOfService, .background)
-        }
-    #endif
+    internal func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
+        let queueName = "TestInitWithNameMaxConcurrentOperationCountQualityOfService"
+        let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10, qualityOfService: .background)
+        
+        XCTAssertEqual(queue.queue.name, queueName)
+        XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
+        XCTAssertEqual(queue.queue.qualityOfService, .background)
+    }
     
-    func testAddOperationBlock() {
+    internal func testAddOperationBlock() {
         let queue = Queuer(name: "QueuerTestAddOperationBlock")
         let testExpectation = expectation(description: "Add Operation Block")
         
@@ -136,13 +127,13 @@ class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(queue.operationCount, 0)
-        })
+        }
     }
     
-    func testAddOperation() {
+    internal func testAddOperation() {
         let queue = Queuer(name: "QueuerTestAddOperation")
         let testExpectation = expectation(description: "Add Operation")
         
@@ -152,13 +143,13 @@ class QueuerTests: XCTestCase {
         }
         queue.addOperation(concurrentOperation)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(queue.operationCount, 0)
-        })
+        }
     }
     
-    func testAddOperations() {
+    internal func testAddOperations() {
         let queue = Queuer(name: "QueuerTestAddOperations")
         let testExpectation = expectation(description: "Add Operations")
         var check = 0
@@ -177,14 +168,14 @@ class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(queue.operationCount, 0)
             XCTAssertEqual(check, 2)
-        })
+        }
     }
     
-    func testAddChainedOperations() {
+    internal func testAddChainedOperations() {
         let queue = Queuer(name: "QueuerTestAddChainedOperations")
         let testExpectation = expectation(description: "Add Chained Operations")
         var order: [Int] = []
@@ -201,13 +192,13 @@ class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(order, [0, 1, 2])
-        })
+        }
     }
     
-    func testAddChainedOperationsList() {
+    internal func testAddChainedOperationsList() {
         let queue = Queuer(name: "QueuerTestAddChainedOperationsList")
         let testExpectation = expectation(description: "Add Chained Operations List")
         var order: [Int] = []
@@ -224,13 +215,13 @@ class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(order, [0, 1, 2])
-        })
+        }
     }
     
-    func testAddChainedOperationsEmpty() {
+    internal func testAddChainedOperationsEmpty() {
         let queue = Queuer(name: "QueuerTestAddChainedOperationsEmpty")
         let testExpectation = expectation(description: "Add Chained Operations Empty")
         
@@ -238,13 +229,13 @@ class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(queue.operationCount, 0)
-        })
+        }
     }
     
-    func testAddChainedOperationsWithoutCompletion() {
+    internal func testAddChainedOperationsWithoutCompletion() {
         let queue = Queuer(name: "QueuerTestAddChainedOperationsWithoutCompletion")
         let testExpectation = expectation(description: "Add Chained Operations Without Completion")
         var order: [Int] = []
@@ -258,14 +249,14 @@ class QueuerTests: XCTestCase {
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2])
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(queue.operationCount, 0)
             XCTAssertEqual(order, [0, 1])
-        })
+        }
     }
     
-    func testCancelAll() {
+    internal func testCancelAll() {
         let queue = Queuer(name: "QueuerTestCancellAll")
         let testExpectation = expectation(description: "Cancell All Operations")
         var order: [Int] = []
@@ -288,13 +279,13 @@ class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertNotEqual(order.count, 3)
-        })
+        }
     }
     
-    func testPauseAndResume() {
+    internal func testPauseAndResume() {
         let queue = Queuer(name: "QueuerTestPauseAndResume")
         let testExpectation = expectation(description: "Pause and Resume")
         var order: [Int] = []
@@ -315,7 +306,7 @@ class QueuerTests: XCTestCase {
         XCTAssertLessThanOrEqual(queue.operationCount, 3)
         testExpectation.fulfill()
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertFalse(queue.isExecuting)
             XCTAssertLessThanOrEqual(queue.operationCount, 3)
@@ -323,10 +314,10 @@ class QueuerTests: XCTestCase {
             
             queue.resume()
             XCTAssertTrue(queue.isExecuting)
-        })
+        }
     }
     
-    func testWaitUnitlAllOperationsAreFinished() {
+    internal func testWaitUnitlAllOperationsAreFinished() {
         let queue = Queuer(name: "QueuerTestWaitUnitlAllOperationsAreFinished")
         let testExpectation = expectation(description: "Wait Unitl All Operations Are Finished")
         var order: [Int] = []
@@ -348,7 +339,7 @@ class QueuerTests: XCTestCase {
         XCTAssertLessThanOrEqual(queue.operationCount, 3)
         testExpectation.fulfill()
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertTrue(queue.isExecuting)
             XCTAssertLessThanOrEqual(queue.operationCount, 3)
@@ -356,6 +347,6 @@ class QueuerTests: XCTestCase {
             
             queue.resume()
             XCTAssertTrue(queue.isExecuting)
-        })
+        }
     }
 }

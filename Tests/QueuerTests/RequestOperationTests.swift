@@ -1,5 +1,5 @@
 //
-//  QueuerTests.swift
+//  RequestOperationTests.swift
 //  Queuer
 //
 //  MIT License
@@ -26,11 +26,11 @@
 
 #if !os(Linux)
 
-import XCTest
 @testable import Queuer
+import XCTest
 
-class RequestOperationTests: XCTestCase {
-    static let allTests = [
+internal class RequestOperationTests: XCTestCase {
+    internal static let allTests = [
         ("testInitFull", testInitFull),
         ("testExecute", testExecute),
         ("testUnsupportedURL", testUnsupportedURL),
@@ -40,22 +40,18 @@ class RequestOperationTests: XCTestCase {
         ("testPauseAndResume", testPauseAndResume)
     ]
     
-    let testAddress: String = "https://google.com"
+    internal let testAddress: String = "https://google.com"
     
-    override func setUp() {
+    override internal func setUp() {
         super.setUp()
         
         RequestOperation.globalCachePolicy = .reloadIgnoringLocalCacheData
     }
     
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    func testInit() {
+    internal func testInit() {
         let queue = Queuer(name: "RequestOperationTestInit")
         
-        let requestOperation: RequestOperation = RequestOperation()
+        let requestOperation = RequestOperation()
         requestOperation.addToQueue(queue)
         
         XCTAssertNil(requestOperation.url?.absoluteString)
@@ -67,11 +63,11 @@ class RequestOperationTests: XCTestCase {
         XCTAssertNil(requestOperation.body)
     }
     
-    func testInitFull() {
+    internal func testInitFull() {
         let queue = Queuer(name: "RequestOperationTestInitFull")
         let testExpectation = expectation(description: "InitFull")
         
-        let requestOperation: RequestOperation = RequestOperation(url: self.testAddress, query: ["test": "test", "test2": "test2"], timeout: 30, method: .get, headers: ["test": "test", "test2": "test2"], body: Data()) { _, _, _, _ in
+        let requestOperation = RequestOperation(url: self.testAddress, query: ["test": "test", "test2": "test2"], timeout: 30, method: .get, headers: ["test": "test", "test2": "test2"], body: Data()) { _, _, _, _ in
             testExpectation.fulfill()
         }
         requestOperation.addToQueue(queue)
@@ -84,73 +80,73 @@ class RequestOperationTests: XCTestCase {
         XCTAssertEqual(requestOperation.headers ?? [:], ["test": "test", "test2": "test2"])
         XCTAssertEqual(requestOperation.body, Data())
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-        })
+        }
     }
     
-    func testExecute() {
+    internal func testExecute() {
         let queue = Queuer(name: "RequestOperationTestExecute")
         let testExpectation = expectation(description: "Execute")
         
-        let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
+        let requestOperation = RequestOperation(url: self.testAddress) { success, _, _, error in
             XCTAssertNil(error)
             XCTAssertTrue(success)
             testExpectation.fulfill()
         }
         requestOperation.addToQueue(queue)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-        })
+        }
     }
     
-    func testUnsupportedURL() {
+    internal func testUnsupportedURL() {
         let queue = Queuer(name: "RequestOperationTestUnsupportedURL")
         let testExpectation = expectation(description: "Unsupported URL")
         
-        let requestOperation: RequestOperation = RequestOperation(url: "/path/to/something") { success, _, _, error in
+        let requestOperation = RequestOperation(url: "/path/to/something") { success, _, _, error in
             XCTAssertTrue(error is URLError)
             XCTAssertFalse(success)
             testExpectation.fulfill()
         }
         requestOperation.addToQueue(queue)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-        })
+        }
     }
     
-    func testWrongURL() {
+    internal func testWrongURL() {
         let queue = Queuer(name: "RequestOperationTestWrongURL")
         let testExpectation = expectation(description: "Wrong URL")
         
-        let requestOperation: RequestOperation = RequestOperation(url: "👍") { success, _, _, error in
+        let requestOperation = RequestOperation(url: "👍") { success, _, _, error in
             XCTAssertEqual(error as? RequestOperation.RequestError, RequestOperation.RequestError.urlError)
             XCTAssertFalse(success)
             testExpectation.fulfill()
         }
         requestOperation.addToQueue(queue)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-        })
+        }
     }
     
-    func testWithoutCompletionHandler() {
+    internal func testWithoutCompletionHandler() {
         let queue = Queuer(name: "RequestOperationTestWithoutCompletionHandler")
-        let requestOperation: RequestOperation = RequestOperation(url: self.testAddress)
+        let requestOperation = RequestOperation(url: self.testAddress)
         requestOperation.addToQueue(queue)
         
         XCTAssertEqual(queue.operations, [requestOperation])
         XCTAssertEqual(queue.operationCount, 1)
     }
     
-    func testCancel() {
+    internal func testCancel() {
         let queue = Queuer(name: "RequestOperationTestCancel")
         let testExpectation = expectation(description: "Cancel")
         
-        let requestOperation: RequestOperation = RequestOperation(url: "http://fakehttpaddress.com/", cachePolicy: .reloadIgnoringLocalCacheData) { success, _, _, _ in
+        let requestOperation = RequestOperation(url: "http://fakehttpaddress.com/", cachePolicy: .reloadIgnoringLocalCacheData) { success, _, _, _ in
             // Currently there is no easy way to check in time if the operation was cancelled before completion.
             // XCTAssertEqual(error as? RequestOperation.RequestError, RequestOperation.RequestError.operationCancelled)
             XCTAssertFalse(success)
@@ -160,12 +156,12 @@ class RequestOperationTests: XCTestCase {
         
         requestOperation.cancel()
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-        })
+        }
     }
     
-    func testPauseAndResume() {
+    internal func testPauseAndResume() {
         let queue = Queuer(name: "RequestOperationTestPauseAndResume")
         let testExpectation = expectation(description: "Pause and Resume")
         var order: [Int] = []
@@ -189,7 +185,7 @@ class RequestOperationTests: XCTestCase {
         
         XCTAssertLessThanOrEqual(queue.operationCount, 3)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertFalse(queue.isExecuting)
             XCTAssertLessThanOrEqual(queue.operationCount, 3)
@@ -197,7 +193,7 @@ class RequestOperationTests: XCTestCase {
             
             queue.resume()
             XCTAssertTrue(queue.isExecuting)
-        })
+        }
     }
 }
 

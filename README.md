@@ -51,7 +51,7 @@ Here is the list of all the features:
 - [ ] Create a network upload operation `*`
 - [ ] Ability to restore uncompleted network operations `*`
 
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
 Requirements
 ============
@@ -60,9 +60,9 @@ Requirements
 |-----------|-----------|---------------|---------|-----------|----------|-------------|-----------|
 | 3.1...3.2 | 8.3...9.0 | 1.0.0...1.1.0 | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 | 4.0       | 9.0...9.2 | 1.3.0         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
-| 4.1       | 9.3       | 1.3.1         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+| 4.1       | 9.3...9.4 | 1.3.2         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
 
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
 Installing
 ==========
@@ -167,11 +167,10 @@ Queuer.shared.addOperation(operation)
 let queue = Queuer(name: "MyCustomQueue")
 ```
 
-You can even create a queue by defining the `maxConcurrentOperationCount` and the `qualityOfService` `*` properties:
+You can even create a queue by defining the `maxConcurrentOperationCount` and the `qualityOfService` properties:
 ```swift
 let queue = Queuer(name: "MyCustomQueue", maxConcurrentOperationCount: Int.max, qualityOfService: .default)
 ```
-> `*` Currently, `QualityOfService` property is not directly supported on Linux, since there are not qos class promotions available outside of darwin targets.
 
 ### Create an Operation Block
 You have three methods to add an `Operation` block:
@@ -326,7 +325,7 @@ Response handler variables:
 
 It can be `pause`d, `resume`d, `cancel`led and chained with other `Operation`s.
 
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux and it is currently deprecated and will be removed in Queuer 2.
 
 Documentation
 =============

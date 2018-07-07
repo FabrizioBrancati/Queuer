@@ -24,26 +24,18 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import XCTest
 @testable import Queuer
+import XCTest
 
-class ConcurrentOperationTests: XCTestCase {
-    static let allTests = [
+internal class ConcurrentOperationTests: XCTestCase {
+    internal static let allTests = [
         ("testInitWithExecutionBlock", testInitWithExecutionBlock),
         ("testIsAsynchronous", testIsAsynchronous),
         ("testAddToSharedQueuer", testAddToSharedQueuer),
         ("testAddToQueue", testAddToQueue)
     ]
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    func testInitWithExecutionBlock() {
+    internal func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
         
         let testExpectation = expectation(description: "Init With Execution Block")
@@ -53,18 +45,18 @@ class ConcurrentOperationTests: XCTestCase {
         }
         concurrentOperation.addToQueue(queue)
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-        })
+        }
     }
     
-    func testIsAsynchronous() {
+    internal func testIsAsynchronous() {
         let concurrentOperation = ConcurrentOperation()
         
         XCTAssertTrue(concurrentOperation.isAsynchronous)
     }
     
-    func testAddToSharedQueuer() {
+    internal func testAddToSharedQueuer() {
         let concurrentOperation = ConcurrentOperation()
         concurrentOperation.addToSharedQueuer()
         
@@ -72,7 +64,7 @@ class ConcurrentOperationTests: XCTestCase {
         XCTAssertEqual(Queuer.shared.operations, [concurrentOperation])
     }
     
-    func testAddToQueue() {
+    internal func testAddToQueue() {
         let queue = Queuer(name: "ConcurrentOperationTestAddToQueuer")
         
         let concurrentOperation = ConcurrentOperation()

@@ -1,5 +1,5 @@
 //
-//  SmaphoreTests.swift
+//  SemaphoreTests.swift
 //  Queuer
 //
 //  MIT License
@@ -24,24 +24,16 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import XCTest
 @testable import Queuer
+import XCTest
 
-class SemaphoreTests: XCTestCase {
-    static let allTests = [
+internal class SemaphoreTests: XCTestCase {
+    internal static let allTests = [
         ("testWithSemaphore", testWithSemaphore),
         ("testWithoutSemaphore", testWithoutSemaphore)
     ]
     
-    override func setUp() {
-        super.setUp()
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-    }
-    
-    func testWithSemaphore() {
+    internal func testWithSemaphore() {
         let semaphore = Semaphore()
         let queue = Queuer(name: "SemaphoreTestWithSemaphore")
         let testExpectation = expectation(description: "With Semaphore")
@@ -58,12 +50,12 @@ class SemaphoreTests: XCTestCase {
         XCTAssertEqual(testString, "Tested")
         testExpectation.fulfill()
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-        })
+        }
     }
     
-    func testWithoutSemaphore() {
+    internal func testWithoutSemaphore() {
         let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
         let testExpectation = expectation(description: "Without Semaphore")
         var testString = ""
@@ -77,9 +69,9 @@ class SemaphoreTests: XCTestCase {
         
         XCTAssertEqual(testString, "")
         
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(testString, "Tested")
-        })
+        }
     }
 }
