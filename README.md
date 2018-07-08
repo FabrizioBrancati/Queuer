@@ -323,7 +323,7 @@ Response handler variables:
 
 It can be `pause`d, `resume`d, `cancel`led and chained with other `Operation`s.
 
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux and it is currently deprecated and will be removed in Queuer 2.
+> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `RequestOperation` is currently deprecated and will be removed in Queuer 2.
 
 Documentation
 =============
