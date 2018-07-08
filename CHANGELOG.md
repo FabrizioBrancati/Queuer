@@ -16,6 +16,12 @@ All notable changes to this project will be documented in this file.<br>
 
 ---
 
+## Develop
+### Removed
+- Removed Hound CI
+
+---
+
 ## [1.3.2](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.3.2) - Linux Quality
 ### 7 Jul 2018
 ### Added
