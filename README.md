@@ -39,7 +39,7 @@ Here is the list of all the features:
 - [x] Works on all Swift compatible platforms (even Linux `*`)
 - [x] Easy to use
 - [x] Well documented (100% documented)
-- [x] Well tested (currently 99% code coverage)
+- [x] Well tested (currently 99% of code coverage)
 - [x] Create an operation block
 - [x] Create a single operation
 - [x] Create chained operations
