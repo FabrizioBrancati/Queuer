@@ -1,4 +1,6 @@
-<p align="center"><img src="https://github.fabriziobrancati.com/queuer/resources/queuer-banner.png" alt="Queuer Banner"></p>
+<p align="center">
+<img src="Resources/Banner.png" alt="Queuer Banner">
+</p>
 
 [![Build Status](https://travis-ci.org/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.org/FabrizioBrancati/Queuer)
 [![Codecov](https://codecov.io/gh/FabrizioBrancati/Queuer/branch/master/graph/badge.svg)](https://codecov.io/gh/FabrizioBrancati/Queuer)
@@ -364,4 +366,4 @@ License
 Queuer is available under the MIT license. See the **[LICENSE](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)** file for more info.
 
 [Documentation]: https://github.fabriziobrancati.com/documentation/Queuer/
-[✓]: https://github.fabriziobrancati.com/queuer/resources/check.png
+[✓]: Resources/Check.png
