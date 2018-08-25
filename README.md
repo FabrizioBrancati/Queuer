@@ -331,7 +331,7 @@ Documentation
 =============
 
 ### [Documentation]
-100% Documented
+Jazzy generated documentation - 100% Documented
 
 Changelog
 =========
