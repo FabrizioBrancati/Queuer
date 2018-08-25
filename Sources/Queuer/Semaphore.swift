@@ -44,16 +44,16 @@ public struct Semaphore {
         semaphore = DispatchSemaphore(value: poolSize)
     }
     
-    @discardableResult
     /// Wait for a `continue` function call.
+    @discardableResult
     public func wait() -> DispatchTimeoutResult {
         return semaphore.wait(timeout: .distantFuture)
     }
     
-    @discardableResult
     /// This function returns non-zero if a thread is woken. Otherwise, zero is returned.
     ///
     /// - Returns: Returns non-zero if a thread is woken. Otherwise, zero is returned.
+    @discardableResult
     public func `continue`() -> Int {
         return semaphore.signal()
     }
