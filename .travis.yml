@@ -19,11 +19,11 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.4,name=iPhone X"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  CODECOV="YES"
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=12.0,name=iPhone X"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  CODECOV="YES"
     - os: osx
       language: objective-c
       osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.1,name=iPhone 7 Plus"              SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="YES" CODECOV="NO"
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.4,name=iPhone 7 Plus"              SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="YES" CODECOV="NO"
     - os: osx
       language: objective-c
       osx_image: xcode10
