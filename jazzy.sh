@@ -14,4 +14,10 @@ jazzy \
   --xcodebuild-arguments -scheme,"Queuer iOS" \
   --module Queuer \
   --root-url https://github.com/FabrizioBrancati/Queuer \
-  --output Docs/
+  --output Docs/ \
+  --theme jony \
+  --docset-icon Resources/Icon-32.png \
+  --root-url https://github.fabriziobrancati.com/documentation/Queuer/ \
+  --dash_url https://github.fabriziobrancati.com/documentation/Queuer/docsets/Queuer.xml
+
+cp -r Resources Docs/Resources
