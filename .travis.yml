@@ -31,7 +31,7 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=9.0,name=iPhone 5s"                    SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=9.0,name=iPhone 5s"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  CODECOV="NO"
     - os: osx
       language: objective-c
       osx_image: xcode9.2
