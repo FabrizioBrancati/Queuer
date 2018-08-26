@@ -73,8 +73,11 @@ internal class RequestOperationTests: XCTestCase {
         requestOperation.addToQueue(queue)
         
         XCTAssertEqual(requestOperation.url?.absoluteString, self.testAddress)
-        XCTAssertEqual(requestOperation.query, "?test=test&test2=test2")
-        XCTAssertEqual(requestOperation.completeURL, URL(string: self.testAddress + "?test=test&test2=test2"))
+        XCTAssertTrue(requestOperation.query?.contains("test=test") ?? false)
+        XCTAssertTrue(requestOperation.query?.contains("test2=test2") ?? false)
+        XCTAssertTrue(requestOperation.completeURL?.absoluteString.contains(self.testAddress) ?? false)
+        XCTAssertTrue(requestOperation.completeURL?.absoluteString.contains("test=test") ?? false)
+        XCTAssertTrue(requestOperation.completeURL?.absoluteString.contains("test2=test2") ?? false)
         XCTAssertEqual(requestOperation.timeout, 30)
         XCTAssertEqual(requestOperation.method, .get)
         XCTAssertEqual(requestOperation.headers ?? [:], ["test": "test", "test2": "test2"])
