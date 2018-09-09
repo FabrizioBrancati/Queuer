@@ -20,6 +20,9 @@ All notable changes to this project will be documented in this file.<br>
 ### Added
 - Added support to Xcode 10 and Swift 4.2
 
+### Changed
+- Changed from Codecov to Coveralls service for code coverage
+
 ---
 
 ## Develop
