@@ -283,6 +283,11 @@ defer { semaphore.continue() }
 /// Your task here
 ```
 
+You can even set a custom timeout, default is `.distantFuture`:
+```swift
+semaphore.wait(DispatchTime(uptimeNanoseconds: 1_000_000_000))
+```
+
 It's more useful if used inside an asynchronous task:
 ```swift
 let concurrentOperation = ConcurrentOperation {
