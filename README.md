@@ -56,12 +56,12 @@ Here is the list of all the features:
 Requirements
 ============
 
-| **Swift** | **Xcode** | **Queuer**    | **iOS** | **macOS** | **tvOS** | **watchOS** | **Linux** |
-|-----------|-----------|---------------|---------|-----------|----------|-------------|-----------|
-| 3.1...3.2 | 8.3...9.0 | 1.0.0...1.1.0 | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
-| 4.0       | 9.0...9.2 | 1.3.0         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
-| 4.1       | 9.3...9.4 | 1.3.1...1.3.2 | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
-| 4.2       | 10.0      | 1.x.x         | 8.0+    | 10.10     | 9.0      | 2.0+        | ![✓] `*`  |
+| **Swift** | **Xcode** | **Queuer**    | **iOS** | **macOS**  | **tvOS**  | **watchOS** | **Linux** |
+|-----------|-----------|---------------|---------|------------|-----------|-------------|-----------|
+| 3.1...3.2 | 8.3...9.0 | 1.0.0...1.1.0 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓] `*`  |
+| 4.0       | 9.0...9.2 | 1.3.0         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓] `*`  |
+| 4.1       | 9.3...9.4 | 1.3.1...1.3.2 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓] `*`  |
+| 4.2       | 10.0      | 2.x.x         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓] `*`  |
 
 > `*` Currently, `URLSession.shared` property is not yet implemented on Linux.
 
@@ -132,7 +132,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 - Create a **Package.swift** file in your **project directory** and write into:
 
     ```swift
-    // swift-tools-version:4.0
+    // swift-tools-version:4.2
     import PackageDescription
 
     let package = Package(
