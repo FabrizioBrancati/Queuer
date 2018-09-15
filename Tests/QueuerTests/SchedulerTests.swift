@@ -1,5 +1,5 @@
 //
-//  LinuxMain.swift
+//  SchedulerTests.swift
 //  Queuer
 //
 //  MIT License
@@ -24,15 +24,40 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if os(Linux)
-@testable import QueuerTests
+import Dispatch
+@testable import Queuer
 import XCTest
 
-XCTMain([
-    testCase(ConcurrentOperationTests.allTests),
-    testCase(QueuerTests.allTests),
-    testCase(SchedulerTests.allTests),
-    testCase(SemaphoreTests.allTests),
-    testCase(SynchronousOperationTests.allTests)
-])
-#endif
+internal class SchedulerTests: XCTestCase {
+    internal static let allTests = [
+        ("testInitWithoutHandler", testInitWithoutHandler),
+        ("testInitWithHandler", testInitWithHandler)
+    ]
+    
+    internal func testInitWithoutHandler() {
+        let testExpectation = expectation(description: "Init Without Handler")
+        
+        var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
+        schedule.setHandler {
+            testExpectation.fulfill()
+            schedule.timer.cancel()
+        }
+        
+        waitForExpectations(timeout: 2) { error in
+            XCTAssertNil(error)
+        }
+    }
+    
+    internal func testInitWithHandler() {
+        let testExpectation = expectation(description: "Init With Handler")
+        
+        let schedule = Scheduler(deadline: .now(), repeating: .seconds(1)) {
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 2) { error in
+            XCTAssertNil(error)
+            schedule.timer.cancel()
+        }
+    }
+}
