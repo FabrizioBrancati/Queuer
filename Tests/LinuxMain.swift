@@ -31,7 +31,6 @@ import XCTest
 XCTMain([
     testCase(ConcurrentOperationTests.allTests),
     testCase(QueuerTests.allTests),
-    testCase(URLBuilderTests.allTests),
     testCase(SemaphoreTests.allTests),
     testCase(SynchronousOperationTests.allTests)
 ])
