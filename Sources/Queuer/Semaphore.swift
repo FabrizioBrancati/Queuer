@@ -46,8 +46,8 @@ public struct Semaphore {
     
     /// Wait for a `continue` function call.
     @discardableResult
-    public func wait() -> DispatchTimeoutResult {
-        return semaphore.wait(timeout: .distantFuture)
+    public func wait(_ timeout: DispatchTime = .distantFuture) -> DispatchTimeoutResult {
+        return semaphore.wait(timeout: timeout)
     }
     
     /// This function returns non-zero if a thread is woken. Otherwise, zero is returned.
