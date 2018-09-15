@@ -226,13 +226,13 @@ queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
     queue.pause()
     ```
     > By calling `pause()` you will not be sure that every operation will be paused.
-      If the Operation is already started it will not be on pause until it's a custom Operation that overrides `pause()` function or is a `RequestOperation`.
+      If the Operation is already started it will not be on pause until it's a custom Operation that overrides `pause()` function.
 
 - Resume queue:
     ```swift
     queue.resume()
     ```
-    > To have a complete `pause` and `resume` states you must create a custom Operation that overrides `pause()` and `resume()` function or use a `RequestOperation`.
+    > To have a complete `pause` and `resume` states you must create a custom Operation that overrides `pause()` and `resume()` function.
 
 - Wait until all operations are finished:
     ```swift
@@ -245,8 +245,7 @@ queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
 It allows synchronous and asynchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
 
 You can create your custom `ConcurrentOperation` by subclassing it.<br>
-You must override `execute()` function and call the `finish()` function inside it, when the task has finished its job to notify the queue.<br>
-Look at [RequestOperation.swift](https://github.com/FabrizioBrancati/Queuer/blob/master/Sources/Queuer/RequestOperation.swift) if you are looking for an example.
+You must override `execute()` function and call the `finish()` function inside it, when the task has finished its job to notify the queue.
 
 For convenience it has an `init` function with a completion block:
 ```swift
@@ -293,40 +292,6 @@ let concurrentOperation = ConcurrentOperation {
 concurrentOperation.addToQueue(queue)
 semaphore.wait()
 ```
-
-### Request Operation `*`
-`RequestOperation` allows you to easily create a network request and add it to a queue:
-```swift
-let requestOperation: RequestOperation = RequestOperation(url: self.testAddress) { success, response, data, error in
-
-}
-requestOperation.addToQueue(queue)
-```
-Allowed parameters in `RequestOperation` `init` function:
-- `url` is a `String` representing the request URL
-- `query` is `Dictionary` representing the request query parameters to be added to the `url` with `?` and `&` characters
-- `timeout` is the request timeout
-- `method` is the request method, you can choose to one of: `connect`, `delete`, `get`, `head`, `options`, `patch`, `post` and `put`
-- `cachePolicy` is the request cache policy, referrer to [CachePolicy documentation](https://developer.apple.com/documentation/foundation/nsurlrequest.cachepolicy)
-- `headers` is a `Dictionary` representing the request headers
-- `body` is a `Data` representing the request body
-- `completionHandler` is the request response handler
-
-Response handler variables:
-- `success` is a `Bool` indicating if the request was successful.
-  It's successful if its status is between 200 and 399, it wasn't cancelled and did't get any other network error.
-- `respose` is an `HTTPURLResponse` instance.
-  It contains all the response headers and the status code.
-  May be `nil`.
-- `data` is a `Data` instance with the request body.
-  You must convert, to a JSON or String in example, it in order to use.
-  May be `nil`.
-- `error` is an `Error` instance with the request error.
-  May be `nil`.
-
-It can be `pause`d, `resume`d, `cancel`led and chained with other `Operation`s.
-
-> `*` Currently, `URLSession.shared` property is not yet implemented on Linux, also `RequestOperation` is currently deprecated and will be removed in Queuer 2.
 
 Documentation
 =============
