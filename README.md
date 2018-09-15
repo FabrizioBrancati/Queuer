@@ -272,6 +272,28 @@ let synchronousOperation = SynchronousOperation {
 synchronousOperation.addToQueue(queue)
 ```
 
+### Scheduler
+A `Scheduler` is a struct that uses the GDC's `DispatchSourceTimer` to create a timer that can execute functions with a specified interval and quality of service.
+
+```swift
+let schedule = Scheduler(deadline: .now(), repeating: .seconds(1)) {
+    /// Your task here
+}
+```
+
+You can even create a `Scheduler` without the handler and set it later:
+```swift
+var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
+schedule.setHandler {
+    /// Your task here.
+}
+```
+
+With `timer` property you can access to all `DispatchSourceTimer` properties and functions, like `cancel()`:
+```swift
+schedule.timer.cancel()
+```
+
 ### Semaphore
 A `Semaphore` is a struct that uses the GCD's `DispatchSemaphore` to create a semaphore on the function and wait until it finish its job.<br>
 I recommend you to use a `defer { semaphore.continue() }` right after the `Semaphore` creation and `wait()` call.

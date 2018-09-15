@@ -51,7 +51,7 @@ internal class SchedulerTests: XCTestCase {
     internal func testInitWithHandler() {
         let testExpectation = expectation(description: "Init With Handler")
         
-        let schedule = Scheduler(deadline: .now(), repeating: .seconds(1)) {
+        let schedule = Scheduler(deadline: .now(), repeating: .never) {
             testExpectation.fulfill()
         }
         
