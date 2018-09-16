@@ -36,9 +36,13 @@ public class SynchronousOperation: ConcurrentOperation {
         return false
     }
     
-    /// Notify the completion of sync task and hence the completion of the operation.
+    /// Notify the completion of async task and hence the completion of the operation.
     /// Must be called when the Operation is finished.
-    override public func finish() {
+    ///
+    /// - Parameter hasFailed: Set it to `true` if the operation has failed, otherwise `false`.
+    override public func finish(_ hasFailed: Bool) {
+        super.finish(hasFailed)
+        
         semaphore.continue()
     }
     

@@ -40,10 +40,10 @@ internal class SynchronousOperationTests: XCTestCase {
         let testExpectation = expectation(description: "Synchronous Operation")
         var testString = ""
         
-        let synchronousOperation1 = SynchronousOperation {
+        let synchronousOperation1 = SynchronousOperation { _ in
             testString = "Tested1"
         }
-        let synchronousOperation2 = SynchronousOperation {
+        let synchronousOperation2 = SynchronousOperation { _ in
             Thread.sleep(forTimeInterval: 2)
             testString = "Tested2"
             
@@ -65,10 +65,10 @@ internal class SynchronousOperationTests: XCTestCase {
         let testExpectation = expectation(description: "Synchronous Operation")
         var testString = ""
         
-        let synchronousOperation1 = SynchronousOperation {
+        let synchronousOperation1 = SynchronousOperation { _ in
             testString = "Tested1"
         }
-        let synchronousOperation2 = SynchronousOperation {
+        let synchronousOperation2 = SynchronousOperation { _ in
             Thread.sleep(forTimeInterval: 2)
             testString = "Tested2"
             
@@ -98,11 +98,11 @@ internal class SynchronousOperationTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        let synchronousOperation1 = SynchronousOperation {
+        let synchronousOperation1 = SynchronousOperation { _ in
             testString = "Tested1"
             Thread.sleep(forTimeInterval: 4)
         }
-        let synchronousOperation2 = SynchronousOperation {
+        let synchronousOperation2 = SynchronousOperation { _ in
             testString = "Tested2"
         }
         synchronousOperation1.addToQueue(queue)

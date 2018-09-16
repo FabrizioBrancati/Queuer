@@ -40,7 +40,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         
         let testExpectation = expectation(description: "Init With Execution Block")
         
-        let concurrentOperation = ConcurrentOperation {
+        let concurrentOperation = ConcurrentOperation { _ in
             testExpectation.fulfill()
         }
         concurrentOperation.addToQueue(queue)

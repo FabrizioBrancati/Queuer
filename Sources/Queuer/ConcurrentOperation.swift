@@ -29,12 +29,12 @@ import Foundation
 /// It allows asynchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
 open class ConcurrentOperation: Operation {
     /// Operation's execution block.
-    public var executionBlock: (() -> Void)?
+    public var executionBlock: ((_ operation: ConcurrentOperation) -> Void)?
     
     /// Creates the Operation with an execution block.
     ///
     /// - Parameter executionBlock: Execution block.
-    public init(executionBlock: (() -> Void)? = nil) {
+    public init(executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
         super.init()
         
         self.executionBlock = executionBlock
@@ -75,6 +75,20 @@ open class ConcurrentOperation: Operation {
         return _finished
     }
     
+    /// You should use `hasFailed` if retry is enabled.
+    /// Set it to `true` if the operation has failed, otherwise `false`.
+    /// Default is `false` to avoid retries.
+    open var hasFailed = false
+    
+    /// Maximum allowed retries.
+    open var maximumRetries = 3
+    
+    /// Current retry tentative.
+    open var currentRetry = 0
+    
+    /// Specify if the operation should retry another time.
+    private var shouldRetry = true
+    
     /// Start the Operation.
     override open func start() {
         _executing = true
@@ -85,16 +99,26 @@ open class ConcurrentOperation: Operation {
     /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
     open func execute() {
         if let executionBlock = executionBlock {
-            executionBlock()
-            self.finish()
+            while shouldRetry {
+                executionBlock(self)
+                self.finish(hasFailed)
+            }
         }
     }
     
     /// Notify the completion of async task and hence the completion of the operation.
     /// Must be called when the Operation is finished.
-    open func finish() {
-        _executing = false
-        _finished = true
+    ///
+    /// - Parameter hasFailed: Set it to `true` if the operation has failed, otherwise `false`.
+    open func finish(_ hasFailed: Bool) {
+        if !hasFailed || currentRetry >= maximumRetries {
+            _executing = false
+            _finished = true
+            shouldRetry = false
+        } else {
+            currentRetry += 1
+            shouldRetry = true
+        }
     }
     
     /// Pause the current Operation, if it's supported.
