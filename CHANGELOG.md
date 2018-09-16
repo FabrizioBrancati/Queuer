@@ -19,8 +19,16 @@ All notable changes to this project will be documented in this file.<br>
 ## Swift 4.2
 ### Added
 - Added support to Xcode 10 and Swift 4.2
+- Added retry feature to `ConcurrentOperation` class [#32](https://github.com/FabrizioBrancati/BFKit-Swift/issues/10)
+- Added `addCompletionHandler(_:)` function to `Queuer` class
 
 ### Changed
+- Changed `executionBlock` of `ConcurrentOperation` to pass the `concurrentOperation` variable inside the closure to be able to use the retry feature. If you don't need it simply put `_ in` after the block creation
+  ```swift
+  let concurrentOperation = ConcurrentOperation { _ in
+      /// Your task here
+  }
+  ```
 - Changed from Codecov to Coveralls service for code coverage
 
 ---
@@ -105,7 +113,7 @@ Thanks to [@BabyAzerty](https://github.com/BabyAzerty) for this release
 - Updated SwiftLint to 0.21.0
 
 ### Fixed
-- Now `ConcurrentOperation` is subclassable with `open` instead of `public` Access Control [#2](https://github.com/FabrizioBrancati/Queuer/issue/2)
+- Now `ConcurrentOperation` is subclassable with `open` instead of `public` Access Control [#2](https://github.com/FabrizioBrancati/Queuer/issues/2)
 - Fixed tests that sometimes fails
 
 ---
