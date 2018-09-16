@@ -38,7 +38,7 @@ public struct Scheduler {
     /// Schedule quality of service.
     public private(set) var qualityOfService: DispatchQoS
     /// Schedule handler.
-    public private(set) var handler: (() -> Void)? = nil
+    public private(set) var handler: (() -> Void)?
     
     /// Create a schedule.
     ///
