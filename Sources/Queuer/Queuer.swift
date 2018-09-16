@@ -120,11 +120,7 @@ public class Queuer {
             return
         }
         
-        let completionOperation = BlockOperation(block: completionHandler)
-        if !operations.isEmpty {
-            completionOperation.addDependency(operations[operations.count - 1])
-        }
-        addOperation(completionOperation)
+        addCompletionHandler(completionHandler)
     }
     
     /// Add an Array of chained Operations.
@@ -139,6 +135,17 @@ public class Queuer {
     ///                        are finished.
     public func addChainedOperations(_ operations: Operation..., completionHandler: (() -> Void)? = nil) {
         addChainedOperations(operations, completionHandler: completionHandler)
+    }
+    
+    /// Add a completion block to the queue.
+    ///
+    /// - Parameter completionHandler: Completion handler to be executed as last operation.
+    public func addCompletionHandler(_ completionHandler: @escaping () -> Void) {
+        let completionOperation = BlockOperation(block: completionHandler)
+        if let lastOperation = operations.last {
+            completionOperation.addDependency(lastOperation)
+        }
+        addOperation(completionOperation)
     }
     
     /// Cancel all Operations in queue.
