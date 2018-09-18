@@ -1,5 +1,5 @@
 //
-//  LinuxMain.swift
+//  QueuerTests+XCTest.swift
 //  Queuer
 //
 //  The MIT License (MIT)
@@ -33,14 +33,25 @@
 
 import XCTest
 
-#if os(Linux) || os(FreeBSD)
-    @testable import QueuerTests
-
-    XCTMain([
-        testCase(ConcurrentOperationTests.allTests),
-        testCase(QueuerTests.allTests),
-        testCase(SchedulerTests.allTests),
-        testCase(SemaphoreTests.allTests),
-        testCase(SynchronousOperationTests.allTests)
-    ])
-#endif
+internal extension QueuerTests {
+    internal static var allTests: [(String, (QueuerTests) -> () throws -> Void)] {
+        return [
+            ("testOperationCount", testOperationCount),
+            ("testOperations", testOperations),
+            ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
+            ("testQualityOfService", testQualityOfService),
+            ("testInitWithNameMaxConcurrentOperationCount", testInitWithNameMaxConcurrentOperationCount),
+            ("testInitWithNameMaxConcurrentOperationCountQualityOfService", testInitWithNameMaxConcurrentOperationCountQualityOfService),
+            ("testAddOperationBlock", testAddOperationBlock),
+            ("testAddOperation", testAddOperation),
+            ("testAddOperations", testAddOperations),
+            ("testAddChainedOperations", testAddChainedOperations),
+            ("testAddChainedOperationsList", testAddChainedOperationsList),
+            ("testAddChainedOperationsEmpty", testAddChainedOperationsEmpty),
+            ("testAddChainedOperationsWithoutCompletion", testAddChainedOperationsWithoutCompletion),
+            ("testCancelAll", testCancelAll),
+            ("testPauseAndResume", testPauseAndResume),
+            ("testWaitUnitlAllOperationsAreFinished", testWaitUnitlAllOperationsAreFinished)
+        ]
+    }
+}

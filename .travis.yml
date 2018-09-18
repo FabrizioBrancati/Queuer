@@ -88,7 +88,8 @@ script:
   - swift -version
 
   - if [ "$SPM" == "YES" ]; then
-      swift build;
+      swift package clean;
+      ruby generate_linux_tests.rb;
       swift test --parallel;
     fi
 

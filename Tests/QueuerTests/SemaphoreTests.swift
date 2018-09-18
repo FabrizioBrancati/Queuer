@@ -28,11 +28,6 @@
 import XCTest
 
 internal class SemaphoreTests: XCTestCase {
-    internal static let allTests = [
-        ("testWithSemaphore", testWithSemaphore),
-        ("testWithoutSemaphore", testWithoutSemaphore)
-    ]
-    
     internal func testWithSemaphore() {
         let semaphore = Semaphore()
         let queue = Queuer(name: "SemaphoreTestWithSemaphore")

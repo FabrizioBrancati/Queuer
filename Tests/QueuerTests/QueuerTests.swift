@@ -30,25 +30,6 @@ import XCTest
 
 // swiftlint:disable type_body_length
 internal class QueuerTests: XCTestCase {
-    internal static let allTests = [
-        ("testOperationCount", testOperationCount),
-        ("testOperations", testOperations),
-        ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
-        ("testQualityOfService", testQualityOfService),
-        ("testInitWithNameMaxConcurrentOperationCount", testInitWithNameMaxConcurrentOperationCount),
-        ("testInitWithNameMaxConcurrentOperationCountQualityOfService", testInitWithNameMaxConcurrentOperationCountQualityOfService),
-        ("testAddOperationBlock", testAddOperationBlock),
-        ("testAddOperation", testAddOperation),
-        ("testAddOperations", testAddOperations),
-        ("testAddChainedOperations", testAddChainedOperations),
-        ("testAddChainedOperationsList", testAddChainedOperationsList),
-        ("testAddChainedOperationsEmpty", testAddChainedOperationsEmpty),
-        ("testAddChainedOperationsWithoutCompletion", testAddChainedOperationsWithoutCompletion),
-        ("testCancelAll", testCancelAll),
-        ("testPauseAndResume", testPauseAndResume),
-        ("testWaitUnitlAllOperationsAreFinished", testWaitUnitlAllOperationsAreFinished)
-    ]
-    
     internal func testOperationCount() {
         let queue = Queuer(name: "QueuerTestOperationCount")
         let testExpectation = expectation(description: "Operation Count")

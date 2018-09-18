@@ -29,12 +29,6 @@ import Dispatch
 import XCTest
 
 internal class SynchronousOperationTests: XCTestCase {
-    internal static let allTests = [
-        ("testSynchronousOperation", testSynchronousOperation),
-        ("testSynchronousOperationOnSharedQueuer", testSynchronousOperationOnSharedQueuer),
-        ("testCancel", testCancel)
-    ]
-    
     internal func testSynchronousOperation() {
         let queue = Queuer(name: "SynchronousOperationTestSynchronousOperation")
         let testExpectation = expectation(description: "Synchronous Operation")

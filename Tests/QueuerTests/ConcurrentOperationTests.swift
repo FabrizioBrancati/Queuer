@@ -28,13 +28,6 @@
 import XCTest
 
 internal class ConcurrentOperationTests: XCTestCase {
-    internal static let allTests = [
-        ("testInitWithExecutionBlock", testInitWithExecutionBlock),
-        ("testIsAsynchronous", testIsAsynchronous),
-        ("testAddToSharedQueuer", testAddToSharedQueuer),
-        ("testAddToQueue", testAddToQueue)
-    ]
-    
     internal func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
         
