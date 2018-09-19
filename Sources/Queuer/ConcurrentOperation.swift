@@ -128,7 +128,10 @@ open class ConcurrentOperation: Operation {
     /// Resume the current `Operation`, if it's supported.
     /// Must be overridend by subclass to get a custom resume action.
     open func resume() {}
-    
+}
+
+/// `ConcurrentOperation` extension with queue handling.
+public extension ConcurrentOperation {
     /// Adds the `Operation` to `shared` Queuer.
     public func addToSharedQueuer() {
         Queuer.shared.addOperation(self)
