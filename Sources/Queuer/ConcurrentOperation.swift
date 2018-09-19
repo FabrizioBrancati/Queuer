@@ -31,15 +31,6 @@ open class ConcurrentOperation: Operation {
     /// Operation's execution block.
     public var executionBlock: ((_ operation: ConcurrentOperation) -> Void)?
     
-    /// Creates the Operation with an execution block.
-    ///
-    /// - Parameter executionBlock: Execution block.
-    public init(executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
-        super.init()
-        
-        self.executionBlock = executionBlock
-    }
-    
     /// Set the Operation as asynchronous.
     override open var isAsynchronous: Bool {
         return true
@@ -88,6 +79,15 @@ open class ConcurrentOperation: Operation {
     
     /// Specify if the operation should retry another time.
     private var shouldRetry = true
+    
+    /// Creates the Operation with an execution block.
+    ///
+    /// - Parameter executionBlock: Execution block.
+    public init(executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
+        super.init()
+        
+        self.executionBlock = executionBlock
+    }
     
     /// Start the Operation.
     override open func start() {
