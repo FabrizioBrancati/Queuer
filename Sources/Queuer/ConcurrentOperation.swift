@@ -84,7 +84,7 @@ open class ConcurrentOperation: Operation {
     open var maximumRetries = 3
     
     /// Current retry tentative.
-    open var currentRetry = 0
+    open var currentAttempt = 1
     
     /// Specify if the operation should retry another time.
     private var shouldRetry = true
@@ -111,12 +111,12 @@ open class ConcurrentOperation: Operation {
     ///
     /// - Parameter hasFailed: Set it to `true` if the operation has failed, otherwise `false`.
     open func finish(_ hasFailed: Bool) {
-        if !hasFailed || currentRetry >= maximumRetries {
+        if !hasFailed || currentAttempt >= maximumRetries {
             _executing = false
             _finished = true
             shouldRetry = false
         } else {
-            currentRetry += 1
+            currentAttempt += 1
             shouldRetry = true
         }
     }

@@ -66,4 +66,49 @@ internal class ConcurrentOperationTests: XCTestCase {
         XCTAssertEqual(queue.operationCount, 1)
         XCTAssertEqual(queue.operations, [concurrentOperation])
     }
+    
+    internal func testSimpleRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestSimpleRetry")
+        
+        let testExpectation = expectation(description: "Simple Retry")
+        
+        let concurrentOperation = ConcurrentOperation { operation in
+            operation.hasFailed = true
+        }
+        concurrentOperation.addToQueue(queue)
+        queue.addCompletionHandler {
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(concurrentOperation.hasFailed)
+            XCTAssertEqual(concurrentOperation.currentAttempt, 3)
+        }
+    }
+    
+    internal func testChainedRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+        let testExpectation = expectation(description: "Chained Retry")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            Thread.sleep(forTimeInterval: 1)
+            order.append(0)
+            operation.hasFailed = true
+        }
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            order.append(1)
+            operation.hasFailed = true
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
+        }
+    }
 }
