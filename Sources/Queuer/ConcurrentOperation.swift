@@ -28,15 +28,15 @@ import Foundation
 
 /// It allows asynchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
 open class ConcurrentOperation: Operation {
-    /// Operation's execution block.
+    /// `Operation`'s execution block.
     public var executionBlock: ((_ operation: ConcurrentOperation) -> Void)?
     
-    /// Set the Operation as asynchronous.
+    /// Set the `Operation` as asynchronous.
     override open var isAsynchronous: Bool {
         return true
     }
     
-    /// Set if the Operation is executing.
+    /// Set if the `Operation` is executing.
     private var _executing = false {
         willSet {
             willChangeValue(forKey: "isExecuting")
@@ -46,12 +46,12 @@ open class ConcurrentOperation: Operation {
         }
     }
     
-    /// Set if the Operation is executing.
+    /// Set if the `Operation` is executing.
     override open var isExecuting: Bool {
         return _executing
     }
     
-    /// Set if the Operation is finished.
+    /// Set if the `Operation` is finished.
     private var _finished = false {
         willSet {
             willChangeValue(forKey: "isFinished")
@@ -61,13 +61,13 @@ open class ConcurrentOperation: Operation {
         }
     }
     
-    /// Set if the Operation is finished.
+    /// Set if the `Operation` is finished.
     override open var isFinished: Bool {
         return _finished
     }
     
-    /// You should use `hasFailed` if retry is enabled.
-    /// Set it to `true` if the operation has failed, otherwise `false`.
+    /// You should use `hasFailed` if you want the retry feature.
+    /// Set it to `true` if the `Operation` has failed, otherwise `false`.
     /// Default is `false` to avoid retries.
     open var hasFailed = false
     
@@ -77,10 +77,10 @@ open class ConcurrentOperation: Operation {
     /// Current retry tentative.
     open var currentAttempt = 1
     
-    /// Specify if the operation should retry another time.
+    /// Specify if the `Operation` should retry another time.
     private var shouldRetry = true
     
-    /// Creates the Operation with an execution block.
+    /// Creates the `Operation` with an execution block.
     ///
     /// - Parameter executionBlock: Execution block.
     public init(executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
@@ -89,13 +89,13 @@ open class ConcurrentOperation: Operation {
         self.executionBlock = executionBlock
     }
     
-    /// Start the Operation.
+    /// Start the `Operation`.
     override open func start() {
         _executing = true
         execute()
     }
     
-    /// Execute the Operation.
+    /// Execute the `Operation`.
     /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
     open func execute() {
         if let executionBlock = executionBlock {
@@ -106,10 +106,10 @@ open class ConcurrentOperation: Operation {
         }
     }
     
-    /// Notify the completion of async task and hence the completion of the operation.
-    /// Must be called when the Operation is finished.
+    /// Notify the completion of async task and hence the completion of the `Operation`.
+    /// Must be called when the `Operation` is finished.
     ///
-    /// - Parameter hasFailed: Set it to `true` if the operation has failed, otherwise `false`.
+    /// - Parameter hasFailed: Set it to `true` if the `Operation` has failed, otherwise `false`.
     open func finish(_ hasFailed: Bool) {
         if !hasFailed || currentAttempt >= maximumRetries {
             _executing = false
@@ -121,22 +121,22 @@ open class ConcurrentOperation: Operation {
         }
     }
     
-    /// Pause the current Operation, if it's supported.
+    /// Pause the current `Operation`, if it's supported.
     /// Must be overridend by subclass to get a custom pause action.
     open func pause() {}
     
-    /// Resume the current Operation, if it's supported.
+    /// Resume the current `Operation`, if it's supported.
     /// Must be overridend by subclass to get a custom resume action.
     open func resume() {}
     
-    /// Adds the Operation to `shared` Queuer.
+    /// Adds the `Operation` to `shared` Queuer.
     public func addToSharedQueuer() {
         Queuer.shared.addOperation(self)
     }
     
-    /// Adds the Operation to the custom queue.
+    /// Adds the `Operation` to the custom queue.
     ///
-    /// - Parameter queue: Custom queue where the Operation will be added.
+    /// - Parameter queue: Custom queue where the `Operation` will be added.
     public func addToQueue(_ queue: Queuer) {
         queue.addOperation(self)
     }

@@ -27,9 +27,9 @@
 import Dispatch
 import Foundation
 
-/// DispatchSemaphore struct wrapper.
+/// `DispatchSemaphore` struct wrapper.
 public struct Semaphore {
-    /// Private DispatchSemaphore.
+    /// Private `DispatchSemaphore`.
     private let semaphore: DispatchSemaphore
     
     /// Creates new counting semaphore with an initial value.
@@ -39,7 +39,7 @@ public struct Semaphore {
     /// to the value.
     ///
     /// - Parameter poolSize: The starting value for the semaphore.
-    ///                       Passing a value less than zero will cause NULL to be returned.
+    ///                       Passing a value less than zero will cause `NULL` to be returned.
     public init(poolSize: Int = 0) {
         semaphore = DispatchSemaphore(value: poolSize)
     }

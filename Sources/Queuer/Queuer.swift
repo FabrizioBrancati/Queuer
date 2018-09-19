@@ -31,20 +31,20 @@ public class Queuer {
     /// Shared Queuer.
     public static let shared = Queuer(name: "Queuer")
     
-    /// Queuer OperationQueue.
+    /// Queuer `OperationQueue`.
     public let queue = OperationQueue()
     
-    /// Total Operation count in queue.
+    /// Total `Operation` count in queue.
     public var operationCount: Int {
         return queue.operationCount
     }
     
-    /// Operations currently in queue.
+    /// `Operation`s currently in queue.
     public var operations: [Operation] {
         return queue.operations
     }
     
-    /// The default service level to apply to operations executed using the queue.
+    /// The default service level to apply to `Operation`s executed using the queue.
     public var qualityOfService: QualityOfService {
         get {
             return queue.qualityOfService
@@ -61,7 +61,7 @@ public class Queuer {
         return !queue.isSuspended
     }
     
-    /// Define the max concurrent operation count.
+    /// Define the max concurrent `Operation`s count.
     public var maxConcurrentOperationCount: Int {
         get {
             return queue.maxConcurrentOperationCount
@@ -75,37 +75,37 @@ public class Queuer {
     ///
     /// - Parameters:
     ///   - name: Custom queue name.
-    ///   - maxConcurrentOperationCount: The max concurrent operation count.
-    ///   - qualityOfService: The default service level to apply to operations executed using the queue.
+    ///   - maxConcurrentOperationCount: The max concurrent `Operation`s count.
+    ///   - qualityOfService: The default service level to apply to `Operation`s executed using the queue.
     public init(name: String, maxConcurrentOperationCount: Int = Int.max, qualityOfService: QualityOfService = .default) {
         queue.name = name
         self.maxConcurrentOperationCount = maxConcurrentOperationCount
         self.qualityOfService = qualityOfService
     }
     
-    /// Add an Operation to be executed asynchronously.
+    /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter block: Block to be executed.
     public func addOperation(_ operation: @escaping () -> Void) {
         queue.addOperation(operation)
     }
     
-    /// Add an Operation to be executed asynchronously.
+    /// Add an `Operation` to be executed asynchronously.
     ///
-    /// - Parameter operation: Operation to be executed.
+    /// - Parameter operation: `Operation` to be executed.
     public func addOperation(_ operation: Operation) {
         queue.addOperation(operation)
     }
     
-    /// Add an Array of chained Operations.
+    /// Add an Array of chained `Operation`s.
     ///
     /// Example:
     ///
     ///     [A, B, C] = A -> B -> C -> completionHandler.
     ///
     /// - Parameters:
-    ///   - operations: Operations Array.
-    ///   - completionHandler: Completion block to be exectuted when all Operations
+    ///   - operations: `Operation`s Array.
+    ///   - completionHandler: Completion block to be exectuted when all `Operation`s
     ///                        are finished.
     public func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
         for (index, operation) in operations.enumerated() {
@@ -123,15 +123,15 @@ public class Queuer {
         addCompletionHandler(completionHandler)
     }
     
-    /// Add an Array of chained Operations.
+    /// Add an Array of chained `Operation`s.
     ///
     /// Example:
     ///
     ///     [A, B, C] = A -> B -> C -> completionHandler.
     ///
     /// - Parameters:
-    ///   - operations: Operations list.
-    ///   - completionHandler: Completion block to be exectuted when all Operations
+    ///   - operations: `Operation`s list.
+    ///   - completionHandler: Completion block to be exectuted when all `Operation`s
     ///                        are finished.
     public func addChainedOperations(_ operations: Operation..., completionHandler: (() -> Void)? = nil) {
         addChainedOperations(operations, completionHandler: completionHandler)
@@ -139,7 +139,7 @@ public class Queuer {
     
     /// Add a completion block to the queue.
     ///
-    /// - Parameter completionHandler: Completion handler to be executed as last operation.
+    /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
     public func addCompletionHandler(_ completionHandler: @escaping () -> Void) {
         let completionOperation = BlockOperation(block: completionHandler)
         if let lastOperation = operations.last {
@@ -148,7 +148,7 @@ public class Queuer {
         addOperation(completionOperation)
     }
     
-    /// Cancel all Operations in queue.
+    /// Cancel all `Operation`s in queue.
     public func cancelAll() {
         queue.cancelAllOperations()
     }
@@ -172,7 +172,7 @@ public class Queuer {
     }
     
     /// Blocks the current thread until all of the receiver’s queued and executing
-    /// operations finish executing.
+    /// `Operation`s finish executing.
     public func waitUntilAllOperationsAreFinished() {
         queue.waitUntilAllOperationsAreFinished()
     }
