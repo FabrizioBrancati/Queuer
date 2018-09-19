@@ -83,6 +83,38 @@ public class Queuer {
         self.qualityOfService = qualityOfService
     }
     
+    /// Cancel all `Operation`s in queue.
+    public func cancelAll() {
+        queue.cancelAllOperations()
+    }
+    
+    /// Pause the queue.
+    public func pause() {
+        queue.isSuspended = true
+        
+        for operation in queue.operations where operation is ConcurrentOperation {
+            (operation as? ConcurrentOperation)?.pause()
+        }
+    }
+    
+    /// Resume the queue.
+    public func resume() {
+        queue.isSuspended = false
+        
+        for operation in queue.operations where operation is ConcurrentOperation {
+            (operation as? ConcurrentOperation)?.resume()
+        }
+    }
+    
+    /// Blocks the current thread until all of the receiver’s queued and executing
+    /// `Operation`s finish executing.
+    public func waitUntilAllOperationsAreFinished() {
+        queue.waitUntilAllOperationsAreFinished()
+    }
+}
+
+/// `Queuer` extension with `Operation`s handling.
+public extension Queuer {
     /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter block: Block to be executed.
@@ -146,34 +178,5 @@ public class Queuer {
             completionOperation.addDependency(lastOperation)
         }
         addOperation(completionOperation)
-    }
-    
-    /// Cancel all `Operation`s in queue.
-    public func cancelAll() {
-        queue.cancelAllOperations()
-    }
-    
-    /// Pause the queue.
-    public func pause() {
-        queue.isSuspended = true
-        
-        for operation in queue.operations where operation is ConcurrentOperation {
-            (operation as? ConcurrentOperation)?.pause()
-        }
-    }
-    
-    /// Resume the queue.
-    public func resume() {
-        queue.isSuspended = false
-        
-        for operation in queue.operations where operation is ConcurrentOperation {
-            (operation as? ConcurrentOperation)?.resume()
-        }
-    }
-    
-    /// Blocks the current thread until all of the receiver’s queued and executing
-    /// `Operation`s finish executing.
-    public func waitUntilAllOperationsAreFinished() {
-        queue.waitUntilAllOperationsAreFinished()
     }
 }
