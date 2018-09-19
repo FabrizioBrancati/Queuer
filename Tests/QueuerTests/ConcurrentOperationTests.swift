@@ -111,4 +111,33 @@ internal class ConcurrentOperationTests: XCTestCase {
             XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
         }
     }
+    
+    internal func testCanceledChainedRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestCanceledChainedRetry")
+        let testExpectation = expectation(description: "Canceled Chained Retry")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            Thread.sleep(forTimeInterval: 1)
+            order.append(0)
+            operation.hasFailed = true
+        }
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            operation.cancel()
+            if operation.isCancelled {
+                return
+            }
+            order.append(1)
+            operation.hasFailed = true
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0, 0, 0, 2])
+        }
+    }
 }
