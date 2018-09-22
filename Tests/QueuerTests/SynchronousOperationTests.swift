@@ -80,6 +80,35 @@ internal class SynchronousOperationTests: XCTestCase {
         }
     }
     
+    internal func testSynchronousOperationRetry() {
+        let queue = Queuer(name: "SynchronousOperationTestRetry")
+        let testExpectation = expectation(description: "Synchronous Operation Retry")
+        var order: [Int] = []
+        
+        let synchronousOperation1 = SynchronousOperation { operation in
+            Thread.sleep(forTimeInterval: 1)
+            order.append(0)
+            operation.hasFailed = true
+            
+            if operation.currentAttempt == 3 {
+                testExpectation.fulfill()
+            }
+        }
+        let synchronousOperation2 = SynchronousOperation { _ in
+            order.append(1)
+        }
+        synchronousOperation1.addToQueue(queue)
+        synchronousOperation2.addToQueue(queue)
+        
+        XCTAssertFalse(synchronousOperation1.isAsynchronous)
+        XCTAssertFalse(synchronousOperation2.isAsynchronous)
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [1, 0, 0, 0])
+        }
+    }
+    
     internal func testCancel() {
         let queue = Queuer(name: "SynchronousOperationTestCancel")
         queue.maxConcurrentOperationCount = 1
