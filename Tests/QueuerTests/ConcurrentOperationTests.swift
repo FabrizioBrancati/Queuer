@@ -140,4 +140,64 @@ internal class ConcurrentOperationTests: XCTestCase {
             XCTAssertEqual(order, [0, 0, 0, 2])
         }
     }
+    
+    internal func testChainedManualRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedManualRetry")
+        let testExpectation = expectation(description: "Chained Manual Retry")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            order.append(0)
+            operation.hasFailed = true
+        }
+        concurrentOperation1.manualRetry = true
+        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            concurrentOperation1.retry()
+            if concurrentOperation1.currentAttempt > concurrentOperation1.maximumRetries {
+                timer.invalidate()
+            }
+        }
+        
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            order.append(1)
+            operation.hasFailed = true
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
+        }
+    }
+    
+    internal func testChainedWrongManualRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedWrongManualRetry")
+        let testExpectation = expectation(description: "Chained Wrong Manual Retry")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            order.append(0)
+            operation.hasFailed = true
+        }
+        concurrentOperation1.manualRetry = true
+        
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            order.append(1)
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+        }
+        
+        let _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { timer in
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0])
+        }
+    }
 }

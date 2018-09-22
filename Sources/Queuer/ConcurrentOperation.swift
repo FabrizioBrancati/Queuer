@@ -72,10 +72,16 @@ open class ConcurrentOperation: Operation {
     open var hasFailed = false
     
     /// Maximum allowed retries.
+    /// Default are 3 retries.
     open var maximumRetries = 3
     
-    /// Current retry tentative.
-    open var currentAttempt = 1
+    /// Current retry attempt.
+    private(set) open var currentAttempt = 1
+    
+    /// Allows for manual retries.
+    /// If set to `true`, `retry()` function must be manually called.
+    /// Default is `false` to automatically retry.
+    open var manualRetry = false
     
     /// Specify if the `Operation` should retry another time.
     private var shouldRetry = true
@@ -95,14 +101,25 @@ open class ConcurrentOperation: Operation {
         execute()
     }
     
+    /// Retry function.
+    /// It only works if `manualRetry` property has been set to `true`.
+    open func retry() {
+        if manualRetry, shouldRetry, let executionBlock = executionBlock {
+            executionBlock(self)
+            self.finish(hasFailed)
+        }
+    }
+    
     /// Execute the `Operation`.
     /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
     open func execute() {
         if let executionBlock = executionBlock {
-            while shouldRetry {
+            while shouldRetry, !manualRetry {
                 executionBlock(self)
                 self.finish(hasFailed)
             }
+            
+            retry()
         }
     }
     
