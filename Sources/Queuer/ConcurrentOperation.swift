@@ -76,7 +76,7 @@ open class ConcurrentOperation: Operation {
     open var maximumRetries = 3
     
     /// Current retry attempt.
-    private(set) open var currentAttempt = 1
+    open private(set) var currentAttempt = 1
     
     /// Allows for manual retries.
     /// If set to `true`, `retry()` function must be manually called.

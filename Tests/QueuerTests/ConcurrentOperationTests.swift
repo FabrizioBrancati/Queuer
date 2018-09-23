@@ -124,7 +124,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         }
         let concurrentOperation2 = ConcurrentOperation { operation in
             operation.cancel()
-            if operation.isCancelled {
+            guard !operation.isCancelled else {
                 return
             }
             order.append(1)
@@ -151,7 +151,7 @@ internal class ConcurrentOperationTests: XCTestCase {
             operation.hasFailed = true
         }
         concurrentOperation1.manualRetry = true
-        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             concurrentOperation1.retry()
             if concurrentOperation1.currentAttempt > concurrentOperation1.maximumRetries {
                 timer.invalidate()
@@ -184,14 +184,14 @@ internal class ConcurrentOperationTests: XCTestCase {
         }
         concurrentOperation1.manualRetry = true
         
-        let concurrentOperation2 = ConcurrentOperation { operation in
+        let concurrentOperation2 = ConcurrentOperation { _ in
             order.append(1)
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             order.append(2)
         }
         
-        let _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { timer in
+        _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
             testExpectation.fulfill()
         }
         
