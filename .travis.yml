@@ -90,7 +90,7 @@ script:
   - if [ "$SPM" == "YES" ]; then
       swift package clean;
       ruby generate_linux_tests.rb;
-      swift test --parallel;
+      swift test;
     fi
 
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
