@@ -38,6 +38,7 @@ internal extension SynchronousOperationTests {
         return [
             ("testSynchronousOperation", testSynchronousOperation),
             ("testSynchronousOperationOnSharedQueuer", testSynchronousOperationOnSharedQueuer),
+            ("testSynchronousOperationRetry", testSynchronousOperationRetry),
             ("testCancel", testCancel)
         ]
     }

@@ -37,7 +37,8 @@ internal extension SchedulerTests {
     internal static var allTests: [(String, (SchedulerTests) -> () throws -> Void)] {
         return [
             ("testInitWithoutHandler", testInitWithoutHandler),
-            ("testInitWithHandler", testInitWithHandler)
+            ("testInitWithHandler", testInitWithHandler),
+            ("testCancel", testCancel)
         ]
     }
 }

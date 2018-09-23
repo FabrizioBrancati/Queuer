@@ -41,7 +41,10 @@ internal extension ConcurrentOperationTests {
             ("testAddToSharedQueuer", testAddToSharedQueuer),
             ("testAddToQueue", testAddToQueue),
             ("testSimpleRetry", testSimpleRetry),
-            ("testChainedRetry", testChainedRetry)
+            ("testChainedRetry", testChainedRetry),
+            ("testCanceledChainedRetry", testCanceledChainedRetry),
+            ("testChainedManualRetry", testChainedManualRetry),
+            ("testChainedWrongManualRetry", testChainedWrongManualRetry)
         ]
     }
 }
