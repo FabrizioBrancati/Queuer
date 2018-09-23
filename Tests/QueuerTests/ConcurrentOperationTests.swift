@@ -151,8 +151,14 @@ internal class ConcurrentOperationTests: XCTestCase {
             operation.hasFailed = true
         }
         concurrentOperation1.manualRetry = true
-        var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
-        schedule.setHandler {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            concurrentOperation1.retry()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            concurrentOperation1.retry()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
             concurrentOperation1.retry()
         }
         
@@ -189,10 +195,8 @@ internal class ConcurrentOperationTests: XCTestCase {
             order.append(2)
         }
         
-        var schedule = Scheduler(deadline: .now(), repeating: .seconds(3))
-        schedule.setHandler {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
             testExpectation.fulfill()
-            schedule.timer.cancel()
         }
         
         waitForExpectations(timeout: 5) { error in

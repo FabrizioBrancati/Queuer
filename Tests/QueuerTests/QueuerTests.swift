@@ -143,8 +143,7 @@ internal class QueuerTests: XCTestCase {
         queue.addOperation(concurrentOperation1)
         queue.addOperation(concurrentOperation2)
         
-        let deadline = DispatchTime.now() + .seconds(2)
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             testExpectation.fulfill()
         }
         

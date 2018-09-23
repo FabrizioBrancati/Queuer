@@ -31,28 +31,59 @@ import XCTest
 internal class SchedulerTests: XCTestCase {    
     internal func testInitWithoutHandler() {
         let testExpectation = expectation(description: "Init Without Handler")
+        var order: [Int] = []
         
         var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
         schedule.setHandler {
-            testExpectation.fulfill()
-            schedule.timer.cancel()
+            order.append(0)
         }
         
-        waitForExpectations(timeout: 2) { error in
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
+            XCTAssertEqual(order, [0 ,0 ,0, 0])
         }
     }
     
     internal func testInitWithHandler() {
         let testExpectation = expectation(description: "Init With Handler")
+        var order: [Int] = []
         
         let schedule = Scheduler(deadline: .now(), repeating: .never) {
+            order.append(0)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 2) { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
+            XCTAssertEqual(order, [0])
             schedule.timer.cancel()
+        }
+    }
+    
+    internal func testCancel() {
+        let testExpectation = expectation(description: "Init Without Handler")
+        var order: [Int] = []
+        
+        var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
+        schedule.setHandler {
+            order.append(0)
+            schedule.timer.cancel()
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0])
         }
     }
 }
