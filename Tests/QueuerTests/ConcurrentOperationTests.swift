@@ -151,11 +151,9 @@ internal class ConcurrentOperationTests: XCTestCase {
             operation.hasFailed = true
         }
         concurrentOperation1.manualRetry = true
-        _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+        var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
+        schedule.setHandler {
             concurrentOperation1.retry()
-            if concurrentOperation1.currentAttempt > concurrentOperation1.maximumRetries {
-                timer.invalidate()
-            }
         }
         
         let concurrentOperation2 = ConcurrentOperation { operation in
