@@ -109,7 +109,6 @@ internal class QueuerTests: XCTestCase {
         
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(queue.operationCount, 0)
         }
     }
     

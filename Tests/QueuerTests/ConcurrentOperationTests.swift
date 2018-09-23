@@ -75,10 +75,10 @@ internal class ConcurrentOperationTests: XCTestCase {
         let concurrentOperation = ConcurrentOperation { operation in
             operation.hasFailed = true
         }
-        concurrentOperation.addToQueue(queue)
         queue.addCompletionHandler {
             testExpectation.fulfill()
         }
+        concurrentOperation.addToQueue(queue)
         
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
