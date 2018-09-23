@@ -153,6 +153,18 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 Usage
 =====
 
+- [Shared Queuer](https://github.com/FabrizioBrancati/Queuer#shared-queuer)
+- [Custom Queue](https://github.com/FabrizioBrancati/Queuer#custom-queue)
+- [Create an Operation Block](https://github.com/FabrizioBrancati/Queuer#create-an-operation-block)
+- [Chained Operations](https://github.com/FabrizioBrancati/Queuer#chained-operations)
+- [Queue States](https://github.com/FabrizioBrancati/Queuer#queue-states)
+- [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#anynchronous-operation)
+- [Synchronous Operation](https://github.com/FabrizioBrancati/Queuer#synchronous-operation)
+- [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
+- [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
+- [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
+- [Semaphore](https://github.com/FabrizioBrancati/Queuer#semaphore)
+
 ### Shared Queuer
 
 ```swift
@@ -182,7 +194,7 @@ You have three methods to add an `Operation` block:
 
 - Creating a `ConcurrentOperation` with a block:
     ```swift
-    let concurrentOperation = ConcurrentOperation {
+    let concurrentOperation = ConcurrentOperation { _ in
         /// Your task here
     }
     queue.addOperation(concurrentOperation)
@@ -190,7 +202,7 @@ You have three methods to add an `Operation` block:
 
 - Creating a `SynchronousOperation` with a block:
     ```swift
-    let synchronousOperation = SynchronousOperation {
+    let synchronousOperation = SynchronousOperation { _ in
         /// Your task here
     }
     queue.addOperation(concurrentOperation)
@@ -202,10 +214,10 @@ You have three methods to add an `Operation` block:
 Chained Operations are operations that add a dependency each other.<br>
 They follow the given array order, for example: `[A, B, C] = A -> B -> C -> completionBlock`.
 ```swift
-let concurrentOperation1 = ConcurrentOperation {
+let concurrentOperation1 = ConcurrentOperation { _ in
     /// Your task 1 here
 }
-let concurrentOperation2 = ConcurrentOperation {
+let concurrentOperation2 = ConcurrentOperation { _ in
     /// Your task 2 here
 }
 queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
@@ -246,7 +258,7 @@ You must override `execute()` function and call the `finish()` function inside i
 
 For convenience it has an `init` function with a completion block:
 ```swift
-let concurrentOperation = ConcurrentOperation {
+let concurrentOperation = ConcurrentOperation { _ in
     /// Your task here
 }
 concurrentOperation.addToQueue(queue)
@@ -263,10 +275,44 @@ There are three methods to create synchronous tasks or even queue:
 
 For convenience it has an `init` function with a completion block:
 ```swift
-let synchronousOperation = SynchronousOperation {
+let synchronousOperation = SynchronousOperation { _ in
   /// Your task here
 }
 synchronousOperation.addToQueue(queue)
+```
+
+### Automatically Retry an Operation
+An `Operation` is passed to every closure, with it you can set and handle the retry feature.<br>
+By default the retry feature is disabled, to enable it simply set the `hasFailed` property to `true`. With `hasFailed` to `true` the `Operation` will retry until reaches `maximumRetries` property value. To let the `Operation` know when everything is ok, you must set `hasFailed` to `false`.<br>
+With `currentAttempt` you can know at which attempt the `Operation` is.
+```swift
+let concurrentOperation = ConcurrentOperation { operation in
+    /// Your task here
+    if /* Failing */ {
+      operation.hasFailed = true
+    } else {
+      operation.hasFailed = false
+    }
+}
+```
+
+### Manually Retry an Operation
+It's even possible to manually retry an `Operation` when you think that the execution will be successful.<br>
+An `Operation` is passed to every closure, with it you can set and handle the retry feature.<br>
+By default the manual retry feature is disabled, to enable it simply set the `manualRetry` property to `true`, you must do this outside of the execution closure. You must also set `hasFailed` to `true` or `false` to let the `Operation` when is everything ok, like the automatic retry feature.<br>
+To let the `Operation` retry your execution closure, you have to call the `retry()` function. If the `retry()` is not called, you may block the entire queue. Be sure to call it at least `maximumRetries` times, it is not a problem if you call `retry()` more times than is needed, your execution closure will not be executed more times than the `maximumRetries` value.
+```swift
+let concurrentOperation = ConcurrentOperation { operation in
+    /// Your task here
+    if /* Failing */ {
+      operation.hasFailed = true
+    } else {
+      operation.hasFailed = false
+    }
+}
+concurrentOperation.manualRetry = true
+/// Later on your code
+concurrentOperation.retry()
 ```
 
 ### Scheduler

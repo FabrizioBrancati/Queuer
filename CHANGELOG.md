@@ -16,26 +16,27 @@ All notable changes to this project will be documented in this file.<br>
 
 ---
 
-## Swift 4.2
+## [2.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.0.0) - Let Me Retry
+### XX XXX 2018
 ### Added
 - Added support to Xcode 10 and Swift 4.2
-- Added retry feature to `ConcurrentOperation` class [#32](https://github.com/FabrizioBrancati/BFKit-Swift/issues/10)
+- Added retry feature to `ConcurrentOperation` class [#32](https://github.com/FabrizioBrancati/BFKit-Swift/issues/10), more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation) and [here](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - Added `addCompletionHandler(_:)` function to `Queuer` class
+- Added a `Scheduler` class to better schedule your tasks
+
+### Improved
+- Improved `Semaphore` with timeout handling
+- Updated SwiftLint to 0.27.0
 
 ### Changed
-- Changed `executionBlock` of `ConcurrentOperation` to pass the `concurrentOperation` variable inside the closure to be able to use the retry feature. If you don't need it simply put `_ in` after the block creation
+- Changed `executionBlock` of `ConcurrentOperation` to pass the `concurrentOperation` variable inside the closure to be able to use the retry feature. If you don't need it simply put `_ in` after the block creation:
   ```swift
   let concurrentOperation = ConcurrentOperation { _ in
       /// Your task here
   }
   ```
+  This also affects `SynchronousOperation`
 - Changed from Codecov to Coveralls service for code coverage
-
----
-
-## Develop
-### Improved
-- Updated SwiftLint to 0.27.0
 
 ### Removed
 - Removed Hound CI

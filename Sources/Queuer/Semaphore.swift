@@ -45,6 +45,9 @@ public struct Semaphore {
     }
     
     /// Wait for a `continue` function call.
+    ///
+    /// - Parameter timeout: The timeout `DispatchTime`, default is `.distantFuture`.
+    /// - Returns: Returns a `DispatchTimeoutResult`.
     @discardableResult
     public func wait(_ timeout: DispatchTime = .distantFuture) -> DispatchTimeoutResult {
         return semaphore.wait(timeout: timeout)
