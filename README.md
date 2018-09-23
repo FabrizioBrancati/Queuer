@@ -11,8 +11,8 @@
 [![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 <br>
-[![Language](https://img.shields.io/badge/language-Swift%204.0%20%7C%204.1-orange.svg)](https://swift.org/)
-[![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-ffc713.svg)][Documentation]
+[![Language](https://img.shields.io/badge/language-Swift%204.2-orange.svg)](https://swift.org/)
+[![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-cc9c00.svg)][Documentation]
 
 ---
 
