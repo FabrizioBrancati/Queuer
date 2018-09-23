@@ -189,8 +189,10 @@ internal class ConcurrentOperationTests: XCTestCase {
             order.append(2)
         }
         
-        _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+        var schedule = Scheduler(deadline: .now(), repeating: .seconds(3))
+        schedule.setHandler {
             testExpectation.fulfill()
+            schedule.timer.cancel()
         }
         
         waitForExpectations(timeout: 5) { error in
