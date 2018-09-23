@@ -35,7 +35,7 @@ Features
 ========
 
 Queuer is a queue manager, built on top of [OperationQueue](https://developer.apple.com/documentation/foundation/operationqueue) and [Dispatch](https://developer.apple.com/documentation/dispatch) (aka GCD).<br>
-It allows you to create any synchronous and asynchronous task easily, with just a few lines.
+It allows you to create any asynchronous and synchronous task easily, all managed by a queue, with just a few lines.
 
 Here is the list of all the features:
 - [x] Works on all Swift compatible platforms (even Linux)
@@ -50,6 +50,7 @@ Here is the list of all the features:
 - [x] Declare how many concurrent operation a queue can handle
 - [x] Create semaphores
 - [x] Create and handle schedules
+- [x] Automatically or manually retry an operation
 - [ ] Ability to restore uncompleted operations
 
 Requirements
@@ -60,7 +61,7 @@ Requirements
 | 3.1...3.2 | 8.3...9.0 | 1.0.0...1.1.0 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
 | 4.0       | 9.0...9.2 | 1.3.0         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
 | 4.1       | 9.3...9.4 | 1.3.1...1.3.2 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
-| 4.2       | 10.0      | 2.x.x         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
+| 4.2       | 10.0      | 2.0.0         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
 
 Installing
 ==========
