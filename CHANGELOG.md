@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ## [2.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.0.0) - Let Me Retry
-### XX XXX 2018
+### 2018
 ### Added
 - Added support to Xcode 10 and Swift 4.2
 - Added retry feature to `ConcurrentOperation` class [#32](https://github.com/FabrizioBrancati/BFKit-Swift/issues/10), more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation) and [here](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
