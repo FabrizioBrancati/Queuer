@@ -39,6 +39,10 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode10
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=12.0,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
+    - os: osx
+      language: objective-c
+      osx_image: xcode10
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.2,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
     - os: osx
       language: objective-c
@@ -51,7 +55,11 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=4.2,name=Apple Watch Series 3 - 42mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=5.0,name=Apple Watch Series 4 - 42mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
+    - os: osx
+      language: objective-c
+      osx_image: xcode10
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=4.2,name=Apple Watch Series 3 - 38mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
     - os: osx
       language: objective-c
       osx_image: xcode10
