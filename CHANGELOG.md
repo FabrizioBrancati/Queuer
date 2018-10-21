@@ -27,10 +27,6 @@ All notable changes to this project will be documented in this file.<br>
 - Added `addCompletionHandler(_:)` function to `Queuer` class
 - Added a `Scheduler` class to better schedule your tasks
 
-### Improved
-- Improved `Semaphore` with timeout handling
-- Updated SwiftLint to 0.27.0
-
 ### Changed
 - Changed watchOS target to watchOS 3.0 instead of 2.0, thanks to an App Store submission rule [#11](https://github.com/FabrizioBrancati/BFKit-Swift/issues/11)
 - Changed `executionBlock` of `ConcurrentOperation` to pass the `concurrentOperation` variable inside the closure to be able to use the retry feature. If you don't need it simply put `_ in` after the block creation:
@@ -41,6 +37,10 @@ All notable changes to this project will be documented in this file.<br>
   ```
   This also affects `SynchronousOperation`
 - Changed from Codecov to Coveralls service for code coverage
+
+### Improved
+- Improved `Semaphore` with timeout handling
+- Updated SwiftLint to 0.27.0
 
 ### Removed
 - Removed Hound CI
