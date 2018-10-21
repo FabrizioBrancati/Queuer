@@ -67,10 +67,6 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=2.0,name=Apple Watch - 38mm"          SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
-    - os: osx
-      language: objective-c
-      osx_image: xcode10
       env: PROJ="Queuer.xcodeproj" DESTINATION="arch=x86_64"                             SCHEME="$MACOS_SCHEME"   RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
 
 before_install:
