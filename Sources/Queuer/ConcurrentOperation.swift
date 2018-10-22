@@ -107,7 +107,7 @@ open class ConcurrentOperation: Operation {
     open func retry() {
         if manualRetry, shouldRetry, let executionBlock = executionBlock {
             executionBlock(self)
-            self.finish(hasFailed)
+            finish(hasFailed)
         }
     }
     
@@ -117,7 +117,7 @@ open class ConcurrentOperation: Operation {
         if let executionBlock = executionBlock {
             while shouldRetry, !manualRetry {
                 executionBlock(self)
-                self.finish(hasFailed)
+                finish(hasFailed)
             }
             
             retry()

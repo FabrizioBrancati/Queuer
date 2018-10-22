@@ -52,7 +52,7 @@ Here is the list of all the features:
 - [x] Create and handle schedules
 - [x] Automatically or manually retry an operation
 - [ ] Ability to restore uncompleted operations
-- [ ] Add throlling between each automatic operation retry
+- [ ] Throlling between each automatic operation retry
 
 Requirements
 ============
