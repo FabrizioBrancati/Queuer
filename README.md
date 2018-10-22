@@ -52,7 +52,8 @@ Here is the list of all the features:
 - [x] Create and handle schedules
 - [x] Automatically or manually retry an operation
 - [ ] Ability to restore uncompleted operations
-- [ ] Throlling between each automatic operation retry
+- [ ] Throttling between each automatic operation retry
+- [ ] Data layer that every operation inside an operation queue can access
 
 Requirements
 ============
