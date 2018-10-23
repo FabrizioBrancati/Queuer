@@ -92,8 +92,10 @@ public class Queuer {
     public func pause() {
         queue.isSuspended = true
         
-        for operation in queue.operations where operation is ConcurrentOperation {
-            (operation as? ConcurrentOperation)?.pause()
+        for operation in queue.operations {
+            if let concurrentOperation = operation as? ConcurrentOperation {
+                concurrentOperation.pause()
+            }
         }
     }
     
@@ -101,8 +103,10 @@ public class Queuer {
     public func resume() {
         queue.isSuspended = false
         
-        for operation in queue.operations where operation is ConcurrentOperation {
-            (operation as? ConcurrentOperation)?.resume()
+        for operation in queue.operations {
+            if let concurrentOperation = operation as? ConcurrentOperation {
+                concurrentOperation.resume()
+            }
         }
     }
     
