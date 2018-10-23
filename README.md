@@ -300,9 +300,9 @@ let concurrentOperation = ConcurrentOperation { operation in
 ```
 
 ### Manually Retry an Operation
-It's even possible to manually retry an `Operation` when you think that the execution will be successful.<br>
+You can manually retry an `Operation` when you think that the execution will be successful.<br>
 An `Operation` is passed to every closure, with it you can set and handle the retry feature.<br>
-By default the manual retry feature is disabled, to enable it simply set the `manualRetry` property to `true`, you must do this outside of the execution closure. You must also set `hasFailed` to `true` or `false` to let the `Operation` when is everything ok, like the automatic retry feature.<br>
+By default the manual retry feature is disabled, to enable it simply set the `manualRetry` property to `true`, you must do this outside of the execution closure. You must also set `hasFailed` to `true` or `false` to let the `Operation` know when is everything ok, like the automatic retry feature.<br>
 To let the `Operation` retry your execution closure, you have to call the `retry()` function. If the `retry()` is not called, you may block the entire queue. Be sure to call it at least `maximumRetries` times, it is not a problem if you call `retry()` more times than is needed, your execution closure will not be executed more times than the `maximumRetries` value.
 ```swift
 let concurrentOperation = ConcurrentOperation { operation in
