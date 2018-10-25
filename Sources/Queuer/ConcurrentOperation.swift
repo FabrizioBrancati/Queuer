@@ -89,10 +89,13 @@ open class ConcurrentOperation: Operation {
     
     /// Creates the `Operation` with an execution block.
     ///
-    /// - Parameter executionBlock: Execution block.
-    public init(executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
+    /// - Parameters:
+    ///   - name: Operation name, useful for Queue Restoration. It must be unique.
+    ///   - executionBlock: Execution block.
+    public init(name: String? = nil, executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
         super.init()
         
+        self.name = name
         self.executionBlock = executionBlock
     }
     
