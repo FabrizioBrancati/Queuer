@@ -369,8 +369,7 @@ semaphore.wait()
 Documentation
 =============
 
-### [Documentation]
-Jazzy generated documentation - 100% Documented
+Jazzy Generated [Documentation] - 100% Documented
 
 Changelog
 =========
