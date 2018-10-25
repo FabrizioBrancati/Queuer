@@ -117,7 +117,9 @@ public class Queuer {
     }
 }
 
-/// `Queuer` extension with `Operation`s handling.
+// MARK: - Queuer Operations and Chaining
+
+/// `Queuer` extension with `Operation`s and chaining handling.
 public extension Queuer {
     /// Add an `Operation` to be executed asynchronously.
     ///
