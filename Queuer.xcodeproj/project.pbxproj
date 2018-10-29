@@ -49,6 +49,13 @@
 		49C7BCF41F2693A100F4FFBC /* QueuerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCB01F26938F00F4FFBC /* QueuerTests.swift */; };
 		49C7BCF61F2693A100F4FFBC /* SemaphoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCB21F26938F00F4FFBC /* SemaphoreTests.swift */; };
 		49C7BCF71F2693A100F4FFBC /* SynchronousOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C7BCB31F26938F00F4FFBC /* SynchronousOperationTests.swift */; };
+		49E803C6217FE8E80001B47A /* OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803C5217FE8E80001B47A /* OperationState.swift */; };
+		49E803C7217FE8E80001B47A /* OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803C5217FE8E80001B47A /* OperationState.swift */; };
+		49E803C8217FE8E80001B47A /* OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803C5217FE8E80001B47A /* OperationState.swift */; };
+		49E803C9217FE8E80001B47A /* OperationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803C5217FE8E80001B47A /* OperationState.swift */; };
+		49E803CB21868A310001B47A /* OperationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803CA21868A310001B47A /* OperationStateTests.swift */; };
+		49E803CC21868A310001B47A /* OperationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803CA21868A310001B47A /* OperationStateTests.swift */; };
+		49E803CD21868A310001B47A /* OperationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803CA21868A310001B47A /* OperationStateTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,8 +85,8 @@
 /* Begin PBXFileReference section */
 		493F57201F21F32B009EC8FA /* Queuer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Queuer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		493F57281F21F32B009EC8FA /* QueuerTests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "QueuerTests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4946BDF5214D586900FAFC84 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
-		4946BDFA214D5C0100FAFC84 /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
+		4946BDF5214D586900FAFC84 /* Scheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		4946BDFA214D5C0100FAFC84 /* SchedulerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
 		4995D7391F21E19B00A34E6E /* Queuer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Queuer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4995D7421F21E19C00A34E6E /* QueuerTests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "QueuerTests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4995D7581F21EA3F00A34E6E /* Queuer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Queuer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +103,8 @@
 		49C7BCBE1F26938F00F4FFBC /* Semaphore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Semaphore.swift; sourceTree = "<group>"; };
 		49C7BCBF1F26938F00F4FFBC /* SynchronousOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SynchronousOperation.swift; sourceTree = "<group>"; };
 		49C7BCC11F26938F00F4FFBC /* Queuer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Queuer.h; sourceTree = "<group>"; };
+		49E803C5217FE8E80001B47A /* OperationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationState.swift; sourceTree = "<group>"; };
+		49E803CA21868A310001B47A /* OperationStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationStateTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				49C7BCAF1F26938F00F4FFBC /* ConcurrentOperationTests.swift */,
+				49E803CA21868A310001B47A /* OperationStateTests.swift */,
 				49C7BCB01F26938F00F4FFBC /* QueuerTests.swift */,
 				4946BDFA214D5C0100FAFC84 /* SchedulerTests.swift */,
 				49C7BCB21F26938F00F4FFBC /* SemaphoreTests.swift */,
@@ -212,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				49C7BCBB1F26938F00F4FFBC /* ConcurrentOperation.swift */,
+				49E803C5217FE8E80001B47A /* OperationState.swift */,
 				49C7BCBC1F26938F00F4FFBC /* Queuer.swift */,
 				4946BDF5214D586900FAFC84 /* Scheduler.swift */,
 				49C7BCBE1F26938F00F4FFBC /* Semaphore.swift */,
@@ -516,6 +527,7 @@
 				49C7BCE11F26939A00F4FFBC /* ConcurrentOperation.swift in Sources */,
 				4946BDF7214D586900FAFC84 /* Scheduler.swift in Sources */,
 				49C7BCE51F26939A00F4FFBC /* SynchronousOperation.swift in Sources */,
+				49E803C7217FE8E80001B47A /* OperationState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,6 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C7BCEE1F2693A000F4FFBC /* QueuerTests.swift in Sources */,
+				49E803CC21868A310001B47A /* OperationStateTests.swift in Sources */,
 				49C7BCF01F2693A000F4FFBC /* SemaphoreTests.swift in Sources */,
 				4946BDFC214D5C0100FAFC84 /* SchedulerTests.swift in Sources */,
 				49C7BCED1F2693A000F4FFBC /* ConcurrentOperationTests.swift in Sources */,
@@ -540,6 +553,7 @@
 				49C7BCCF1F26938F00F4FFBC /* Queuer.swift in Sources */,
 				4946BDF6214D586900FAFC84 /* Scheduler.swift in Sources */,
 				49C7BCD11F26938F00F4FFBC /* Semaphore.swift in Sources */,
+				49E803C6217FE8E80001B47A /* OperationState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,6 +562,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C7BCE81F26939F00F4FFBC /* QueuerTests.swift in Sources */,
+				49E803CB21868A310001B47A /* OperationStateTests.swift in Sources */,
 				49C7BCEA1F26939F00F4FFBC /* SemaphoreTests.swift in Sources */,
 				4946BDFB214D5C0100FAFC84 /* SchedulerTests.swift in Sources */,
 				49C7BCE71F26939F00F4FFBC /* ConcurrentOperationTests.swift in Sources */,
@@ -564,6 +579,7 @@
 				49C7BCD51F26939900F4FFBC /* ConcurrentOperation.swift in Sources */,
 				4946BDF9214D586900FAFC84 /* Scheduler.swift in Sources */,
 				49C7BCD91F26939900F4FFBC /* SynchronousOperation.swift in Sources */,
+				49E803C9217FE8E80001B47A /* OperationState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -576,6 +592,7 @@
 				49C7BCDB1F26939A00F4FFBC /* ConcurrentOperation.swift in Sources */,
 				4946BDF8214D586900FAFC84 /* Scheduler.swift in Sources */,
 				49C7BCDF1F26939A00F4FFBC /* SynchronousOperation.swift in Sources */,
+				49E803C8217FE8E80001B47A /* OperationState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,6 +601,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49C7BCF41F2693A100F4FFBC /* QueuerTests.swift in Sources */,
+				49E803CD21868A310001B47A /* OperationStateTests.swift in Sources */,
 				49C7BCF61F2693A100F4FFBC /* SemaphoreTests.swift in Sources */,
 				4946BDFD214D5C0100FAFC84 /* SchedulerTests.swift in Sources */,
 				49C7BCF31F2693A100F4FFBC /* ConcurrentOperationTests.swift in Sources */,
