@@ -191,12 +191,20 @@ public extension Queuer {
 
 /// `Queuer` extension with state restoration feature.
 public extension Queuer {
+    /// `OperationState` array typealias.
     public typealias QueueStateList = [OperationState]
     
+    /// Creates the queue state.
+    ///
+    /// - Returns: Returns the current queue state.
     public func state() -> QueueStateList {
         return Queuer.state(of: queue)
     }
     
+    /// Creates the state of a given queue.
+    ///
+    /// - Parameter queue: State will be created starting from this `OperationQueue`.
+    /// - Returns: Returns the current queue state.
     public static func state(of queue: OperationQueue) -> QueueStateList {
         var operations: QueueStateList = []
         

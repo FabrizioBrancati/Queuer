@@ -39,14 +39,14 @@ public struct Semaphore {
     /// to the value.
     ///
     /// - Parameter poolSize: The starting value for the semaphore.
-    ///                       Passing a value less than zero will cause `NULL` to be returned.
+    ///                       Passing a value less than zero will cause `nil` to be returned.
     public init(poolSize: Int = 0) {
         semaphore = DispatchSemaphore(value: poolSize)
     }
     
     /// Wait for a `continue` function call.
     ///
-    /// - Parameter timeout: The timeout `DispatchTime`, default is `.distantFuture`.
+    /// - Parameter timeout: The timeout `DispatchTime`. Default is `.distantFuture`.
     /// - Returns: Returns a `DispatchTimeoutResult`.
     @discardableResult
     public func wait(_ timeout: DispatchTime = .distantFuture) -> DispatchTimeoutResult {
