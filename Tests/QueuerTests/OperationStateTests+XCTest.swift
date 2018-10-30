@@ -1,5 +1,5 @@
 //
-//  QueuerTests+XCTest.swift
+//  OperationStateTests+XCTest.swift
 //  Queuer
 //
 //  MIT License
@@ -33,26 +33,12 @@
 
 import XCTest
 
-internal extension QueuerTests {
-    internal static var allTests: [(String, (QueuerTests) -> () throws -> Void)] {
+internal extension OperationStateTests {
+    internal static var allTests: [(String, (OperationStateTests) -> () throws -> Void)] {
         return [
-            ("testOperationCount", testOperationCount),
-            ("testOperations", testOperations),
-            ("testMaxConcurrentOperationCount", testMaxConcurrentOperationCount),
-            ("testQualityOfService", testQualityOfService),
-            ("testInitWithNameMaxConcurrentOperationCount", testInitWithNameMaxConcurrentOperationCount),
-            ("testInitWithNameMaxConcurrentOperationCountQualityOfService", testInitWithNameMaxConcurrentOperationCountQualityOfService),
-            ("testAddOperationBlock", testAddOperationBlock),
-            ("testAddOperation", testAddOperation),
-            ("testAddOperations", testAddOperations),
-            ("testAddChainedOperations", testAddChainedOperations),
-            ("testAddChainedOperationsList", testAddChainedOperationsList),
-            ("testAddChainedOperationsEmpty", testAddChainedOperationsEmpty),
-            ("testAddChainedOperationsWithoutCompletion", testAddChainedOperationsWithoutCompletion),
-            ("testCancelAll", testCancelAll),
-            ("testPauseAndResume", testPauseAndResume),
-            ("testWaitUnitlAllOperationsAreFinished", testWaitUnitlAllOperationsAreFinished),
-            ("testQueueState", testQueueState)
+            ("testInitOperationState", testInitOperationState),
+            ("testCustomDescription", testCustomDescription),
+            ("testEncodeDecode", testEncodeDecode)
         ]
     }
 }
