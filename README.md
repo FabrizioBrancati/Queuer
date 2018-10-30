@@ -51,7 +51,8 @@ Here is the list of all the features:
 - [x] Create semaphores
 - [x] Create and handle schedules
 - [x] Automatically or manually retry an operation
-- [ ] Ability to restore uncompleted operations
+- [x] Ability to restore uncompleted operations
+- [ ] Improve the state restoration feature
 - [ ] Throttling between each automatic operation retry
 - [ ] Data layer that every operation inside an operation queue can access
 
@@ -167,6 +168,7 @@ Usage
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
 - [Semaphore](https://github.com/FabrizioBrancati/Queuer#semaphore)
+- [Queue State Restoration](https://github.com/FabrizioBrancati/Queuer#queue-state-restoration)
 
 ### Shared Queuer
 
@@ -365,6 +367,13 @@ let concurrentOperation = ConcurrentOperation {
 concurrentOperation.addToQueue(queue)
 semaphore.wait()
 ```
+
+### Queue State Restoration (Beta)
+To enable the Queue Restoration feature you must use `ConcurrentOperation` with a unique (non-nil) `name` property.
+Currently this feature allows you to save the current state of you queue, like: `name`, `progress` and `dependencies`.<br>
+The `progress` property allows to save the current state of the `Operation` progress. Update it constantly during the `Operation` execution.<br>
+Call `Queuer.state(of: OperationQueue)` or `operationQueue.state()` to get the `QueueStateList` aka: Array of `OperationState`s.<br>
+It's up to you save and retrieve this list, and create the queue correctly.
 
 Documentation
 =============
