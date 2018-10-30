@@ -50,23 +50,9 @@ internal class OperationStateTests: XCTestCase {
     internal func testEncodeDecode() {
         var operationState = OperationState(name: "Test", progress: 50, dependencies: ["Test2"])
         
-        guard let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            XCTFail()
-            return
-        }
-        
-        let url = documents.appendingPathComponent("Test.plist")
-        
         let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(operationState)
-            try data.write(to: url)
-        } catch {
-            XCTFail()
-        }
-        
-        do {
-            let data = try Data(contentsOf: url)
             let decoder = JSONDecoder()
             operationState = try decoder.decode(OperationState.self, from: data)
             

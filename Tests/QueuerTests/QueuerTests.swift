@@ -331,9 +331,11 @@ internal class QueuerTests: XCTestCase {
     internal func testQueueState() {
         let queue = Queuer(name: "QueuerTestPauseAndResume")
         let testExpectation = expectation(description: "Pause and Resume")
+        var state: Queuer.QueueStateList?
         
         let concurrentOperation1 = ConcurrentOperation(name: "Test1") { operation in
             operation.progress = 50
+            state = queue.state()
             Thread.sleep(forTimeInterval: 2)
         }
         let concurrentOperation2 = ConcurrentOperation(name: "Test2") { _ in
@@ -343,10 +345,13 @@ internal class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        let state = queue.state()
-        
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
+            
+            guard let state = state else {
+                XCTFail()
+                return
+            }
             
             XCTAssertEqual(state.count, 2)
             XCTAssertEqual(state[0].name, "Test1")
