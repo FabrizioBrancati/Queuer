@@ -57,8 +57,7 @@ internal class OperationStateTests: XCTestCase {
         
         let url = documents.appendingPathComponent("Test.plist")
         
-        let encoder = PropertyListEncoder()
-        encoder.outputFormat = .xml
+        let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(operationState)
             try data.write(to: url)
@@ -68,7 +67,7 @@ internal class OperationStateTests: XCTestCase {
         
         do {
             let data = try Data(contentsOf: url)
-            let decoder = PropertyListDecoder()
+            let decoder = JSONDecoder()
             operationState = try decoder.decode(OperationState.self, from: data)
             
             XCTAssertEqual(operationState.name, "Test")
