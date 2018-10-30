@@ -335,7 +335,6 @@ internal class QueuerTests: XCTestCase {
         
         let concurrentOperation1 = ConcurrentOperation(name: "Test1") { operation in
             operation.progress = 50
-            state = queue.state()
             Thread.sleep(forTimeInterval: 2)
         }
         let concurrentOperation2 = ConcurrentOperation(name: "Test2") { _ in
@@ -343,6 +342,10 @@ internal class QueuerTests: XCTestCase {
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             testExpectation.fulfill()
+        }
+        
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(1)) {
+            state = queue.state()
         }
         
         waitForExpectations(timeout: 5) { error in
