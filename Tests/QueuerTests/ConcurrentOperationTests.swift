@@ -89,7 +89,9 @@ internal class ConcurrentOperationTests: XCTestCase {
             operation.hasFailed = true
         }
         queue.addCompletionHandler {
-            testExpectation.fulfill()
+            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(1), execute: {
+                testExpectation.fulfill()
+            })
         }
         concurrentOperation.addToQueue(queue)
         
