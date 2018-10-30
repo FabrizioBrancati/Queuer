@@ -151,11 +151,11 @@ open class ConcurrentOperation: Operation {
     }
     
     /// Pause the current `Operation`, if it's supported.
-    /// Must be overridend by subclass to get a custom pause action.
+    /// Must be overridden by a subclass to get a custom pause action.
     open func pause() {}
     
     /// Resume the current `Operation`, if it's supported.
-    /// Must be overridend by subclass to get a custom resume action.
+    /// Must be overridden by a subclass to get a custom resume action.
     open func resume() {}
 }
 
