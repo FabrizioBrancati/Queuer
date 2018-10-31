@@ -370,7 +370,7 @@ semaphore.wait()
 
 ### Queue State Restoration (Beta)
 To enable the Queue Restoration feature you must use `ConcurrentOperation` with a unique (non-nil) `name` property.
-Currently this feature allows you to save the current state of you queue, like: `name`, `progress` and `dependencies`.<br>
+Currently this feature allows you to save the current state (`OperationState`s) of your queue, like: `name`, `progress` and `dependencies`.<br>
 The `progress` property allows to save the current state of the `Operation` progress. Update it constantly during the `Operation` execution.<br>
 Call `Queuer.state(of: OperationQueue)` or `operationQueue.state()` to get the `QueueStateList` aka: Array of `OperationState`s.<br>
 It's up to you save and retrieve this list, and create the queue correctly.

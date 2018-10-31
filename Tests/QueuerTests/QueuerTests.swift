@@ -331,7 +331,7 @@ internal class QueuerTests: XCTestCase {
     internal func testQueueState() {
         let queue = Queuer(name: "QueuerTestPauseAndResume")
         let testExpectation = expectation(description: "Pause and Resume")
-        var state: Queuer.QueueStateList?
+        var state: Queuer.QueueStateList = []
         
         let concurrentOperation1 = ConcurrentOperation(name: "Test1") { operation in
             operation.progress = 50
@@ -350,11 +350,6 @@ internal class QueuerTests: XCTestCase {
         
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-            
-            guard let state = state else {
-                XCTFail()
-                return
-            }
             
             XCTAssertEqual(state.count, 2)
             XCTAssertEqual(state[0].name, "Test1")
