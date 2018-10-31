@@ -344,7 +344,7 @@ internal class QueuerTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .milliseconds(1500)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500)) {
             state = queue.state()
         }
         
