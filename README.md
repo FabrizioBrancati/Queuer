@@ -168,7 +168,7 @@ Usage
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
 - [Semaphore](https://github.com/FabrizioBrancati/Queuer#semaphore)
-- [Queue State Restoration](https://github.com/FabrizioBrancati/Queuer#queue-state-restoration)
+- [Queue State Restoration](https://github.com/FabrizioBrancati/Queuer#queue-state-restoration-beta)
 
 ### Shared Queuer
 
@@ -216,7 +216,7 @@ You have three methods to add an `Operation` block:
 > We will see how `ConcurrentOperation` and `SynchronousOperation` works later.
 
 ### Chained Operations
-Chained Operations are operations that add a dependency each other.<br>
+Chained Operations are `Operation`s that add a dependency each other.<br>
 They follow the given array order, for example: `[A, B, C] = A -> B -> C -> completionBlock`.
 ```swift
 let concurrentOperation1 = ConcurrentOperation { _ in
@@ -230,8 +230,15 @@ queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
 }
 ```
 
+You can also add a `completionHandler` after the queue creation with:
+```swift
+queue.addCompletionHandler {
+    /* Your completion task here */
+}
+```
+
 ### Queue States
-- Cancel all operations in queue:
+- Cancel all `Operation`s in queue:
     ```swift
     queue.cancelAll()
     ```
@@ -239,20 +246,20 @@ queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
     ```swift
     queue.pause()
     ```
-    > By calling `pause()` you will not be sure that every operation will be paused.
-      If the Operation is already started it will not be on pause until it's a custom Operation that overrides `pause()` function.
+    > By calling `pause()` you will not be sure that every `Operation` will be paused.<br>
+    If the `Operation` is already started it will not be on pause until it's a custom `Operation` that overrides `pause()` function.
 
 - Resume queue:
     ```swift
     queue.resume()
     ```
-    > To have a complete `pause` and `resume` states you must create a custom Operation that overrides `pause()` and `resume()` function.
+    > To have a complete `pause` and `resume` states you must create a custom `Operation` that overrides `pause()` and `resume()` function.
 
-- Wait until all operations are finished:
+- Wait until all `Operation`s are finished:
     ```swift
     queue.waitUntilAllOperationsAreFinished()
     ```
-    > This function means that the queue will blocks the current thread until all operations are finished.
+    > This function means that the queue will blocks the current thread until all `Operation`s are finished.
 
 ### Asynchronous Operation
 `ConcurrentOperation` is a class created to be subclassed.
