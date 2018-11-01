@@ -1,0 +1,5 @@
+coverage_service: coveralls
+xcodeproj: Queuer.xcodeproj
+scheme: Queuer iOS
+ignore:
+  - Tests/*

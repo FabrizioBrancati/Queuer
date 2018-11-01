@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name              = 'Queuer'
   s.module_name       = 'Queuer'
-  s.version           = '1.3.2'
+  s.version           = '2.0.0'
   s.summary           = 'Queuer is a queue manager, built on top of OperationQueue and Dispatch (aka GCD).'
   s.homepage          = 'https://github.com/FabrizioBrancati/Queuer'
   s.screenshots       = 'https://github.fabriziobrancati.com/queuer/resources/queuer-screenshot.png'
@@ -11,12 +11,12 @@ Pod::Spec.new do |s|
   s.source            = { :git => 'https://github.com/FabrizioBrancati/Queuer.git', :tag => s.version }
   s.documentation_url = 'https://github.fabriziobrancati.com/documentation/Queuer/'
 
-  s.swift_version = '4.1'
+  s.swift_version = '4.2'
 
   s.source_files  = 'Sources/**/*.swift'
 
   s.ios.deployment_target     = '8.0'
   s.osx.deployment_target     = '10.10'
   s.tvos.deployment_target    = '9.0'
-  s.watchos.deployment_target = '2.0'
+  s.watchos.deployment_target = '3.0'
 end

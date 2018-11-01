@@ -28,19 +28,25 @@
 import XCTest
 
 internal class ConcurrentOperationTests: XCTestCase {
-    internal static let allTests = [
-        ("testInitWithExecutionBlock", testInitWithExecutionBlock),
-        ("testIsAsynchronous", testIsAsynchronous),
-        ("testAddToSharedQueuer", testAddToSharedQueuer),
-        ("testAddToQueue", testAddToQueue)
-    ]
+    internal func testProgress() {
+        let concurrentOperation = ConcurrentOperation()
+        
+        concurrentOperation.progress = 1000
+        XCTAssertTrue(concurrentOperation.progress == 100)
+        
+        concurrentOperation.progress = -1000
+        XCTAssertTrue(concurrentOperation.progress == 0)
+        
+        concurrentOperation.progress = 26
+        XCTAssertTrue(concurrentOperation.progress == 26)
+    }
     
     internal func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
         
         let testExpectation = expectation(description: "Init With Execution Block")
         
-        let concurrentOperation = ConcurrentOperation {
+        let concurrentOperation = ConcurrentOperation { _ in
             testExpectation.fulfill()
         }
         concurrentOperation.addToQueue(queue)
@@ -72,5 +78,145 @@ internal class ConcurrentOperationTests: XCTestCase {
         
         XCTAssertEqual(queue.operationCount, 1)
         XCTAssertEqual(queue.operations, [concurrentOperation])
+    }
+    
+    internal func testSimpleRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestSimpleRetry")
+        
+        let testExpectation = expectation(description: "Simple Retry")
+        
+        let concurrentOperation = ConcurrentOperation { operation in
+            operation.hasFailed = true
+        }
+        queue.addCompletionHandler {
+            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(1), execute: {
+                testExpectation.fulfill()
+            })
+        }
+        concurrentOperation.addToQueue(queue)
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(concurrentOperation.hasFailed)
+            XCTAssertEqual(concurrentOperation.currentAttempt, 3)
+        }
+    }
+    
+    internal func testChainedRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+        let testExpectation = expectation(description: "Chained Retry")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            Thread.sleep(forTimeInterval: 1)
+            order.append(0)
+            operation.hasFailed = true
+        }
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            order.append(1)
+            operation.hasFailed = true
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
+        }
+    }
+    
+    internal func testCanceledChainedRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestCanceledChainedRetry")
+        let testExpectation = expectation(description: "Canceled Chained Retry")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            Thread.sleep(forTimeInterval: 1)
+            order.append(0)
+            operation.hasFailed = true
+        }
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            operation.cancel()
+            guard !operation.isCancelled else {
+                return
+            }
+            order.append(1)
+            operation.hasFailed = true
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0, 0, 0, 2])
+        }
+    }
+    
+    internal func testChainedManualRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedManualRetry")
+        let testExpectation = expectation(description: "Chained Manual Retry")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            order.append(0)
+            operation.hasFailed = true
+        }
+        concurrentOperation1.manualRetry = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            concurrentOperation1.retry()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            concurrentOperation1.retry()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+            concurrentOperation1.retry()
+        }
+        
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            order.append(1)
+            operation.hasFailed = true
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
+        }
+    }
+    
+    internal func testChainedWrongManualRetry() {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedWrongManualRetry")
+        let testExpectation = expectation(description: "Chained Wrong Manual Retry")
+        var order: [Int] = []
+        
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            order.append(0)
+            operation.hasFailed = true
+        }
+        concurrentOperation1.manualRetry = true
+        
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            order.append(1)
+        }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+            testExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0])
+        }
     }
 }

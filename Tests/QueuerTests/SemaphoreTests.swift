@@ -28,18 +28,13 @@
 import XCTest
 
 internal class SemaphoreTests: XCTestCase {
-    internal static let allTests = [
-        ("testWithSemaphore", testWithSemaphore),
-        ("testWithoutSemaphore", testWithoutSemaphore)
-    ]
-    
     internal func testWithSemaphore() {
         let semaphore = Semaphore()
         let queue = Queuer(name: "SemaphoreTestWithSemaphore")
         let testExpectation = expectation(description: "With Semaphore")
         var testString = ""
         
-        let concurrentOperation = ConcurrentOperation {
+        let concurrentOperation = ConcurrentOperation { _ in
             Thread.sleep(forTimeInterval: 2)
             testString = "Tested"
             semaphore.continue()
@@ -60,7 +55,7 @@ internal class SemaphoreTests: XCTestCase {
         let testExpectation = expectation(description: "Without Semaphore")
         var testString = ""
         
-        let concurrentOperation = ConcurrentOperation {
+        let concurrentOperation = ConcurrentOperation { _ in
             Thread.sleep(forTimeInterval: 2)
             testString = "Tested"
             testExpectation.fulfill()

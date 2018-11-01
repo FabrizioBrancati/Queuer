@@ -27,9 +27,9 @@
 import Dispatch
 import Foundation
 
-/// DispatchSemaphore struct wrapper.
+/// `DispatchSemaphore` struct wrapper.
 public struct Semaphore {
-    /// Private DispatchSemaphore.
+    /// Private `DispatchSemaphore`.
     private let semaphore: DispatchSemaphore
     
     /// Creates new counting semaphore with an initial value.
@@ -39,15 +39,18 @@ public struct Semaphore {
     /// to the value.
     ///
     /// - Parameter poolSize: The starting value for the semaphore.
-    ///                       Passing a value less than zero will cause NULL to be returned.
+    ///                       Passing a value less than zero will cause `nil` to be returned.
     public init(poolSize: Int = 0) {
         semaphore = DispatchSemaphore(value: poolSize)
     }
     
     /// Wait for a `continue` function call.
+    ///
+    /// - Parameter timeout: The timeout `DispatchTime`. Default is `.distantFuture`.
+    /// - Returns: Returns a `DispatchTimeoutResult`.
     @discardableResult
-    public func wait() -> DispatchTimeoutResult {
-        return semaphore.wait(timeout: .distantFuture)
+    public func wait(_ timeout: DispatchTime = .distantFuture) -> DispatchTimeoutResult {
+        return semaphore.wait(timeout: timeout)
     }
     
     /// This function returns non-zero if a thread is woken. Otherwise, zero is returned.

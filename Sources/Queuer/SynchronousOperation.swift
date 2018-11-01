@@ -28,28 +28,32 @@ import Foundation
 
 /// It allows synchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
 public class SynchronousOperation: ConcurrentOperation {
-    /// Private semaphore instance.
+    /// Private `Semaphore` instance.
     private let semaphore = Semaphore()
     
-    /// Set the Operation as synchronous.
+    /// Set the `Operation` as synchronous.
     override public var isAsynchronous: Bool {
         return false
     }
     
-    /// Notify the completion of sync task and hence the completion of the operation.
-    /// Must be called when the Operation is finished.
-    override public func finish() {
+    /// Notify the completion of async task and hence the completion of the `Operation`.
+    /// Must be called when the `Operation` is finished.
+    ///
+    /// - Parameter hasFailed: Set it to `true` if the `Operation` has failed, otherwise `false`.
+    override public func finish(_ hasFailed: Bool) {
+        super.finish(hasFailed)
+        
         semaphore.continue()
     }
     
-    /// Advises the operation object that it should stop executing its task.
+    /// Advises the `Operation` object that it should stop executing its task.
     override public func cancel() {
         super.cancel()
         
         semaphore.continue()
     }
     
-    /// Execute the Operation.
+    /// Execute the `Operation`.
     /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
     override public func execute() {
         super.execute()

@@ -1,5 +1,5 @@
 //
-//  URLBuilder.swift
+//  OperationState.swift
 //  Queuer
 //
 //  MIT License
@@ -26,25 +26,37 @@
 
 import Foundation
 
-/// URL builder struct.
-internal enum URLBuilder {
-    /// Builds the query as a string, ready to be added in the URL.
+/// `Operation` State class.
+/// Used to save the `Operation` State.
+/// This class allows to save the current queue state.
+public class OperationState: Codable {
+    /// `Operation` name.
+    public var name: String
+    /// `Operation` progress.
+    public var progress: Int
+    /// `Operation` dependencies. It
+    public var dependencies: [String]
+    
+    /// Initialize an `OperationState`.
     ///
-    /// - Parameter query: Query dictionary.
-    /// - Returns: Returns the query as a String.
-    internal static func build(query: [String: String]?) -> String {
-        guard let query = query else {
-            return ""
-        }
-        
-        var finalQuery: String = ""
-        for (index, parameter) in query.enumerated() {
-            guard let parameterKey = parameter.key.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed), let parameterValue = parameter.value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else {
-                continue
-            }
-            finalQuery += index == 0 ? "?" : "&"
-            finalQuery += parameterKey + "=" + parameterValue
-        }
-        return finalQuery
+    /// - Parameters:
+    ///   - name: `Operation` name.
+    ///   - progress: `Operation` progress.
+    ///   - dependencies: `Operation` dependencies.
+    public init(name: String, progress: Int, dependencies: [String]) {
+        self.name = name
+        self.progress = progress
+        self.dependencies = dependencies
+    }
+}
+
+/// `OperationState` extension to allow custom print of the class.
+extension OperationState: CustomStringConvertible {
+    public var description: String {
+        return """
+        Operation Name: \(name)
+        Operation Progress: \(progress)
+        Operation Dependencies: \(dependencies)
+        """
     }
 }
