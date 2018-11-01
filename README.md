@@ -168,7 +168,7 @@ Usage
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
 - [Semaphore](https://github.com/FabrizioBrancati/Queuer#semaphore)
-- [Queue State Restoration](https://github.com/FabrizioBrancati/Queuer#queue-state-restoration-beta)
+- [Queue State Restoration (Beta)](https://github.com/FabrizioBrancati/Queuer#queue-state-restoration-beta)
 
 ### Shared Queuer
 
