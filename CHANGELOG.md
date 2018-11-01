@@ -20,16 +20,16 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ## [2.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.0.0) - Let Me Retry
-### XX XXX 2018
+### 1 Nov 2018
 ### Added
 - Added support to Xcode 10 and Swift 4.2
-- Added retry feature to `ConcurrentOperation` class [#10](https://github.com/FabrizioBrancati/BFKit-Swift/issues/10), more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation) and [here](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
+- Added retry feature to `ConcurrentOperation` class [#10](https://github.com/FabrizioBrancati/Queuer/issues/10), more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation) and [here](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - Added `addCompletionHandler(_:)` function to `Queuer` class
 - Added a `Scheduler` class to better schedule your tasks, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#scheduler)
 - Added queue state restoration (beta) feature, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#queue-state-restoration-beta)
 
 ### Changed
-- Changed watchOS target to watchOS 3.0 instead of 2.0, thanks to an App Store submission rule [#11](https://github.com/FabrizioBrancati/BFKit-Swift/issues/11)
+- Changed watchOS target to watchOS 3.0 instead of 2.0, thanks to an App Store submission rule [#11](https://github.com/FabrizioBrancati/Queuer/issues/11)
 - Changed `executionBlock` of `ConcurrentOperation` to pass the `concurrentOperation` variable inside the closure to be able to use the retry feature. If you don't need it simply put `_ in` after the block creation:
   ```swift
   let concurrentOperation = ConcurrentOperation { _ in
@@ -46,7 +46,7 @@ All notable changes to this project will be documented in this file.<br>
 ### Removed
 - Removed Hound CI
 
-Thanks to [@zykloman](https://github.com/zykloman) and [@debjitk](https://github.com/debjitk) for this release
+Thanks to [@SureshSc](https://github.com/SureshSc), [@zykloman](https://github.com/zykloman) and [@debjitk](https://github.com/debjitk) for this release
 
 ---
 
