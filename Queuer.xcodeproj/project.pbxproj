@@ -212,8 +212,8 @@
 			isa = PBXGroup;
 			children = (
 				49C7BCB71F26938F00F4FFBC /* Info.plist */,
-				49C7BCBA1F26938F00F4FFBC /* Queuer */,
 				49C7BCC11F26938F00F4FFBC /* Queuer.h */,
+				49C7BCBA1F26938F00F4FFBC /* Queuer */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

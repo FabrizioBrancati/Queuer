@@ -88,7 +88,7 @@ internal class SynchronousOperationTests: XCTestCase {
         let synchronousOperation1 = SynchronousOperation { operation in
             Thread.sleep(forTimeInterval: 1)
             order.append(0)
-            operation.hasFailed = true
+            operation.success = false
             
             if operation.currentAttempt == 3 {
                 testExpectation.fulfill()

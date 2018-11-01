@@ -86,7 +86,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         let testExpectation = expectation(description: "Simple Retry")
         
         let concurrentOperation = ConcurrentOperation { operation in
-            operation.hasFailed = true
+            operation.success = false
         }
         queue.addCompletionHandler {
             DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(1), execute: {
@@ -97,7 +97,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-            XCTAssertTrue(concurrentOperation.hasFailed)
+            XCTAssertFalse(concurrentOperation.success)
             XCTAssertEqual(concurrentOperation.currentAttempt, 3)
         }
     }
@@ -110,11 +110,11 @@ internal class ConcurrentOperationTests: XCTestCase {
         let concurrentOperation1 = ConcurrentOperation { operation in
             Thread.sleep(forTimeInterval: 1)
             order.append(0)
-            operation.hasFailed = true
+            operation.success = false
         }
         let concurrentOperation2 = ConcurrentOperation { operation in
             order.append(1)
-            operation.hasFailed = true
+            operation.success = false
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             order.append(2)
@@ -135,7 +135,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         let concurrentOperation1 = ConcurrentOperation { operation in
             Thread.sleep(forTimeInterval: 1)
             order.append(0)
-            operation.hasFailed = true
+            operation.success = false
         }
         let concurrentOperation2 = ConcurrentOperation { operation in
             operation.cancel()
@@ -143,7 +143,7 @@ internal class ConcurrentOperationTests: XCTestCase {
                 return
             }
             order.append(1)
-            operation.hasFailed = true
+            operation.success = false
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             order.append(2)
@@ -163,7 +163,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         
         let concurrentOperation1 = ConcurrentOperation { operation in
             order.append(0)
-            operation.hasFailed = true
+            operation.success = false
         }
         concurrentOperation1.manualRetry = true
         
@@ -179,7 +179,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         
         let concurrentOperation2 = ConcurrentOperation { operation in
             order.append(1)
-            operation.hasFailed = true
+            operation.success = false
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             order.append(2)
@@ -199,7 +199,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         
         let concurrentOperation1 = ConcurrentOperation { operation in
             order.append(0)
-            operation.hasFailed = true
+            operation.success = false
         }
         concurrentOperation1.manualRetry = true
         

@@ -75,10 +75,10 @@ open class ConcurrentOperation: Operation {
         }
     }
     
-    /// You should use `hasFailed` if you want the retry feature.
-    /// Set it to `true` if the `Operation` has failed, otherwise `false`.
-    /// Default is `false` to avoid retries.
-    open var hasFailed = false
+    /// You should use `success` if you want the retry feature.
+    /// Set it to `false` if the `Operation` has failed, otherwise `true`.
+    /// Default is `true` to avoid retries.
+    open var success = true
     
     /// Maximum allowed retries.
     /// Default are 3 retries.
@@ -118,7 +118,7 @@ open class ConcurrentOperation: Operation {
     open func retry() {
         if manualRetry, shouldRetry, let executionBlock = executionBlock {
             executionBlock(self)
-            finish(hasFailed)
+            finish(success: success)
         }
     }
     
@@ -128,19 +128,20 @@ open class ConcurrentOperation: Operation {
         if let executionBlock = executionBlock {
             while shouldRetry, !manualRetry {
                 executionBlock(self)
-                finish(hasFailed)
+                finish(success: success)
             }
             
             retry()
         }
     }
     
-    /// Notify the completion of async task and hence the completion of the `Operation`.
+    /// Notify the completion of asynchronous task and hence the completion of the `Operation`.
     /// Must be called when the `Operation` is finished.
     ///
-    /// - Parameter hasFailed: Set it to `true` if the `Operation` has failed, otherwise `false`.
-    open func finish(_ hasFailed: Bool) {
-        if !hasFailed || currentAttempt >= maximumRetries {
+    /// - Parameter success: Set it to `false` if the `Operation` has failed, otherwise `true`.
+    ///                      Default is `true`.
+    open func finish(success: Bool = true) {
+        if success || currentAttempt >= maximumRetries {
             _executing = false
             _finished = true
             shouldRetry = false
