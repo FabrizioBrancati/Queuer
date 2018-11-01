@@ -59,12 +59,12 @@ Here is the list of all the features:
 Requirements
 ============
 
-| **Swift** | **Xcode** | **Queuer**    | **iOS** | **macOS**  | **tvOS**  | **watchOS** | **Linux** |
-|-----------|-----------|---------------|---------|------------|-----------|-------------|-----------|
-| 3.1...3.2 | 8.3...9.0 | 1.0.0...1.1.0 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
-| 4.0       | 9.0...9.2 | 1.3.0         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
-| 4.1       | 9.3...9.4 | 1.3.1...1.3.2 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
-| 4.2       | 10.0      | 2.0.0         | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ![✓]      |
+| **Swift** | **Xcode**   | **Queuer**    | **iOS** | **macOS**  | **tvOS**  | **watchOS** | **Linux** |
+|-----------|-------------|---------------|---------|------------|-----------|-------------|-----------|
+| 3.1...3.2 | 8.3...9.0   | 1.0.0...1.1.0 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
+| 4.0       | 9.0...9.2   | 1.3.0         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
+| 4.1       | 9.3...9.4   | 1.3.1...1.3.2 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
+| 4.2       | 10.0...10.1 | 2.0.0         | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ![✓]      |
 
 Installing
 ==========
@@ -142,7 +142,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
             .executable(name: "Project", targets: ["Project"])
         ],
         dependencies: [
-            .package(url: "https://github.com/FabrizioBrancati/Queuer.git", .upToNextMajor(from: "1.0.0"))
+            .package(url: "https://github.com/FabrizioBrancati/Queuer.git", .upToNextMajor(from: "2.0.0"))
         ],
         targets: [
             .target(name: "Project", dependencies: ["Queuer"])
