@@ -29,7 +29,7 @@ All notable changes to this project will be documented in this file.<br>
 - Added queue state restoration (beta) feature, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#queue-state-restoration-beta)
 
 ### Changed
-- Changed watchOS target to watchOS 3.0 instead of 2.0, thanks to an App Store submission rule [#11](https://github.com/FabrizioBrancati/Queuer/issues/11)
+- Changed watchOS target to watchOS 3.0 instead of 2.0, thanks to an App Store submission bug [#11](https://github.com/FabrizioBrancati/Queuer/issues/11)
 - Changed `executionBlock` of `ConcurrentOperation` to pass the `concurrentOperation` variable inside the closure to be able to use the retry feature. If you don't need it simply put `_ in` after the block creation:
   ```swift
   let concurrentOperation = ConcurrentOperation { _ in
