@@ -38,7 +38,6 @@ Thanks to [@zykloman](https://github.com/zykloman) for this release
 - Added queue state restoration (beta) feature, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#queue-state-restoration-beta)
 
 ### Changed
-- Changed watchOS target to watchOS 3.0 instead of 2.0, thanks to an App Store submission bug [#11](https://github.com/FabrizioBrancati/Queuer/issues/11)
 - Changed `executionBlock` of `ConcurrentOperation` to pass the `concurrentOperation` variable inside the closure to be able to use the retry feature. If you don't need it simply put `_ in` after the block creation:
   ```swift
   let concurrentOperation = ConcurrentOperation { _ in
@@ -53,6 +52,7 @@ Thanks to [@zykloman](https://github.com/zykloman) for this release
 - Updated SwiftLint to 0.27.0
 
 ### Removed
+- Removed watchOS 2.0 support in favour of watchOS 3.0, thanks to an App Store submission bug [#11](https://github.com/FabrizioBrancati/Queuer/issues/11)
 - Removed Hound CI
 
 Thanks to [@SureshSc](https://github.com/SureshSc), [@zykloman](https://github.com/zykloman) and [@debjitk](https://github.com/debjitk) for this release
