@@ -52,7 +52,7 @@ Thanks to [@zykloman](https://github.com/zykloman) for this release
 - Updated SwiftLint to 0.27.0
 
 ### Removed
-- Removed watchOS 2.0 support in favour of watchOS 3.0, thanks to an App Store submission bug [#11](https://github.com/FabrizioBrancati/Queuer/issues/11)
+- Removed watchOS 2.0 support in favor of watchOS 3.0, thanks to an App Store submission bug [#11](https://github.com/FabrizioBrancati/Queuer/issues/11)
 - Removed Hound CI
 
 Thanks to [@SureshSc](https://github.com/SureshSc), [@zykloman](https://github.com/zykloman) and [@debjitk](https://github.com/debjitk) for this release
