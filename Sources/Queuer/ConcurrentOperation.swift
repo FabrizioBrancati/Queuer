@@ -75,6 +75,14 @@ open class ConcurrentOperation: Operation {
         }
     }
     
+    /// You should use `hasFailed` if you want the retry feature.
+    /// Set it to `true` if the `Operation` has failed, otherwise `false`.
+    /// Default is `false` to avoid retries.
+    @available(*, deprecated: 2.0, renamed: "success")
+    open var hasFailed: Bool {
+        return !success
+    }
+    
     /// You should use `success` if you want the retry feature.
     /// Set it to `false` if the `Operation` has failed, otherwise `true`.
     /// Default is `true` to avoid retries.
@@ -135,6 +143,12 @@ open class ConcurrentOperation: Operation {
         }
     }
     
+    /// - Parameter hasFailed: Set it to `true` if the `Operation` has failed, otherwise `false`.
+    @available(*, deprecated: 2.0, renamed: "finish(success:)")
+    open func finish(_ hasFailed: Bool) {
+        finish(success: !hasFailed)
+    }
+        
     /// Notify the completion of asynchronous task and hence the completion of the `Operation`.
     /// Must be called when the `Operation` is finished.
     ///
