@@ -24,6 +24,9 @@ All notable changes to this project will be documented in this file.<br>
 - Renamed `open func finish(_ hasFailed: Bool)` to `open func finish(success: Bool = true)` [#12](https://github.com/FabrizioBrancati/Queuer/issues/12)
 - Renamed `hasFailed` variable to `success` [#12](https://github.com/FabrizioBrancati/Queuer/issues/12)
 
+### Improved
+- Updated SwiftLint to 0.28.1
+
 Thanks to [@zykloman](https://github.com/zykloman) for this release
 
 ---

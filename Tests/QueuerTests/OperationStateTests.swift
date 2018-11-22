@@ -60,7 +60,7 @@ internal class OperationStateTests: XCTestCase {
             XCTAssertEqual(operationState.progress, 50)
             XCTAssertEqual(operationState.dependencies, ["Test2"])
         } catch {
-            XCTFail()
+            XCTFail("Failed encoding or decoding")
         }
     }
 }
