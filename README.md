@@ -2,7 +2,7 @@
 <img src="Resources/Banner.png" alt="Queuer Banner">
 </p>
 
-[![Build Status](https://travis-ci.org/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.org/FabrizioBrancati/Queuer)
+[![Build Status](https://travis-ci.com/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.org/FabrizioBrancati/Queuer)
 [![Coverage Status](https://coveralls.io/repos/github/FabrizioBrancati/Queuer/badge.svg?branch=master)](https://coveralls.io/github/FabrizioBrancati/Queuer?branch=master)
 [![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
 [![codebeat badge](https://codebeat.co/badges/50844e60-f4f2-4f9f-a688-5ccc976b7c8c)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master-9833cda0-af64-433d-a08a-cd0d50d6b579)
