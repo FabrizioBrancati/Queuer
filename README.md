@@ -54,7 +54,7 @@ Here is the list of all the features:
 - [x] Ability to restore uncompleted operations
 - [ ] Improve the state restoration feature
 - [ ] Throttling between each automatic operation retry
-- [ ] Data layer that every operation inside an operation queue can access
+- [ ] Data layer that every operation inside an `OperationQueue` can access
 
 Requirements
 ============
