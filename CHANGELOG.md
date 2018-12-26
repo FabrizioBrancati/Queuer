@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ## [2.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.0.1) - Better APIs
+### 26 Dec 2018
 ### Changed
 - Renamed `open func finish(_ hasFailed: Bool)` to `open func finish(success: Bool = true)` [#12](https://github.com/FabrizioBrancati/Queuer/issues/12), the old one has been deprecated but still valid
 - Renamed `hasFailed` variable to `success` [#12](https://github.com/FabrizioBrancati/Queuer/issues/12), the old one has been deprecated but still valid
