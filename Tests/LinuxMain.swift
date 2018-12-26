@@ -36,12 +36,14 @@ import XCTest
 #if os(Linux) || os(FreeBSD)
     @testable import QueuerTests
 
-    XCTMain([
-        testCase(ConcurrentOperationTests.allTests),
-        testCase(OperationStateTests.allTests),
-        testCase(QueuerTests.allTests),
-        testCase(SchedulerTests.allTests),
-        testCase(SemaphoreTests.allTests),
-        testCase(SynchronousOperationTests.allTests)
-    ])
+    XCTMain(
+        [
+            testCase(ConcurrentOperationTests.allTests),
+            testCase(OperationStateTests.allTests),
+            testCase(QueuerTests.allTests),
+            testCase(SchedulerTests.allTests),
+            testCase(SemaphoreTests.allTests),
+            testCase(SynchronousOperationTests.allTests)
+        ]
+    )
 #endif

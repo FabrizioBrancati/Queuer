@@ -114,7 +114,7 @@ def create_linux_main(tests_directory, all_test_sub_directories, files)
       file.write '    @testable import ' + test_sub_directory + "\n"
     end
     file.write "\n"
-    file.write "    XCTMain([\n"
+    file.write "    XCTMain(\n        [\n"
 
     test_cases = []
     for classes in files
@@ -128,9 +128,9 @@ def create_linux_main(tests_directory, all_test_sub_directories, files)
     for test_case in test_cases.sort { |x, y| x <=> y }
       count += 1
 
-      file.write '        testCase(' + test_case + (count == cases_count ? ".allTests)\n" : ".allTests),\n")
+      file.write '            testCase(' + test_case + (count == cases_count ? ".allTests)\n" : ".allTests),\n")
     end
-    file.write "    ])\n"
+    file.write "        ]\n    )\n"
     file.write "#endif\n"
   end
 end

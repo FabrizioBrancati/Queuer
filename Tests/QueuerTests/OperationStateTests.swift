@@ -31,31 +31,32 @@ import XCTest
 internal class OperationStateTests: XCTestCase {
     internal func testInitOperationState() {
         let operationState = OperationState(name: "Test", progress: 50, dependencies: ["Test2"])
-        
+
         XCTAssertEqual(operationState.name, "Test")
         XCTAssertEqual(operationState.progress, 50)
         XCTAssertEqual(operationState.dependencies, ["Test2"])
     }
-    
+
     internal func testCustomDescription() {
         let operationState = OperationState(name: "Test", progress: 50, dependencies: ["Test2"])
-        
-        XCTAssertEqual(operationState.description, """
+        let correctDescription = """
         Operation Name: Test
         Operation Progress: 50
         Operation Dependencies: ["Test2"]
-        """)
+        """
+        
+        XCTAssertEqual(operationState.description, correctDescription)
     }
-    
+
     internal func testEncodeDecode() {
         var operationState = OperationState(name: "Test", progress: 50, dependencies: ["Test2"])
-        
+
         let encoder = JSONEncoder()
         do {
             let data = try encoder.encode(operationState)
             let decoder = JSONDecoder()
             operationState = try decoder.decode(OperationState.self, from: data)
-            
+
             XCTAssertEqual(operationState.name, "Test")
             XCTAssertEqual(operationState.progress, 50)
             XCTAssertEqual(operationState.dependencies, ["Test2"])
