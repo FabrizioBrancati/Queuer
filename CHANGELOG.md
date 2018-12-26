@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ### 2.x Releases
-- `2.0.x` Releases - [2.0.0](#200---let-me-retry)
+- `2.0.x` Releases - [2.0.0](#200---let-me-retry) | [2.0.1](#201---better-apis)
 
 ### 1.x Releases
 - `1.3.x` Releases - [1.3.0](#130---open-everything) | [1.3.1](#131---swift-41-support) | [1.3.2](#132---linux-quality)
