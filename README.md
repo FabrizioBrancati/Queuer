@@ -162,7 +162,7 @@ Usage
 - [Create an Operation Block](https://github.com/FabrizioBrancati/Queuer#create-an-operation-block)
 - [Chained Operations](https://github.com/FabrizioBrancati/Queuer#chained-operations)
 - [Queue States](https://github.com/FabrizioBrancati/Queuer#queue-states)
-- [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#anynchronous-operation)
+- [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#asynchronous-operation)
 - [Synchronous Operation](https://github.com/FabrizioBrancati/Queuer#synchronous-operation)
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
