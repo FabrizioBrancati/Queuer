@@ -219,13 +219,13 @@ You have three methods to add an `Operation` block:
 Chained Operations are `Operation`s that add a dependency each other.<br>
 They follow the given array order, for example: `[A, B, C] = A -> B -> C -> completionBlock`.
 ```swift
-let concurrentOperation1 = ConcurrentOperation { _ in
-    /// Your task 1 here
+let concurrentOperationA = ConcurrentOperation { _ in
+    /// Your task A here
 }
-let concurrentOperation2 = ConcurrentOperation { _ in
-    /// Your task 2 here
+let concurrentOperationB = ConcurrentOperation { _ in
+    /// Your task B here
 }
-queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+queue.addChainedOperations([concurrentOperationA, concurrentOperationB]) {
     /// Your completion task here
 }
 ```
@@ -233,7 +233,7 @@ queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
 You can also add a `completionHandler` after the queue creation with:
 ```swift
 queue.addCompletionHandler {
-    /* Your completion task here */
+    /// Your completion task here
 }
 ```
 
