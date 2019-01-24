@@ -448,6 +448,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 4995D72F1F21E19B00A34E6E;
 			productRefGroup = 4995D73A1F21E19B00A34E6E /* Products */;
@@ -649,6 +650,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -671,6 +673,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -686,6 +689,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.FabrizioBrancati.QueuerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -701,6 +705,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.FabrizioBrancati.QueuerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
