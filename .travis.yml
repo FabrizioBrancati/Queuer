@@ -104,9 +104,6 @@ script:
 
   - if [ "$RUN_TESTS" == "YES" ]; then
       xcodebuild clean test -project "$PROJ" -scheme "$SCHEME" -destination "$DESTINATION" -enableCodeCoverage YES | xcpretty;
-      # Swift 5
-      # --enable-code-coverage
-      # <build-dir>/<configuration>/codecov
     fi
   - if [ "$RUN_TESTS" == "NO" ]; then
       xcodebuild clean build -project "$PROJ" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release | xcpretty;
