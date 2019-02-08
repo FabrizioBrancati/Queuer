@@ -101,7 +101,7 @@ open class ConcurrentOperation: Operation {
     open var manualRetry = false
     
     /// Specify if the `Operation` should retry another time.
-    private var shouldRetry = true
+    internal var shouldRetry = true
     
     /// Creates the `Operation` with an execution block.
     ///
