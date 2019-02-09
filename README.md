@@ -31,6 +31,11 @@
 
 ---
 
+Swift 5.0
+=========
+
+If you need Swift 5.0 support, switch to the `swift-5` branch!
+
 Features
 ========
 
@@ -210,7 +215,7 @@ You have three methods to add an `Operation` block:
     let synchronousOperation = SynchronousOperation { _ in
         /// Your task here
     }
-    queue.addOperation(concurrentOperation)
+    queue.addOperation(synchronousOperation)
     ```
 
 > We will see how `ConcurrentOperation` and `SynchronousOperation` works later.
