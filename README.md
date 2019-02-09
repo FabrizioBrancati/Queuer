@@ -215,7 +215,7 @@ You have three methods to add an `Operation` block:
     let synchronousOperation = SynchronousOperation { _ in
         /// Your task here
     }
-    queue.addOperation(concurrentOperation)
+    queue.addOperation(synchronousOperation)
     ```
 
 > We will see how `ConcurrentOperation` and `SynchronousOperation` works later.
