@@ -19,6 +19,13 @@ All notable changes to this project will be documented in this file.<br>
 
 ---
 
+## [2.1.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/5.0.0) - Swift 5.0 Support
+### XX XXX 2019
+### Added
+- Added support to Xcode 10.2 and Swift 5.0
+
+---
+
 ## [2.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.0.1) - Better APIs
 ### 26 Dec 2018
 ### Changed
