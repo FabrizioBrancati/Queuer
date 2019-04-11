@@ -139,7 +139,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 - Create a **Package.swift** file in your **project directory** and write into:
 
     ```swift
-    // swift-tools-version:4.2
+    // swift-tools-version:5.0
     import PackageDescription
 
     let package = Package(

@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.source            = { :git => 'https://github.com/FabrizioBrancati/Queuer.git', :tag => s.version }
   s.documentation_url = 'https://github.fabriziobrancati.com/documentation/Queuer/'
 
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
 
   s.source_files  = 'Sources/**/*.swift'
 
