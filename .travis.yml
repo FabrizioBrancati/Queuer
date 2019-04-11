@@ -24,57 +24,57 @@ matrix:
       language: objective-c
       osx_image: xcode10.2
       env: SPM="YES"
-    - name: macOS / Xcode 10.2 / iPhone X / iOS 12.0
+    - name: macOS / Xcode 10.2 / iOS 12.2 / iPhone X
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=12.2,name=iPhone X"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="YES"
-    - name: macOS / Xcode 10.2 / iPhone 7 Plus / iOS 11.4
+    - name: macOS / Xcode 10.2 / iOS 11.4 / iPhone 7 Plus
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.4,name=iPhone 7 Plus"              SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="YES" COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / iPhone 6 / iOS 10.3.1
+    - name: macOS / Xcode 10.2 / iOS 10.3.1 / iPhone 6
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=10.3.1,name=iPhone 6"                 SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / iPhone 5s / iOS 9.0
+    - name: macOS / Xcode 10.2 / iOS 9.0 / iPhone 5s
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=9.0,name=iPhone 5s"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / Apple TV 4K / tvOS 12.0
+    - name: macOS / Xcode 10.2 / tvOS 12.2 / Apple TV 4K
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=12.2,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / Apple TV 4K / tvOS 11.2
+    - name: macOS / Xcode 10.2 / tvOS 11.2 / Apple TV 4K
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.2,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / Apple TV HD / tvOS 10.2
+    - name: macOS / Xcode 10.2 / tvOS 10.2 / Apple TV HD
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=10.2,name=Apple TV 1080p"             SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / Apple TV HD / tvOS 9.0
+    - name: macOS / Xcode 10.2 / tvOS 9.0 / Apple TV HD
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=9.0,name=Apple TV 1080p"              SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / Apple Watch 4 - 44mm / watchOS 5.0
+    - name: macOS / Xcode 10.2 / watchOS 5.2 / Apple Watch 4 - 44mm
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=5.2,name=Apple Watch Series 4 - 44mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / Apple Watch 3 - 38mm / watchOS 4.2
+    - name: macOS / Xcode 10.2 / watchOS 4.2 / Apple Watch 3 - 38mm
       os: osx
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=4.2,name=Apple Watch Series 3 - 38mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
-    - name: macOS / Xcode 10.2 / Apple Watch 2 - 42mm / watchOS 3.2
+    - name: macOS / Xcode 10.2 / watchOS 3.2 / Apple Watch 2 - 42mm
       os: osx
       language: objective-c
       osx_image: xcode10.2
