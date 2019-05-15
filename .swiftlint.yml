@@ -156,7 +156,7 @@ custom_rules:
   redundant_parentheses:
     included: ".*.swift"
     name: "Redundant Parentheses"
-    regex: '(if|guard) \(.*\) \{'
+    regex: '(if|guard) \(.*\) (else)? \{'
     message: "Condition should not be enclosed within parentheses."
     severity: warning
   single_line_return:
