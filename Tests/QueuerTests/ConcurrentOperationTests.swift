@@ -167,13 +167,13 @@ internal class ConcurrentOperationTests: XCTestCase {
         }
         concurrentOperation1.manualRetry = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            concurrentOperation1.retry()
-        }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             concurrentOperation1.retry()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+            concurrentOperation1.retry()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
             concurrentOperation1.retry()
         }
         
