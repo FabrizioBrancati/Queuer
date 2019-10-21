@@ -2,7 +2,7 @@
 <img src="Resources/Banner.png" alt="Queuer Banner">
 </p>
 
-[![Build Status](https://travis-ci.com/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.org/FabrizioBrancati/Queuer)
+[![Build Status](https://travis-ci.com/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.com/FabrizioBrancati/Queuer)
 [![Coverage Status](https://coveralls.io/repos/github/FabrizioBrancati/Queuer/badge.svg?branch=master)](https://coveralls.io/github/FabrizioBrancati/Queuer?branch=master)
 [![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
@@ -12,7 +12,7 @@
 <br>
 [![Maintainability](https://api.codeclimate.com/v1/badges/ce03faaf6abe697458ed/maintainability)](https://codeclimate.com/github/FabrizioBrancati/Queuer/maintainability)
 [![codebeat badge](https://codebeat.co/badges/50844e60-f4f2-4f9f-a688-5ccc976b7c8c)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master-9833cda0-af64-433d-a08a-cd0d50d6b579)
-[![Language](https://img.shields.io/badge/language-Swift%205.0-orange.svg)](https://swift.org/)
+[![Language](https://img.shields.io/badge/language-Swift%205.0%20%7C%205.1-orange.svg)](https://swift.org/)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-cc9c00.svg)][Documentation]
 
 ---
@@ -66,7 +66,7 @@ Requirements
 | 4.0       | 9.0...9.2   | 1.3.0         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
 | 4.1       | 9.3...9.4   | 1.3.1...1.3.2 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
 | 4.2       | 10.0...10.1 | 2.0.0...2.0.1 | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ![✓]      |
-| 5.0       | 10.2        | 2.1.0         | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ![✓]      |
+| 5.0...5.1 | 10.2...11.1 | 2.1.0...2.1.1 | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ![✓]      |
 
 Installing
 ==========
@@ -135,7 +135,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 - Create a **Package.swift** file in your **project directory** and write into:
 
     ```swift
-    // swift-tools-version:5.0
+    // swift-tools-version:5.1
     import PackageDescription
 
     let package = Package(
