@@ -110,6 +110,11 @@ matrix:
       language: objective-c
       osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="arch=x86_64"                             SCHEME="$MACOS_SCHEME"   RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
+    - name: macOS / Xcode 11.1
+      os: osx
+      language: objective-c
+      osx_image: xcode11.1
+      env: PROJ="Queuer.xcodeproj" DESTINATION="arch=x86_64"                             SCHEME="$MACOS_SCHEME"   RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
