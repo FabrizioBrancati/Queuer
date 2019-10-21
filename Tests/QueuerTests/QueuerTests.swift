@@ -352,12 +352,14 @@ internal class QueuerTests: XCTestCase {
             XCTAssertNil(error)
             
             XCTAssertEqual(state.count, 2)
-            XCTAssertEqual(state[0].name, "Test1")
-            XCTAssertEqual(state[0].progress, 50)
-            XCTAssertEqual(state[0].dependencies, [])
-            XCTAssertEqual(state[1].name, "Test2")
-            XCTAssertEqual(state[1].progress, 0)
-            XCTAssertEqual(state[1].dependencies, ["Test1"])
+            if state.count >= 2 {
+                XCTAssertEqual(state[0].name, "Test1")
+                XCTAssertEqual(state[0].progress, 50)
+                XCTAssertEqual(state[0].dependencies, [])
+                XCTAssertEqual(state[1].name, "Test2")
+                XCTAssertEqual(state[1].progress, 0)
+                XCTAssertEqual(state[1].dependencies, ["Test1"])
+            }
         }
     }
 }
