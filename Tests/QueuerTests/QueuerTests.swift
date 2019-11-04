@@ -335,20 +335,20 @@ internal class QueuerTests: XCTestCase {
         
         let concurrentOperation1 = ConcurrentOperation(name: "Test1") { operation in
             operation.progress = 50
-            Thread.sleep(forTimeInterval: 2)
+            Thread.sleep(forTimeInterval: 4)
         }
         let concurrentOperation2 = ConcurrentOperation(name: "Test2") { _ in
-            Thread.sleep(forTimeInterval: 1)
+            Thread.sleep(forTimeInterval: 2)
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             testExpectation.fulfill()
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
             state = queue.state()
         }
         
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             
             XCTAssertEqual(state.count, 2)

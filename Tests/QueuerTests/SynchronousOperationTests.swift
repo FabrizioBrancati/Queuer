@@ -86,7 +86,7 @@ internal class SynchronousOperationTests: XCTestCase {
         var order: [Int] = []
         
         let synchronousOperation1 = SynchronousOperation { operation in
-            Thread.sleep(forTimeInterval: 2)
+            Thread.sleep(forTimeInterval: 2.5)
             order.append(0)
             operation.success = false
             

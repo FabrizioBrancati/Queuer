@@ -170,10 +170,10 @@ internal class ConcurrentOperationTests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             concurrentOperation1.retry()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
             concurrentOperation1.retry()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
             concurrentOperation1.retry()
         }
         
@@ -186,7 +186,7 @@ internal class ConcurrentOperationTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
         }
@@ -210,11 +210,11 @@ internal class ConcurrentOperationTests: XCTestCase {
             order.append(2)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertEqual(order, [0])
         }
