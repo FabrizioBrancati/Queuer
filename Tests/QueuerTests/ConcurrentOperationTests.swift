@@ -161,9 +161,9 @@ internal class ConcurrentOperationTests: XCTestCase {
         let testExpectation = expectation(description: "Chained Manual Retry")
         var order: [Int] = []
         
-        let concurrentOperation1 = ConcurrentOperation { operation in
-            order.append(0)
+        let concurrentOperation1 = ConcurrentOperation(name: "concurrentOperation1") { operation in
             operation.success = false
+            order.append(0)
         }
         concurrentOperation1.manualRetry = true
         
@@ -177,13 +177,16 @@ internal class ConcurrentOperationTests: XCTestCase {
             concurrentOperation1.retry()
         }
         
-        let concurrentOperation2 = ConcurrentOperation { operation in
-            order.append(1)
+        let concurrentOperation2 = ConcurrentOperation(name: "concurrentOperation2") { operation in
             operation.success = false
+            order.append(1)
         }
-        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
-            order.append(2)
-            testExpectation.fulfill()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+                order.append(2)
+                testExpectation.fulfill()
+            }
         }
         
         waitForExpectations(timeout: 10) { error in
