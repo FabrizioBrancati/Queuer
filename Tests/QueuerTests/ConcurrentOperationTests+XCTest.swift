@@ -34,7 +34,7 @@
 import XCTest
 
 internal extension ConcurrentOperationTests {
-    internal static var allTests: [(String, (ConcurrentOperationTests) -> () throws -> Void)] {
+    static var allTests: [(String, (ConcurrentOperationTests) -> () throws -> Void)] {
         return [
             ("testProgress", testProgress),
             ("testInitWithExecutionBlock", testInitWithExecutionBlock),
@@ -43,9 +43,7 @@ internal extension ConcurrentOperationTests {
             ("testAddToQueue", testAddToQueue),
             ("testSimpleRetry", testSimpleRetry),
             ("testChainedRetry", testChainedRetry),
-            ("testCanceledChainedRetry", testCanceledChainedRetry),
-            ("testChainedManualRetry", testChainedManualRetry),
-            ("testChainedWrongManualRetry", testChainedWrongManualRetry)
+            ("testCanceledChainedRetry", testCanceledChainedRetry)
         ]
     }
 }

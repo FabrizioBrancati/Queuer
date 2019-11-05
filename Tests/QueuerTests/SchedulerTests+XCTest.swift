@@ -34,7 +34,7 @@
 import XCTest
 
 internal extension SchedulerTests {
-    internal static var allTests: [(String, (SchedulerTests) -> () throws -> Void)] {
+    static var allTests: [(String, (SchedulerTests) -> () throws -> Void)] {
         return [
             ("testInitWithoutHandler", testInitWithoutHandler),
             ("testInitWithHandler", testInitWithHandler),

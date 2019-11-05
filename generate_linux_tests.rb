@@ -159,6 +159,9 @@ def parse_source_file(file_name)
           in_if_linux = false
           ignore = false
       end
+    elsif /\#if[ !\t]+os\(Linux\)/ =~ line
+        in_if_linux = false
+        ignore = true
     elsif /\#if[ \t]+os\(Linux\)/ =~ line
         in_if_linux = true
         ignore = false
