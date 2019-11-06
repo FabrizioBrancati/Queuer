@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.<br>
 ## [2.1.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.1.1) - Swift 5.1 Support
 ### 6 Nov 2019
 ### Added
-- Added support to Xcode 11.1 and Swift 5.1
+- Added support to Xcode 11.2 and Swift 5.1
 
 ### Improved
 - Updated SwiftLint to 0.35.0
