@@ -4,16 +4,18 @@
 
 [![Build Status](https://travis-ci.com/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.com/FabrizioBrancati/Queuer)
 [![Coverage Status](https://coveralls.io/repos/github/FabrizioBrancati/Queuer/badge.svg?branch=master)](https://coveralls.io/github/FabrizioBrancati/Queuer?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ce03faaf6abe697458ed/maintainability)](https://codeclimate.com/github/FabrizioBrancati/Queuer/maintainability)
+[![Codebeat Badge](https://codebeat.co/badges/50844e60-f4f2-4f9f-a688-5ccc976b7c8c)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master-9833cda0-af64-433d-a08a-cd0d50d6b579)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dc5a0e93970b42308ddd333c3bcc22ce)](https://www.codacy.com/manual/FabrizioBrancati/Queuer)
+<br>
 [![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
-[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 <br>
-[![Maintainability](https://api.codeclimate.com/v1/badges/ce03faaf6abe697458ed/maintainability)](https://codeclimate.com/github/FabrizioBrancati/Queuer/maintainability)
-[![codebeat badge](https://codebeat.co/badges/50844e60-f4f2-4f9f-a688-5ccc976b7c8c)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master-9833cda0-af64-433d-a08a-cd0d50d6b579)
+[![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
 [![Language](https://img.shields.io/badge/language-Swift%205.0%20%7C%205.1-orange.svg)](https://swift.org/)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-cc9c00.svg)][Documentation]
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 
 ---
 
