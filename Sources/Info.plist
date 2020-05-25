@@ -19,7 +19,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2017 - 2019 Fabrizio Brancati.</string>
+	<string>Copyright © 2017 - 2020 Fabrizio Brancati.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 	<key>UIRequiredDeviceCapabilities</key>
