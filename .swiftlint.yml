@@ -83,6 +83,7 @@ opt_in_rules:
   - vertical_whitespace_opening_braces
   - void_function_in_ternary
   - yoda_condition
+  - xct_specific_matcher
 
 disabled_rules:
   - trailing_whitespace
