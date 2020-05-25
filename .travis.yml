@@ -32,11 +32,11 @@ jobs:
       language: objective-c
       osx_image: xcode10.2
       env: SPM="YES"
-    - name: macOS / Xcode 11.4 / iOS 13.5 / iPhone 11 Pro Max
+    - name: macOS / Xcode 11.4 / iOS 13.4.1 / iPhone 11 Pro Max
       os: osx
       language: objective-c
       osx_image: xcode11.4
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=13.5,name=iPhone 11 Pro Max"          SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=13.4.1,name=iPhone 11 Pro Max"          SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
     - name: macOS / Xcode 10.2 / iOS 12.2 / iPhone X
       os: osx
       language: objective-c
