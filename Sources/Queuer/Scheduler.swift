@@ -56,9 +56,7 @@ public struct Scheduler {
         timer = DispatchSource.makeTimerSource()
         timer.schedule(deadline: deadline, repeating: repeating)
         if let handler = handler {
-            timer.setEventHandler(qos: qualityOfService) {
-                handler()
-            }
+            timer.setEventHandler(qos: qualityOfService, handler: handler)
             timer.resume()
         }
     }
@@ -69,9 +67,7 @@ public struct Scheduler {
     public mutating func setHandler(_ handler: @escaping () -> Void) {
         self.handler = handler
         
-        timer.setEventHandler(qos: qualityOfService) {
-            handler()
-        }
+        timer.setEventHandler(qos: qualityOfService, handler: handler)
         timer.resume()
     }
 }

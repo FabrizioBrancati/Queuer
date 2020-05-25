@@ -45,6 +45,7 @@ internal class SchedulerTests: XCTestCase {
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(order, [0, 0, 0, 0])
+            schedule.timer.cancel()
         }
     }
     
