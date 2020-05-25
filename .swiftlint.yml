@@ -12,11 +12,14 @@ opt_in_rules:
   - contains_over_filter_count
   - contains_over_filter_is_empty
   - contains_over_first_not_nil
+  - contains_over_range_nil_comparison
   - convenience_type
   - empty_collection_literal
   - empty_count
   - empty_string
   - empty_xctest_method
+  - enum_case_associated_value_count
+  - expiring_todo
   - explicit_acl
   - explicit_init
   - fallthrough
@@ -25,6 +28,7 @@ opt_in_rules:
   - file_header
   - file_types_order
   - first_where
+  - flatmap_over_map_reduce
   - force_unwrapping
   - implicitly_unwrapped_optional
   - joined_default_parameter
@@ -47,22 +51,28 @@ opt_in_rules:
   - number_separator
   - object_literal
   - operator_usage_whitespace
+  - optional_enum_case_matching
   - overridden_super_call
   - override_in_extension
   - pattern_matching_keywords
+  - prefer_self_type_over_type_of_self
   - private_action
   - private_outlet
+  - prohibited_nan_comparison
   - prohibited_super_call
   - quick_discouraged_call
   - quick_discouraged_focused_test
   - quick_discouraged_pending_test
+  - raw_value_for_camel_cased_codable_enum
   - reduce_into
   - redundant_nil_coalescing
+  - return_value_from_void_function
   - single_test_class
   - sorted_first_last
   - sorted_imports
   - switch_case_on_newline
   - trailing_closure
+  - tuple_pattern
   - unavailable_function
   - unneeded_parentheses_in_closure_argument
   - unowned_variable_capture
@@ -71,6 +81,7 @@ opt_in_rules:
   - vertical_whitespace_between_cases
   - vertical_whitespace_closing_braces
   - vertical_whitespace_opening_braces
+  - void_function_in_ternary
   - yoda_condition
 
 disabled_rules:
