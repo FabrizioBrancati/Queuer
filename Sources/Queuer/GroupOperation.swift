@@ -9,29 +9,26 @@
 import Foundation
 
 open class GroupOperation: ConcurrentOperation {
-    /// Private `OperationQueue` instance
+    /// Private `OperationQueue` instance.
     private let queue = OperationQueue()
     
-    /// List of `ConcurrentOperation` that should be run in this `GroupOperation`
+    /// List of `ConcurrentOperation` that should be run in this `GroupOperation`.
     public var operations: [ConcurrentOperation] = []
     
-    /// Flag to know if all `ConcurrentOperation` of this `GroupOperation` were successful
+    /// Flag to know if all `ConcurrentOperation` of this `GroupOperation` were successful.
     public var allOperationsSucceeded: Bool {
         return operations.first(where: { $0.success == false }) == nil
     }
     
-    /// Completion block that will run once all `operations` are finished
-    public var completionHandler: ((_ operation: GroupOperation) -> Void)?
-    
-    /// Creates the `GroupOperation` with a completion handler
+    /// Creates the `GroupOperation` with a completion handler.
     ///
     /// - Parameters:
-    ///     - operations: Array of ConcurrentOperation to be executed
-    ///     - completionHandler: Block that will be executed once all operations are over
-    public init(_ operations: [ConcurrentOperation], completionHandler: ((_ operation: GroupOperation) -> Void)? = nil) {
+    ///     - operations: Array of ConcurrentOperation to be executed.
+    ///     - completionHandler: Block that will be executed once all operations are over.
+    public init(_ operations: [ConcurrentOperation], completionBlock: (() -> Void)? = nil) {
         super.init()
         self.operations = operations
-        self.completionHandler = completionHandler
+        self.completionBlock = completionBlock
     }
     
     /// A `GroupOperation` shouldn't be able to retry itself. It should be the responsability of its operations to retry themselves.
@@ -44,6 +41,6 @@ open class GroupOperation: ConcurrentOperation {
     open override func execute() {
         queue.addOperations(operations, waitUntilFinished: true)
         finish(success: true)
-        completionHandler?(self)
+        completionBlock?()
     }
 }
