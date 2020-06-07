@@ -51,6 +51,7 @@ internal class GroupOperationTests: XCTestCase {
         }
         
         waitForExpectations(timeout: 5) { error in
+            XCTAssertTrue(groupOperation1.allOperationsSucceeded)
             XCTAssertNil(error)
             XCTAssertEqual(order, ["2", "1", "3", "4", "5", "6", "7"])
         }
@@ -126,40 +127,40 @@ internal class GroupOperationTests: XCTestCase {
         let testExpectation = expectation(description: "Group Operations Inner Chained Manual Retry")
         var order: [String] = []
         
-        let operation1A = ConcurrentOperation() { operation in
+        let concurrentOperation1 = ConcurrentOperation() { operation in
             order.append("1")
             operation.success = false
         }
-        operation1A.manualRetry = true
+        concurrentOperation1.manualRetry = true
         
-        let operation1B = ConcurrentOperation() { operation in
+        let concurrentOperation2 = ConcurrentOperation() { operation in
             Thread.sleep(forTimeInterval: 1)
             order.append("2")
             operation.success = false
         }
-        operation1B.manualRetry = true
+        concurrentOperation2.manualRetry = true
         
-        let operation1 = GroupOperation([operation1A, operation1B])
+        let groupOperation1 = GroupOperation([concurrentOperation1, concurrentOperation2])
         
-        let operation2 = ConcurrentOperation() { _ in
+        let groupOperation2 = ConcurrentOperation() { _ in
             order.append("3")
         }
         
-        queue.addChainedOperations([operation1, operation2]) {
+        queue.addChainedOperations([groupOperation1, groupOperation2]) {
             testExpectation.fulfill()
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            operation1A.retry()
+            concurrentOperation1.retry()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
-            operation1B.retry()
+            concurrentOperation2.retry()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
-            operation1B.retry()
+            concurrentOperation2.retry()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
-            operation1A.retry()
+            concurrentOperation1.retry()
         }
         
         waitForExpectations(timeout: 8) { error in
