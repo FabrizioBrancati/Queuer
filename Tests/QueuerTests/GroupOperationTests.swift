@@ -12,88 +12,89 @@ import XCTest
 import XCTest
 
 internal class GroupOperationTests: XCTestCase {
-    func testGroupedOperations() {
+    func testGroupOperations() {
         var order: [String] = []
-        let testExpectation = expectation(description: "GroupedOperations")
-        let queue = Queuer(name: "Grouped Operations")
+        let testExpectation = expectation(description: "GroupOperations")
+        let queue = Queuer(name: "Group Operations")
         
-        let operation1 = GroupOperation([
+        let groupOperation1 = GroupOperation([
             ConcurrentOperation() { _ in
-                Thread.sleep(forTimeInterval: 0.2)
-                order.append("1_A")
+                Thread.sleep(forTimeInterval: 1)
+                order.append("1")
             },
             ConcurrentOperation() { _ in
-                order.append("1_B")
+                order.append("2")
             }
-        ]) { _ in
-            order.append("1_ended")
-        }
-        
-        let operation2 = GroupOperation([
-            ConcurrentOperation() { _ in
-                order.append("2_A")
-            },
-            ConcurrentOperation() { _ in
-                Thread.sleep(forTimeInterval: 0.2)
-                order.append("2_B")
-            }
-        ]) { _ in
-            order.append("2_ended")
-        }
-        
-        let operation3 = ConcurrentOperation() { _ in
+        ]) {
             order.append("3")
         }
         
-        queue.addChainedOperations([operation1, operation2, operation3]) {
+        let groupOperation2 = GroupOperation([
+            ConcurrentOperation() { _ in
+                order.append("4")
+            },
+            ConcurrentOperation() { _ in
+                Thread.sleep(forTimeInterval: 1)
+                order.append("5")
+            }
+        ]) {
+            order.append("6")
+        }
+        
+        let groupOperation3 = ConcurrentOperation() { _ in
+            Thread.sleep(forTimeInterval: 1)
+            order.append("7")
+        }
+        
+        queue.addChainedOperations([groupOperation1, groupOperation2, groupOperation3]) {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 2) { error in
+        waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, ["1_B", "1_A", "1_ended", "2_A", "2_B", "2_ended", "3"])
+            XCTAssertEqual(order, ["2", "1", "3", "4", "5", "6", "7"])
         }
     }
     
-    func testGroupedOperationsWithInnerChainedRetry() {
+    func testGroupOperationsWithInnerChainedRetry() {
         var order: [String] = []
-        let testExpectation = expectation(description: "GroupedOperationsWithInnerChainedRetry")
-        let queue = Queuer(name: "Grouped Operations Chained Retry")
+        let testExpectation = expectation(description: "GroupOperationsWithInnerChainedRetry")
+        let queue = Queuer(name: "Group Operations Chained Retry")
         
-        let operation1 = GroupOperation([
+        let groupOperation1 = GroupOperation([
             ConcurrentOperation() { _ in
-                order.append("1_A")
+                order.append("1")
             },
             ConcurrentOperation() { operation in
-                Thread.sleep(forTimeInterval: 0.2)
-                order.append("1_B")
+                Thread.sleep(forTimeInterval: 1)
+                order.append("2")
                 operation.success = false
             }
             ])
         
-        let operation2 = ConcurrentOperation() { _ in
-            order.append("2")
+        let groupOperation2 = ConcurrentOperation() { _ in
+            order.append("3")
         }
         
-        queue.addChainedOperations([operation1, operation2]) {
+        queue.addChainedOperations([groupOperation1, groupOperation2]) {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 2) { error in
+        waitForExpectations(timeout: 8) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, ["1_A", "1_B", "1_B", "1_B", "2"])
+            XCTAssertEqual(order, ["1", "2", "2", "2", "3"])
         }
     }
     
-    func testGroupedOperationsWithCancelledInnerChainedRetry() {
-        let queue = Queuer(name: "GroupedOperationsWithCancelledInnerChainedRetry")
-        let testExpectation = expectation(description: "Grouped Operations Cancelled Inner Chained Retry")
+    func testGroupOperationsWithCancelledInnerChainedRetry() {
+        let queue = Queuer(name: "GroupOperationsWithCancelledInnerChainedRetry")
+        let testExpectation = expectation(description: "Group Operations Cancelled Inner Chained Retry")
         var order: [String] = []
         
-        let operation1 = GroupOperation([
+        let groupOperation1 = GroupOperation([
             ConcurrentOperation() { operation in
-                Thread.sleep(forTimeInterval: 0.2)
-                order.append("1_A")
+                Thread.sleep(forTimeInterval: 1)
+                order.append("1")
                 operation.success = false
             },
             ConcurrentOperation() { operation in
@@ -101,39 +102,39 @@ internal class GroupOperationTests: XCTestCase {
                 guard !operation.isCancelled else {
                     return
                 }
-                order.append("1_B")
+                order.append("2")
                 operation.success = false
             }
-            ])
+        ])
         
-        let operation2 = ConcurrentOperation() { _ in
-            order.append("2")
+        let groupOperation2 = ConcurrentOperation() { _ in
+            order.append("3")
         }
         
-        queue.addChainedOperations([operation1, operation2]) {
+        queue.addChainedOperations([groupOperation1, groupOperation2]) {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 2) { error in
+        waitForExpectations(timeout: 6) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, ["1_A", "1_A", "1_A", "2"])
+            XCTAssertEqual(order, ["1", "1", "1", "3"])
         }
     }
     
-    func testGroupedOperationsWithInnerChainedManualRetry() {
-        let queue = Queuer(name: "GroupedOperationsWithInnerChainedManualRetry")
-        let testExpectation = expectation(description: "Grouped Operations Inner Chained Manual Retry")
+    func testGroupOperationsWithInnerChainedManualRetry() {
+        let queue = Queuer(name: "GroupOperationsWithInnerChainedManualRetry")
+        let testExpectation = expectation(description: "Group Operations Inner Chained Manual Retry")
         var order: [String] = []
         
         let operation1A = ConcurrentOperation() { operation in
-            order.append("1_A")
+            order.append("1")
             operation.success = false
         }
         operation1A.manualRetry = true
         
         let operation1B = ConcurrentOperation() { operation in
-            Thread.sleep(forTimeInterval: 0.2)
-            order.append("1_B")
+            Thread.sleep(forTimeInterval: 1)
+            order.append("2")
             operation.success = false
         }
         operation1B.manualRetry = true
@@ -141,29 +142,29 @@ internal class GroupOperationTests: XCTestCase {
         let operation1 = GroupOperation([operation1A, operation1B])
         
         let operation2 = ConcurrentOperation() { _ in
-            order.append("2")
+            order.append("3")
         }
         
         queue.addChainedOperations([operation1, operation2]) {
             testExpectation.fulfill()
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(600)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
             operation1A.retry()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(800)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
             operation1B.retry()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1200)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
             operation1B.retry()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1400)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
             operation1A.retry()
         }
         
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 8) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, ["1_A", "1_B", "1_A", "1_B", "1_B", "1_A", "2"])
+            XCTAssertEqual(order, ["1", "2", "1", "2", "2", "1", "3"])
         }
     }
 }
