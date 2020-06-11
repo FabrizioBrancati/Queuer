@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2018 Fabrizio Brancati
+//  Copyright (c) 2017 - 2020 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@
 import XCTest
 
 internal extension ConcurrentOperationTests {
-    internal static var allTests: [(String, (ConcurrentOperationTests) -> () throws -> Void)] {
+    static var allTests: [(String, (ConcurrentOperationTests) -> () throws -> Void)] {
         return [
             ("testProgress", testProgress),
             ("testInitWithExecutionBlock", testInitWithExecutionBlock),
@@ -43,9 +43,7 @@ internal extension ConcurrentOperationTests {
             ("testAddToQueue", testAddToQueue),
             ("testSimpleRetry", testSimpleRetry),
             ("testChainedRetry", testChainedRetry),
-            ("testCanceledChainedRetry", testCanceledChainedRetry),
-            ("testChainedManualRetry", testChainedManualRetry),
-            ("testChainedWrongManualRetry", testChainedWrongManualRetry)
+            ("testCanceledChainedRetry", testCanceledChainedRetry)
         ]
     }
 }

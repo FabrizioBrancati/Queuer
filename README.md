@@ -2,17 +2,20 @@
 <img src="Resources/Banner.png" alt="Queuer Banner">
 </p>
 
-[![Build Status](https://travis-ci.com/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.org/FabrizioBrancati/Queuer)
+[![Build Status](https://travis-ci.com/FabrizioBrancati/Queuer.svg?branch=master)](https://travis-ci.com/FabrizioBrancati/Queuer)
 [![Coverage Status](https://coveralls.io/repos/github/FabrizioBrancati/Queuer/badge.svg?branch=master)](https://coveralls.io/github/FabrizioBrancati/Queuer?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ce03faaf6abe697458ed/maintainability)](https://codeclimate.com/github/FabrizioBrancati/Queuer/maintainability)
+[![Codebeat Badge](https://codebeat.co/badges/50844e60-f4f2-4f9f-a688-5ccc976b7c8c)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master-9833cda0-af64-433d-a08a-cd0d50d6b579)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dc5a0e93970b42308ddd333c3bcc22ce)](https://www.codacy.com/manual/FabrizioBrancati/Queuer)
+<br>
 [![Documentation](https://github.fabriziobrancati.com/documentation/Queuer/badge.svg)](https://github.fabriziobrancati.com/documentation/Queuer/)
-[![codebeat badge](https://codebeat.co/badges/50844e60-f4f2-4f9f-a688-5ccc976b7c8c)](https://codebeat.co/projects/github-com-fabriziobrancati-queuer-master-9833cda0-af64-433d-a08a-cd0d50d6b579)
 [![Swift Package Manager Compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
-[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 <br>
-[![Language](https://img.shields.io/badge/language-Swift%204.2-orange.svg)](https://swift.org/)
+[![Version](https://img.shields.io/cocoapods/v/Queuer.svg?style=flat)][Documentation]
+[![Language](https://img.shields.io/badge/language-Swift%205.0%20%7C%205.1-orange.svg)](https://swift.org/)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS%20%7C%20Linux-cc9c00.svg)][Documentation]
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/FabrizioBrancati/Queuer/blob/master/LICENSE)
 
 ---
 
@@ -30,11 +33,6 @@
 </p>
 
 ---
-
-Swift 5.0
-=========
-
-If you need Swift 5.0 support, switch to the `swift-5` branch!
 
 Features
 ========
@@ -70,6 +68,7 @@ Requirements
 | 4.0       | 9.0...9.2   | 1.3.0         | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
 | 4.1       | 9.3...9.4   | 1.3.1...1.3.2 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ![✓]      |
 | 4.2       | 10.0...10.1 | 2.0.0...2.0.1 | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ![✓]      |
+| 5.0...5.1 | 10.2...11.2 | 2.1.0...2.1.1 | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ![✓]      |
 
 Installing
 ==========
@@ -138,7 +137,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 - Create a **Package.swift** file in your **project directory** and write into:
 
     ```swift
-    // swift-tools-version:4.2
+    // swift-tools-version:5.1
     import PackageDescription
 
     let package = Package(
@@ -167,7 +166,7 @@ Usage
 - [Create an Operation Block](https://github.com/FabrizioBrancati/Queuer#create-an-operation-block)
 - [Chained Operations](https://github.com/FabrizioBrancati/Queuer#chained-operations)
 - [Queue States](https://github.com/FabrizioBrancati/Queuer#queue-states)
-- [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#anynchronous-operation)
+- [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#asynchronous-operation)
 - [Synchronous Operation](https://github.com/FabrizioBrancati/Queuer#synchronous-operation)
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
@@ -215,7 +214,7 @@ You have three methods to add an `Operation` block:
     let synchronousOperation = SynchronousOperation { _ in
         /// Your task here
     }
-    queue.addOperation(concurrentOperation)
+    queue.addOperation(synchronousOperation)
     ```
 
 > We will see how `ConcurrentOperation` and `SynchronousOperation` works later.
@@ -224,13 +223,13 @@ You have three methods to add an `Operation` block:
 Chained Operations are `Operation`s that add a dependency each other.<br>
 They follow the given array order, for example: `[A, B, C] = A -> B -> C -> completionBlock`.
 ```swift
-let concurrentOperation1 = ConcurrentOperation { _ in
-    /// Your task 1 here
+let concurrentOperationA = ConcurrentOperation { _ in
+    /// Your task A here
 }
-let concurrentOperation2 = ConcurrentOperation { _ in
-    /// Your task 2 here
+let concurrentOperationB = ConcurrentOperation { _ in
+    /// Your task B here
 }
-queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+queue.addChainedOperations([concurrentOperationA, concurrentOperationB]) {
     /// Your completion task here
 }
 ```
@@ -238,7 +237,7 @@ queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
 You can also add a `completionHandler` after the queue creation with:
 ```swift
 queue.addCompletionHandler {
-    /* Your completion task here */
+    /// Your completion task here
 }
 ```
 

@@ -5,68 +5,97 @@ env:
     - TVOS_SCHEME="Queuer tvOS"
     - WATCHOS_SCHEME="Queuer watchOS"
 
-matrix:
+jobs:
   include:
-    - os: linux
+    - name: Ubuntu 14.04 / SwiftPM
+      os: linux
       language: generic
-      sudo: required
       dist: trusty
       env: SPM="YES"
-    - os: osx
-      language: objective-c
-      osx_image: xcode10
+    - name: Ubuntu 16.04 / SwiftPM
+      os: linux
+      language: generic
+      dist: xenial
       env: SPM="YES"
-    - os: osx
+    - name: Ubuntu 18.04 / SwiftPM
+      os: linux
+      language: generic
+      dist: bionic
+      env: SPM="YES"
+    - name: macOS / Xcode 11.4 / SwiftPM
+      os: osx
       language: objective-c
-      osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=12.0,name=iPhone X"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="YES"
-    - os: osx
+      osx_image: xcode11.4
+      env: SPM="YES"
+    - name: macOS / Xcode 10.2 / SwiftPM
+      os: osx
       language: objective-c
-      osx_image: xcode10
+      osx_image: xcode10.2
+      env: SPM="YES"
+    - name: macOS / Xcode 11.4 / iOS 13.4.1 / iPhone 11 Pro Max
+      os: osx
+      language: objective-c
+      osx_image: xcode11.4
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=13.4.1,name=iPhone 11 Pro Max"          SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
+    - name: macOS / Xcode 10.2 / iOS 12.2 / iPhone X
+      os: osx
+      language: objective-c
+      osx_image: xcode10.2
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=12.2,name=iPhone X"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="YES"
+    - name: macOS / Xcode 10.2 / iOS 11.4 / iPhone 7 Plus
+      os: osx
+      language: objective-c
+      osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.4,name=iPhone 7 Plus"              SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="YES" COVERAGE="NO"
-    - os: osx
+    - name: macOS / Xcode 10.2 / iOS 10.3.1 / iPhone 6
+      os: osx
       language: objective-c
-      osx_image: xcode10
+      osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=10.3.1,name=iPhone 6"                 SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - os: osx
+    - name: macOS / Xcode 11.4 / tvOS 13.1 / Apple TV 4K
+      os: osx
       language: objective-c
-      osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=9.0,name=iPhone 5s"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    # - os: osx
-    #   language: objective-c
-    #   osx_image: xcode10
-    #   env: PROJ="Queuer.xcodeproj" DESTINATION="OS=8.1,name=iPhone 4S"                   SCHEME="$IOS_SCHEME"     RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - os: osx
+      osx_image: xcode11.4
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=13.0,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
+    - name: macOS / Xcode 10.2 / tvOS 12.2 / Apple TV 4K
+      os: osx
       language: objective-c
-      osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=12.0,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - os: osx
+      osx_image: xcode10.2
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=12.2,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
+    - name: macOS / Xcode 10.2 / tvOS 11.2 / Apple TV 4K
+      os: osx
       language: objective-c
-      osx_image: xcode10
+      osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=11.2,name=Apple TV 4K"                SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - os: osx
+    - name: macOS / Xcode 11.4 / watchOS 6.2 / Apple Watch Series 5 - 44mm
+      os: osx
       language: objective-c
-      osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=10.2,name=Apple TV 1080p"             SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - os: osx
+      osx_image: xcode11.4
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=6.2,name=Apple Watch Series 5 - 44mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
+    - name: macOS / Xcode 10.2 / watchOS 5.2 / Apple Watch Series 4 - 44mm
+      os: osx
       language: objective-c
-      osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=9.0,name=Apple TV 1080p"              SCHEME="$TVOS_SCHEME"    RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
-    - os: osx
+      osx_image: xcode10.2
+      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=5.2,name=Apple Watch Series 4 - 44mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
+    - name: macOS / Xcode 10.2 / watchOS 4.2 / Apple Watch Series 3 - 38mm
+      os: osx
       language: objective-c
-      osx_image: xcode10
-      env: PROJ="Queuer.xcodeproj" DESTINATION="OS=5.0,name=Apple Watch Series 4 - 44mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
-    - os: osx
-      language: objective-c
-      osx_image: xcode10
+      osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=4.2,name=Apple Watch Series 3 - 38mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
-    - os: osx
+    - name: macOS / Xcode 10.2 / watchOS 3.2 / Apple Watch Series 2 - 42mm
+      os: osx
       language: objective-c
-      osx_image: xcode10
+      osx_image: xcode10.2
       env: PROJ="Queuer.xcodeproj" DESTINATION="OS=3.2,name=Apple Watch Series 2 - 42mm" SCHEME="$WATCHOS_SCHEME" RUN_TESTS="NO"  LINT="NO"  COVERAGE="NO"
-    - os: osx
+    - name: macOS / Xcode 10.2
+      os: osx
       language: objective-c
-      osx_image: xcode10
+      osx_image: xcode10.2
+      env: PROJ="Queuer.xcodeproj" DESTINATION="arch=x86_64"                             SCHEME="$MACOS_SCHEME"   RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
+    - name: macOS / Xcode 11.4
+      os: osx
+      language: objective-c
+      osx_image: xcode11.4
       env: PROJ="Queuer.xcodeproj" DESTINATION="arch=x86_64"                             SCHEME="$MACOS_SCHEME"   RUN_TESTS="YES" LINT="NO"  COVERAGE="NO"
 
 before_install:

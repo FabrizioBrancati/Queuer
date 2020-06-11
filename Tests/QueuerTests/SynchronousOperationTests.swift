@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2018 Fabrizio Brancati
+//  Copyright (c) 2017 - 2020 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -80,34 +80,37 @@ internal class SynchronousOperationTests: XCTestCase {
         }
     }
     
-    internal func testSynchronousOperationRetry() {
-        let queue = Queuer(name: "SynchronousOperationTestRetry")
-        let testExpectation = expectation(description: "Synchronous Operation Retry")
-        var order: [Int] = []
-        
-        let synchronousOperation1 = SynchronousOperation { operation in
-            Thread.sleep(forTimeInterval: 1)
-            order.append(0)
-            operation.success = false
+    #if !os(Linux)
+        internal func testSynchronousOperationRetry() {
+            let queue = Queuer(name: "SynchronousOperationTestRetry")
+            let testExpectation = expectation(description: "Synchronous Operation Retry")
+            var order: [Int] = []
             
-            if operation.currentAttempt == 3 {
-                testExpectation.fulfill()
+            let synchronousOperation1 = SynchronousOperation { operation in
+                Thread.sleep(forTimeInterval: 2.5)
+                order.append(0)
+                operation.success = false
+                
+                if operation.currentAttempt == 3 {
+                    testExpectation.fulfill()
+                }
+            }
+            synchronousOperation1.addToQueue(queue)
+            
+            let synchronousOperation2 = SynchronousOperation { _ in
+                order.append(1)
+            }
+            synchronousOperation2.addToQueue(queue)
+            
+            XCTAssertFalse(synchronousOperation1.isAsynchronous)
+            XCTAssertFalse(synchronousOperation2.isAsynchronous)
+            
+            waitForExpectations(timeout: 10) { error in
+                XCTAssertNil(error)
+                XCTAssertEqual(order, [1, 0, 0, 0])
             }
         }
-        let synchronousOperation2 = SynchronousOperation { _ in
-            order.append(1)
-        }
-        synchronousOperation1.addToQueue(queue)
-        synchronousOperation2.addToQueue(queue)
-        
-        XCTAssertFalse(synchronousOperation1.isAsynchronous)
-        XCTAssertFalse(synchronousOperation2.isAsynchronous)
-        
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(order, [1, 0, 0, 0])
-        }
-    }
+    #endif
     
     internal func testCancel() {
         let queue = Queuer(name: "SynchronousOperationTestCancel")

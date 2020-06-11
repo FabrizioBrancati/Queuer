@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2018 Fabrizio Brancati
+//  Copyright (c) 2017 - 2020 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -124,14 +124,14 @@ public extension Queuer {
     /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter block: Block to be executed.
-    public func addOperation(_ operation: @escaping () -> Void) {
+    func addOperation(_ operation: @escaping () -> Void) {
         queue.addOperation(operation)
     }
     
     /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter operation: `Operation` to be executed.
-    public func addOperation(_ operation: Operation) {
+    func addOperation(_ operation: Operation) {
         queue.addOperation(operation)
     }
     
@@ -145,7 +145,7 @@ public extension Queuer {
     ///   - operations: `Operation`s Array.
     ///   - completionHandler: Completion block to be exectuted when all `Operation`s
     ///                        are finished.
-    public func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
+    func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
         for (index, operation) in operations.enumerated() {
             if index > 0 {
                 operation.addDependency(operations[index - 1])
@@ -171,14 +171,14 @@ public extension Queuer {
     ///   - operations: `Operation`s list.
     ///   - completionHandler: Completion block to be exectuted when all `Operation`s
     ///                        are finished.
-    public func addChainedOperations(_ operations: Operation..., completionHandler: (() -> Void)? = nil) {
+    func addChainedOperations(_ operations: Operation..., completionHandler: (() -> Void)? = nil) {
         addChainedOperations(operations, completionHandler: completionHandler)
     }
     
     /// Add a completion block to the queue.
     ///
     /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
-    public func addCompletionHandler(_ completionHandler: @escaping () -> Void) {
+    func addCompletionHandler(_ completionHandler: @escaping () -> Void) {
         let completionOperation = BlockOperation(block: completionHandler)
         if let lastOperation = operations.last {
             completionOperation.addDependency(lastOperation)
@@ -192,12 +192,12 @@ public extension Queuer {
 /// `Queuer` extension with state restoration feature.
 public extension Queuer {
     /// `OperationState` array typealias.
-    public typealias QueueStateList = [OperationState]
+    typealias QueueStateList = [OperationState]
     
     /// Creates the queue state.
     ///
     /// - Returns: Returns the current queue state.
-    public func state() -> QueueStateList {
+    func state() -> QueueStateList {
         return Queuer.state(of: queue)
     }
     
@@ -205,7 +205,7 @@ public extension Queuer {
     ///
     /// - Parameter queue: State will be created starting from this `OperationQueue`.
     /// - Returns: Returns the current queue state.
-    public static func state(of queue: OperationQueue) -> QueueStateList {
+    static func state(of queue: OperationQueue) -> QueueStateList {
         var operations: QueueStateList = []
         
         for operation in queue.operations {

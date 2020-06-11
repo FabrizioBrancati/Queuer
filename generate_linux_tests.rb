@@ -38,7 +38,7 @@ def header(file_name)
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2018 Fabrizio Brancati
+//  Copyright (c) 2017 - 2020 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -83,7 +83,7 @@ def create_extension_file(file_name, classes)
 
     for class_array in classes
       file.write 'internal extension ' + class_array[0] + " {\n"
-      file.write '    internal static var allTests: [(String, (' + class_array[0] + ") -> () throws -> Void)] {\n"
+      file.write '    static var allTests: [(String, (' + class_array[0] + ") -> () throws -> Void)] {\n"
       file.write "        return [\n"
 
       class_count = class_array[1].size
@@ -159,6 +159,9 @@ def parse_source_file(file_name)
           in_if_linux = false
           ignore = false
       end
+    elsif /\#if[ !\t]+os\(Linux\)/ =~ line
+        in_if_linux = false
+        ignore = true
     elsif /\#if[ \t]+os\(Linux\)/ =~ line
         in_if_linux = true
         ignore = false

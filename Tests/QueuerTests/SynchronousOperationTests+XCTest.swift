@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2018 Fabrizio Brancati
+//  Copyright (c) 2017 - 2020 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -34,12 +34,10 @@
 import XCTest
 
 internal extension SynchronousOperationTests {
-    internal static var allTests: [(String, (SynchronousOperationTests) -> () throws -> Void)] {
+    static var allTests: [(String, (SynchronousOperationTests) -> () throws -> Void)] {
         return [
             ("testSynchronousOperation", testSynchronousOperation),
-            ("testSynchronousOperationOnSharedQueuer", testSynchronousOperationOnSharedQueuer),
-            ("testSynchronousOperationRetry", testSynchronousOperationRetry),
-            ("testCancel", testCancel)
+            ("testSynchronousOperationOnSharedQueuer", testSynchronousOperationOnSharedQueuer)
         ]
     }
 }

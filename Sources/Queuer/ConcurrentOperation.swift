@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2018 Fabrizio Brancati
+//  Copyright (c) 2017 - 2020 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ open class ConcurrentOperation: Operation {
     /// You should use `hasFailed` if you want the retry feature.
     /// Set it to `true` if the `Operation` has failed, otherwise `false`.
     /// Default is `false` to avoid retries.
-    @available(*, deprecated: 2.0, renamed: "success")
+    @available(*, deprecated, renamed: "success")
     open var hasFailed: Bool {
         return !success
     }
@@ -144,7 +144,7 @@ open class ConcurrentOperation: Operation {
     }
     
     /// - Parameter hasFailed: Set it to `true` if the `Operation` has failed, otherwise `false`.
-    @available(*, deprecated: 2.0, renamed: "finish(success:)")
+    @available(*, deprecated, renamed: "finish(success:)")
     open func finish(_ hasFailed: Bool) {
         finish(success: !hasFailed)
     }
@@ -177,14 +177,14 @@ open class ConcurrentOperation: Operation {
 /// `ConcurrentOperation` extension with queue handling.
 public extension ConcurrentOperation {
     /// Adds the `Operation` to `shared` Queuer.
-    public func addToSharedQueuer() {
+    func addToSharedQueuer() {
         Queuer.shared.addOperation(self)
     }
     
     /// Adds the `Operation` to the custom queue.
     ///
     /// - Parameter queue: Custom queue where the `Operation` will be added.
-    public func addToQueue(_ queue: Queuer) {
+    func addToQueue(_ queue: Queuer) {
         queue.addOperation(self)
     }
 }
