@@ -11,17 +11,17 @@ jobs:
       os: linux
       language: generic
       dist: trusty
-      env: SPM="YES"
+      env: SPM="YES" SWIFT_VERSION="5.1"
     - name: Ubuntu 16.04 / SwiftPM
       os: linux
       language: generic
       dist: xenial
-      env: SPM="YES"
+      env: SPM="YES" SWIFT_VERSION="5.1"
     - name: Ubuntu 18.04 / SwiftPM
       os: linux
       language: generic
       dist: bionic
-      env: SPM="YES"
+      env: SPM="YES" SWIFT_VERSION="5.1"
     - name: macOS / Xcode 11.5 / SwiftPM
       os: osx
       language: objective-c
