@@ -29,55 +29,57 @@ import Dispatch
 import XCTest
 
 internal class GroupOperationTests: XCTestCase {
-    internal func testGroupOperations() {
-        var order: [String] = []
-        let testExpectation = expectation(description: "GroupOperations")
-        let queue = Queuer(name: "Group Operations")
-        
-        let groupOperation1 = GroupOperation(
-            [
-                ConcurrentOperation { _ in
-                    Thread.sleep(forTimeInterval: 2)
-                    order.append("1")
-                },
-                ConcurrentOperation { _ in
-                    order.append("2")
-                }
-            ]
-        ) {
-            order.append("3")
+    #if !os(Linux)
+        internal func testGroupOperations() {
+            var order: [String] = []
+            let testExpectation = expectation(description: "GroupOperations")
+            let queue = Queuer(name: "Group Operations")
+            
+            let groupOperation1 = GroupOperation(
+                [
+                    ConcurrentOperation { _ in
+                        Thread.sleep(forTimeInterval: 2)
+                        order.append("1")
+                    },
+                    ConcurrentOperation { _ in
+                        order.append("2")
+                    }
+                ]
+            ) {
+                order.append("3")
+            }
+            
+            let groupOperation2 = GroupOperation(
+                [
+                    ConcurrentOperation { _ in
+                        Thread.sleep(forTimeInterval: 2)
+                        order.append("4")
+                    },
+                    ConcurrentOperation { _ in
+                        Thread.sleep(forTimeInterval: 4)
+                        order.append("5")
+                    }
+                ]
+            ) {
+                order.append("6")
+            }
+            
+            let groupOperation3 = ConcurrentOperation { _ in
+                Thread.sleep(forTimeInterval: 2)
+                order.append("7")
+            }
+            
+            queue.addChainedOperations([groupOperation1, groupOperation2, groupOperation3]) {
+                testExpectation.fulfill()
+            }
+            
+            waitForExpectations(timeout: 14) { error in
+                XCTAssertTrue(groupOperation1.allOperationsSucceeded)
+                XCTAssertNil(error)
+                XCTAssertEqual(order, ["2", "1", "3", "4", "5", "6", "7"])
+            }
         }
-        
-        let groupOperation2 = GroupOperation(
-            [
-                ConcurrentOperation { _ in
-                    Thread.sleep(forTimeInterval: 2)
-                    order.append("4")
-                },
-                ConcurrentOperation { _ in
-                    Thread.sleep(forTimeInterval: 4)
-                    order.append("5")
-                }
-            ]
-        ) {
-            order.append("6")
-        }
-        
-        let groupOperation3 = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 2)
-            order.append("7")
-        }
-        
-        queue.addChainedOperations([groupOperation1, groupOperation2, groupOperation3]) {
-            testExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 14) { error in
-            XCTAssertTrue(groupOperation1.allOperationsSucceeded)
-            XCTAssertNil(error)
-            XCTAssertEqual(order, ["2", "1", "3", "4", "5", "6", "7"])
-        }
-    }
+    #endif
     
     internal func testGroupOperationsWithInnerChainedRetry() {
         var order: [String] = []
