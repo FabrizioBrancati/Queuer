@@ -37,7 +37,7 @@ internal class GroupOperationTests: XCTestCase {
         let groupOperation1 = GroupOperation(
             [
                 ConcurrentOperation { _ in
-                    Thread.sleep(forTimeInterval: 1)
+                    Thread.sleep(forTimeInterval: 2)
                     order.append("1")
                 },
                 ConcurrentOperation { _ in
@@ -54,7 +54,7 @@ internal class GroupOperationTests: XCTestCase {
                     order.append("4")
                 },
                 ConcurrentOperation { _ in
-                    Thread.sleep(forTimeInterval: 1)
+                    Thread.sleep(forTimeInterval: 2)
                     order.append("5")
                 }
             ]
@@ -63,7 +63,7 @@ internal class GroupOperationTests: XCTestCase {
         }
         
         let groupOperation3 = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 1)
+            Thread.sleep(forTimeInterval: 2)
             order.append("7")
         }
         
@@ -71,7 +71,7 @@ internal class GroupOperationTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertTrue(groupOperation1.allOperationsSucceeded)
             XCTAssertNil(error)
             XCTAssertEqual(order, ["2", "1", "3", "4", "5", "6", "7"])
