@@ -120,6 +120,7 @@ internal class QueuerTests: XCTestCase {
         
         let concurrentOperation = ConcurrentOperation { _ in
             XCTAssertEqual(queue.operationCount, 1)
+            Thread.sleep(forTimeInterval: 0.5)
             testExpectation.fulfill()
         }
         queue.addOperation(concurrentOperation)
