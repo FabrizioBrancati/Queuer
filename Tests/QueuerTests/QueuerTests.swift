@@ -225,6 +225,7 @@ internal class QueuerTests: XCTestCase {
         }
         let concurrentOperation2 = ConcurrentOperation { _ in
             order.append(1)
+            Thread.sleep(forTimeInterval: 0.5)
             testExpectation.fulfill()
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2])

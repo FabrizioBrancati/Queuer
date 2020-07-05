@@ -51,6 +51,7 @@ internal class GroupOperationTests: XCTestCase {
         let groupOperation2 = GroupOperation(
             [
                 ConcurrentOperation { _ in
+                    Thread.sleep(forTimeInterval: 2)
                     order.append("4")
                 },
                 ConcurrentOperation { _ in
