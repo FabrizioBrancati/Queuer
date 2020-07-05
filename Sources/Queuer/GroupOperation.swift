@@ -56,7 +56,7 @@ open class GroupOperation: ConcurrentOperation {
     
     /// Execute the `Operation`
     /// The execution of a `GroupOperation` will always be considered successful.
-    /// Use the variable `allOperationsSucceeded` to know if an error occured on an operation in the Group.
+    /// Use the variable `allOperationsSucceeded` to know if an error occurred on an operation in the Group.
     override open func execute() {
         queue.addOperations(operations, waitUntilFinished: true)
         finish(success: true)
