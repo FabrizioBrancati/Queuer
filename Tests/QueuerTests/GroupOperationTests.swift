@@ -55,7 +55,7 @@ internal class GroupOperationTests: XCTestCase {
                     order.append("4")
                 },
                 ConcurrentOperation { _ in
-                    Thread.sleep(forTimeInterval: 2)
+                    Thread.sleep(forTimeInterval: 4)
                     order.append("5")
                 }
             ]
@@ -72,7 +72,7 @@ internal class GroupOperationTests: XCTestCase {
             testExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 10) { error in
+        waitForExpectations(timeout: 14) { error in
             XCTAssertTrue(groupOperation1.allOperationsSucceeded)
             XCTAssertNil(error)
             XCTAssertEqual(order, ["2", "1", "3", "4", "5", "6", "7"])
