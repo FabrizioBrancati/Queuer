@@ -59,6 +59,5 @@ open class GroupOperation: ConcurrentOperation {
     open override func execute() {
         queue.addOperations(operations, waitUntilFinished: true)
         finish(success: true)
-        completionBlock?()
     }
 }
