@@ -34,7 +34,7 @@
 import XCTest
 
 internal extension OperationStateTests {
-    static var allTests: [(String, (OperationStateTests) -> () throws -> Void)] {
+    internal static var allTests: [(String, (OperationStateTests) -> () throws -> Void)] {
         return [
             ("testInitOperationState", testInitOperationState),
             ("testCustomDescription", testCustomDescription),

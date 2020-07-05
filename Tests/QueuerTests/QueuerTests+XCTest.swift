@@ -34,7 +34,7 @@
 import XCTest
 
 internal extension QueuerTests {
-    static var allTests: [(String, (QueuerTests) -> () throws -> Void)] {
+    internal static var allTests: [(String, (QueuerTests) -> () throws -> Void)] {
         return [
             ("testOperationCount", testOperationCount),
             ("testOperations", testOperations),

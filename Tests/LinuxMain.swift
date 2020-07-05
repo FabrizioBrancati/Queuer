@@ -39,6 +39,7 @@ import XCTest
     XCTMain(
         [
             testCase(ConcurrentOperationTests.allTests),
+            testCase(GroupOperationTests.allTests),
             testCase(OperationStateTests.allTests),
             testCase(QueuerTests.allTests),
             testCase(SchedulerTests.allTests),

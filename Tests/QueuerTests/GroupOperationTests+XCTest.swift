@@ -1,5 +1,5 @@
 //
-//  SchedulerTests+XCTest.swift
+//  GroupOperationTests+XCTest.swift
 //  Queuer
 //
 //  MIT License
@@ -33,12 +33,13 @@
 
 import XCTest
 
-internal extension SchedulerTests {
-    internal static var allTests: [(String, (SchedulerTests) -> () throws -> Void)] {
+internal extension GroupOperationTests {
+    internal static var allTests: [(String, (GroupOperationTests) -> () throws -> Void)] {
         return [
-            ("testInitWithoutHandler", testInitWithoutHandler),
-            ("testInitWithHandler", testInitWithHandler),
-            ("testCancel", testCancel)
+            ("testGroupOperations", testGroupOperations),
+            ("testGroupOperationsWithInnerChainedRetry", testGroupOperationsWithInnerChainedRetry),
+            ("testGroupOperationsWithCancelledInnerChainedRetry", testGroupOperationsWithCancelledInnerChainedRetry),
+            ("testGroupOperationsWithInnerChainedManualRetry", testGroupOperationsWithInnerChainedManualRetry)
         ]
     }
 }

@@ -1,5 +1,5 @@
 //
-//  ConcurrentOperation.swift
+//  GroupOperationTests.swift
 //  Queuer
 //
 //  MIT License
@@ -24,42 +24,45 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import XCTest
-
+import Dispatch
 @testable import Queuer
 import XCTest
 
 internal class GroupOperationTests: XCTestCase {
-    func testGroupOperations() {
+    internal func testGroupOperations() {
         var order: [String] = []
         let testExpectation = expectation(description: "GroupOperations")
         let queue = Queuer(name: "Group Operations")
         
-        let groupOperation1 = GroupOperation([
-            ConcurrentOperation() { _ in
-                Thread.sleep(forTimeInterval: 1)
-                order.append("1")
-            },
-            ConcurrentOperation() { _ in
-                order.append("2")
-            }
-        ]) {
+        let groupOperation1 = GroupOperation(
+            [
+                ConcurrentOperation { _ in
+                    Thread.sleep(forTimeInterval: 1)
+                    order.append("1")
+                },
+                ConcurrentOperation { _ in
+                    order.append("2")
+                }
+            ]
+        ) {
             order.append("3")
         }
         
-        let groupOperation2 = GroupOperation([
-            ConcurrentOperation() { _ in
-                order.append("4")
-            },
-            ConcurrentOperation() { _ in
-                Thread.sleep(forTimeInterval: 1)
-                order.append("5")
-            }
-        ]) {
+        let groupOperation2 = GroupOperation(
+            [
+                ConcurrentOperation { _ in
+                    order.append("4")
+                },
+                ConcurrentOperation { _ in
+                    Thread.sleep(forTimeInterval: 1)
+                    order.append("5")
+                }
+            ]
+        ) {
             order.append("6")
         }
         
-        let groupOperation3 = ConcurrentOperation() { _ in
+        let groupOperation3 = ConcurrentOperation { _ in
             Thread.sleep(forTimeInterval: 1)
             order.append("7")
         }
@@ -75,23 +78,25 @@ internal class GroupOperationTests: XCTestCase {
         }
     }
     
-    func testGroupOperationsWithInnerChainedRetry() {
+    internal func testGroupOperationsWithInnerChainedRetry() {
         var order: [String] = []
         let testExpectation = expectation(description: "GroupOperationsWithInnerChainedRetry")
         let queue = Queuer(name: "Group Operations Chained Retry")
         
-        let groupOperation1 = GroupOperation([
-            ConcurrentOperation() { _ in
-                order.append("1")
-            },
-            ConcurrentOperation() { operation in
-                Thread.sleep(forTimeInterval: 1)
-                order.append("2")
-                operation.success = false
-            }
-            ])
+        let groupOperation1 = GroupOperation(
+            [
+                ConcurrentOperation { _ in
+                    order.append("1")
+                },
+                ConcurrentOperation { operation in
+                    Thread.sleep(forTimeInterval: 1)
+                    order.append("2")
+                    operation.success = false
+                }
+            ]
+        )
         
-        let groupOperation2 = ConcurrentOperation() { _ in
+        let groupOperation2 = ConcurrentOperation { _ in
             order.append("3")
         }
         
@@ -105,28 +110,30 @@ internal class GroupOperationTests: XCTestCase {
         }
     }
     
-    func testGroupOperationsWithCancelledInnerChainedRetry() {
+    internal func testGroupOperationsWithCancelledInnerChainedRetry() {
         let queue = Queuer(name: "GroupOperationsWithCancelledInnerChainedRetry")
         let testExpectation = expectation(description: "Group Operations Cancelled Inner Chained Retry")
         var order: [String] = []
         
-        let groupOperation1 = GroupOperation([
-            ConcurrentOperation() { operation in
-                Thread.sleep(forTimeInterval: 1)
-                order.append("1")
-                operation.success = false
-            },
-            ConcurrentOperation() { operation in
-                operation.cancel()
-                guard !operation.isCancelled else {
-                    return
+        let groupOperation1 = GroupOperation(
+            [
+                ConcurrentOperation { operation in
+                    Thread.sleep(forTimeInterval: 1)
+                    order.append("1")
+                    operation.success = false
+                },
+                ConcurrentOperation { operation in
+                    operation.cancel()
+                    guard !operation.isCancelled else {
+                        return
+                    }
+                    order.append("2")
+                    operation.success = false
                 }
-                order.append("2")
-                operation.success = false
-            }
-        ])
+            ]
+        )
         
-        let groupOperation2 = ConcurrentOperation() { _ in
+        let groupOperation2 = ConcurrentOperation { _ in
             order.append("3")
         }
         
@@ -140,18 +147,18 @@ internal class GroupOperationTests: XCTestCase {
         }
     }
     
-    func testGroupOperationsWithInnerChainedManualRetry() {
+    internal func testGroupOperationsWithInnerChainedManualRetry() {
         let queue = Queuer(name: "GroupOperationsWithInnerChainedManualRetry")
         let testExpectation = expectation(description: "Group Operations Inner Chained Manual Retry")
         var order: [String] = []
         
-        let concurrentOperation1 = ConcurrentOperation() { operation in
+        let concurrentOperation1 = ConcurrentOperation { operation in
             order.append("1")
             operation.success = false
         }
         concurrentOperation1.manualRetry = true
         
-        let concurrentOperation2 = ConcurrentOperation() { operation in
+        let concurrentOperation2 = ConcurrentOperation { operation in
             Thread.sleep(forTimeInterval: 1)
             order.append("2")
             operation.success = false
@@ -160,7 +167,7 @@ internal class GroupOperationTests: XCTestCase {
         
         let groupOperation1 = GroupOperation([concurrentOperation1, concurrentOperation2])
         
-        let groupOperation2 = ConcurrentOperation() { _ in
+        let groupOperation2 = ConcurrentOperation { _ in
             order.append("3")
         }
         

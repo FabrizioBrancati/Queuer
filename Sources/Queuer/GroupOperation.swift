@@ -35,7 +35,7 @@ open class GroupOperation: ConcurrentOperation {
     
     /// Flag to know if all `ConcurrentOperation` of this `GroupOperation` were successful.
     public var allOperationsSucceeded: Bool {
-        return operations.first(where: { $0.success == false }) == nil
+        return !operations.contains { !$0.success }
     }
     
     /// Creates the `GroupOperation` with a completion handler.
@@ -45,18 +45,19 @@ open class GroupOperation: ConcurrentOperation {
     ///     - completionHandler: Block that will be executed once all operations are over.
     public init(_ operations: [ConcurrentOperation], completionBlock: (() -> Void)? = nil) {
         super.init()
+
         self.operations = operations
         self.completionBlock = completionBlock
     }
     
     /// A `GroupOperation` shouldn't be able to retry itself. It should be the responsability of its operations to retry themselves.
     @available(*, obsoleted: 1.0, message: "Use retry on the children operations directly")
-    open override func retry() {}
+    override open func retry() {}
     
     /// Execute the `Operation`
     /// The execution of a `GroupOperation` will always be considered successful.
     /// Use the variable `allOperationsSucceeded` to know if an error occured on an operation in the Group.
-    open override func execute() {
+    override open func execute() {
         queue.addOperations(operations, waitUntilFinished: true)
         finish(success: true)
     }

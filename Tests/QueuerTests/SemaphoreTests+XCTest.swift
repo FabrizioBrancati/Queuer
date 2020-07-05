@@ -34,7 +34,7 @@
 import XCTest
 
 internal extension SemaphoreTests {
-    static var allTests: [(String, (SemaphoreTests) -> () throws -> Void)] {
+    internal static var allTests: [(String, (SemaphoreTests) -> () throws -> Void)] {
         return [
             ("testWithSemaphore", testWithSemaphore),
             ("testWithoutSemaphore", testWithoutSemaphore)

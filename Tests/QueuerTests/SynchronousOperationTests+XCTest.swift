@@ -34,7 +34,7 @@
 import XCTest
 
 internal extension SynchronousOperationTests {
-    static var allTests: [(String, (SynchronousOperationTests) -> () throws -> Void)] {
+    internal static var allTests: [(String, (SynchronousOperationTests) -> () throws -> Void)] {
         return [
             ("testSynchronousOperation", testSynchronousOperation),
             ("testSynchronousOperationOnSharedQueuer", testSynchronousOperationOnSharedQueuer)
