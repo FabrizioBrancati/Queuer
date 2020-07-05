@@ -34,7 +34,7 @@
 import XCTest
 
 internal extension GroupOperationTests {
-    internal static var allTests: [(String, (GroupOperationTests) -> () throws -> Void)] {
+    static var allTests: [(String, (GroupOperationTests) -> () throws -> Void)] {
         return [
             ("testGroupOperations", testGroupOperations),
             ("testGroupOperationsWithInnerChainedRetry", testGroupOperationsWithInnerChainedRetry),
