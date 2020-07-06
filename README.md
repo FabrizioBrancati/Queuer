@@ -165,6 +165,7 @@ Usage
 - [Custom Queue](https://github.com/FabrizioBrancati/Queuer#custom-queue)
 - [Create an Operation Block](https://github.com/FabrizioBrancati/Queuer#create-an-operation-block)
 - [Chained Operations](https://github.com/FabrizioBrancati/Queuer#chained-operations)
+- [Group Oprations](https://github.com/FabrizioBrancati/Queuer#group-operations)
 - [Queue States](https://github.com/FabrizioBrancati/Queuer#queue-states)
 - [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#asynchronous-operation)
 - [Synchronous Operation](https://github.com/FabrizioBrancati/Queuer#synchronous-operation)
@@ -240,6 +241,32 @@ queue.addCompletionHandler {
     /// Your completion task here
 }
 ```
+
+### Group Operations
+Group Operations are `Operation`s that handles a group of `Operation`s with a completion handler.<br>
+Allows the execution of a block of `Operation`s with a completion handler that will be called once all the operations are finished, for example: `[A -> [[B & C & D] -> completionHandler] -> E] -> completionHandler`.
+It should usually be used with a [Chained Opetation](https://github.com/FabrizioBrancati/Queuer#chained-operations).
+```swift
+let groupOperationA = GroupOperation(
+    [
+        ConcurrentOperation { _ in
+            /// Your task A here
+        },
+        ConcurrentOperation { _ in
+            /// Your task B here
+        }
+    ]
+)
+
+let concurrentOperationC = ConcurrentOperation { _ in
+    /// Your task C here
+}
+
+queue.addChainedOperations([groupOperationA, concurrentOperationC]) {
+    /// Your completion task here
+}
+```
+In this case the output will be the following one: `[[A & B -> completionHandler] -> C] -> completionHandler`.
 
 ### Queue States
 - Cancel all `Operation`s in queue:
