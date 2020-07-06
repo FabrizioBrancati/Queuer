@@ -28,6 +28,8 @@ import Dispatch
 @testable import Queuer
 import XCTest
 
+// swiftlint:disable type_body_length
+
 internal class QueuerTests: XCTestCase {
     internal func testOperationCount() {
         let queue = Queuer(name: "QueuerTestOperationCount")
@@ -118,6 +120,7 @@ internal class QueuerTests: XCTestCase {
         
         let concurrentOperation = ConcurrentOperation { _ in
             XCTAssertEqual(queue.operationCount, 1)
+            Thread.sleep(forTimeInterval: 0.5)
             testExpectation.fulfill()
         }
         queue.addOperation(concurrentOperation)
@@ -223,6 +226,7 @@ internal class QueuerTests: XCTestCase {
         }
         let concurrentOperation2 = ConcurrentOperation { _ in
             order.append(1)
+            Thread.sleep(forTimeInterval: 0.5)
             testExpectation.fulfill()
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2])

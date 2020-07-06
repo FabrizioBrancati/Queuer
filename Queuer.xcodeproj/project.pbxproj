@@ -56,6 +56,13 @@
 		49E803CB21868A310001B47A /* OperationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803CA21868A310001B47A /* OperationStateTests.swift */; };
 		49E803CC21868A310001B47A /* OperationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803CA21868A310001B47A /* OperationStateTests.swift */; };
 		49E803CD21868A310001B47A /* OperationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E803CA21868A310001B47A /* OperationStateTests.swift */; };
+		E7A1AEF9220CADB400D40A92 /* GroupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A1AEF8220CADB400D40A92 /* GroupOperation.swift */; };
+		E7A1AEFA220CADB400D40A92 /* GroupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A1AEF8220CADB400D40A92 /* GroupOperation.swift */; };
+		E7A1AEFB220CADB400D40A92 /* GroupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A1AEF8220CADB400D40A92 /* GroupOperation.swift */; };
+		E7A1AEFC220CADB400D40A92 /* GroupOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A1AEF8220CADB400D40A92 /* GroupOperation.swift */; };
+		E7A1AEFE220CADC900D40A92 /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A1AEFD220CADC900D40A92 /* GroupOperationTests.swift */; };
+		E7A1AEFF220CADC900D40A92 /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A1AEFD220CADC900D40A92 /* GroupOperationTests.swift */; };
+		E7A1AF00220CADC900D40A92 /* GroupOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A1AEFD220CADC900D40A92 /* GroupOperationTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +112,8 @@
 		49C7BCC11F26938F00F4FFBC /* Queuer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Queuer.h; sourceTree = "<group>"; };
 		49E803C5217FE8E80001B47A /* OperationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationState.swift; sourceTree = "<group>"; };
 		49E803CA21868A310001B47A /* OperationStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationStateTests.swift; sourceTree = "<group>"; };
+		E7A1AEF8220CADB400D40A92 /* GroupOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupOperation.swift; sourceTree = "<group>"; };
+		E7A1AEFD220CADC900D40A92 /* GroupOperationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupOperationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				49C7BCAF1F26938F00F4FFBC /* ConcurrentOperationTests.swift */,
+				E7A1AEFD220CADC900D40A92 /* GroupOperationTests.swift */,
 				49E803CA21868A310001B47A /* OperationStateTests.swift */,
 				49C7BCB01F26938F00F4FFBC /* QueuerTests.swift */,
 				4946BDFA214D5C0100FAFC84 /* SchedulerTests.swift */,
@@ -222,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				49C7BCBB1F26938F00F4FFBC /* ConcurrentOperation.swift */,
+				E7A1AEF8220CADB400D40A92 /* GroupOperation.swift */,
 				49E803C5217FE8E80001B47A /* OperationState.swift */,
 				49C7BCBC1F26938F00F4FFBC /* Queuer.swift */,
 				4946BDF5214D586900FAFC84 /* Scheduler.swift */,
@@ -527,6 +538,7 @@
 				49C7BCE41F26939A00F4FFBC /* Semaphore.swift in Sources */,
 				49C7BCE11F26939A00F4FFBC /* ConcurrentOperation.swift in Sources */,
 				4946BDF7214D586900FAFC84 /* Scheduler.swift in Sources */,
+				E7A1AEFA220CADB400D40A92 /* GroupOperation.swift in Sources */,
 				49C7BCE51F26939A00F4FFBC /* SynchronousOperation.swift in Sources */,
 				49E803C7217FE8E80001B47A /* OperationState.swift in Sources */,
 			);
@@ -536,6 +548,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A1AEFF220CADC900D40A92 /* GroupOperationTests.swift in Sources */,
 				49C7BCEE1F2693A000F4FFBC /* QueuerTests.swift in Sources */,
 				49E803CC21868A310001B47A /* OperationStateTests.swift in Sources */,
 				49C7BCF01F2693A000F4FFBC /* SemaphoreTests.swift in Sources */,
@@ -553,6 +566,7 @@
 				49C7BCD21F26938F00F4FFBC /* SynchronousOperation.swift in Sources */,
 				49C7BCCF1F26938F00F4FFBC /* Queuer.swift in Sources */,
 				4946BDF6214D586900FAFC84 /* Scheduler.swift in Sources */,
+				E7A1AEF9220CADB400D40A92 /* GroupOperation.swift in Sources */,
 				49C7BCD11F26938F00F4FFBC /* Semaphore.swift in Sources */,
 				49E803C6217FE8E80001B47A /* OperationState.swift in Sources */,
 			);
@@ -562,6 +576,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A1AEFE220CADC900D40A92 /* GroupOperationTests.swift in Sources */,
 				49C7BCE81F26939F00F4FFBC /* QueuerTests.swift in Sources */,
 				49E803CB21868A310001B47A /* OperationStateTests.swift in Sources */,
 				49C7BCEA1F26939F00F4FFBC /* SemaphoreTests.swift in Sources */,
@@ -579,6 +594,7 @@
 				49C7BCD81F26939900F4FFBC /* Semaphore.swift in Sources */,
 				49C7BCD51F26939900F4FFBC /* ConcurrentOperation.swift in Sources */,
 				4946BDF9214D586900FAFC84 /* Scheduler.swift in Sources */,
+				E7A1AEFC220CADB400D40A92 /* GroupOperation.swift in Sources */,
 				49C7BCD91F26939900F4FFBC /* SynchronousOperation.swift in Sources */,
 				49E803C9217FE8E80001B47A /* OperationState.swift in Sources */,
 			);
@@ -592,6 +608,7 @@
 				49C7BCDE1F26939A00F4FFBC /* Semaphore.swift in Sources */,
 				49C7BCDB1F26939A00F4FFBC /* ConcurrentOperation.swift in Sources */,
 				4946BDF8214D586900FAFC84 /* Scheduler.swift in Sources */,
+				E7A1AEFB220CADB400D40A92 /* GroupOperation.swift in Sources */,
 				49C7BCDF1F26939A00F4FFBC /* SynchronousOperation.swift in Sources */,
 				49E803C8217FE8E80001B47A /* OperationState.swift in Sources */,
 			);
@@ -601,6 +618,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A1AF00220CADC900D40A92 /* GroupOperationTests.swift in Sources */,
 				49C7BCF41F2693A100F4FFBC /* QueuerTests.swift in Sources */,
 				49E803CD21868A310001B47A /* OperationStateTests.swift in Sources */,
 				49C7BCF61F2693A100F4FFBC /* SemaphoreTests.swift in Sources */,
