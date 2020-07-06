@@ -26,6 +26,7 @@
 
 import Foundation
 
+/// It allows the creation of group `Operation`s by using it's `operations` array of `ConcurrentOperation`.
 open class GroupOperation: ConcurrentOperation {
     /// Private `OperationQueue` instance.
     private let queue = OperationQueue()
@@ -39,20 +40,22 @@ open class GroupOperation: ConcurrentOperation {
     }
     
     /// Creates the `GroupOperation` with a completion handler.
+    /// Allows the execution of a block of `Operation`s with a completion handler that will be called
+    /// once all the operations are finished.
+    ///
+    /// Example:
+    ///
+    ///     [A -> [[B & C & D] -> completionHandler] -> E] -> completionHandler
     ///
     /// - Parameters:
     ///     - operations: Array of ConcurrentOperation to be executed.
     ///     - completionHandler: Block that will be executed once all operations are over.
-    public init(_ operations: [ConcurrentOperation], completionBlock: (() -> Void)? = nil) {
+    public init(_ operations: [ConcurrentOperation], completionHandler: (() -> Void)? = nil) {
         super.init()
 
         self.operations = operations
-        self.completionBlock = completionBlock
+        self.completionBlock = completionHandler
     }
-    
-    /// A `GroupOperation` shouldn't be able to retry itself. It should be the responsability of its operations to retry themselves.
-    @available(*, obsoleted: 1.0, message: "Use retry on the children operations directly")
-    override open func retry() {}
     
     /// Execute the `Operation`
     /// The execution of a `GroupOperation` will always be considered successful.

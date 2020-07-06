@@ -139,7 +139,7 @@ public extension Queuer {
     ///
     /// Example:
     ///
-    ///     [A, B, C] = A -> B -> C -> completionHandler.
+    ///     [A, B, C] = A -> B -> C -> completionHandler
     ///
     /// - Parameters:
     ///   - operations: `Operation`s Array.
@@ -165,7 +165,7 @@ public extension Queuer {
     ///
     /// Example:
     ///
-    ///     [A, B, C] = A -> B -> C -> completionHandler.
+    ///     [A, B, C] = A -> B -> C -> completionHandler
     ///
     /// - Parameters:
     ///   - operations: `Operation`s list.

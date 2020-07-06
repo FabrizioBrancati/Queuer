@@ -26,7 +26,8 @@
 
 import Foundation
 
-/// It allows synchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
+/// It allows synchronous tasks, has a pause and resume states,
+/// can be easily added to a queue and can be created with a block.
 public class SynchronousOperation: ConcurrentOperation {
     /// Private `Semaphore` instance.
     private let semaphore = Semaphore()
