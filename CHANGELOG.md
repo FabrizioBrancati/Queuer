@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ### 2.x Releases
+- `2.2.x` Releases - [2.2.0](#210---group-operations)
 - `2.1.x` Releases - [2.1.0](#210---swift-50-support) | [2.0.1](#211---swift-51-support)
 - `2.0.x` Releases - [2.0.0](#200---let-me-retry) | [2.0.1](#201---better-apis)
 
@@ -17,6 +18,20 @@ All notable changes to this project will be documented in this file.<br>
 - `1.2.x` Releases - [1.2.0](#120---swift-4-support) | [1.2.1](#121---unwanted-alert)
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
+
+---
+
+## [2.2.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.2.0) - Group Operations
+### XX XXX 2019
+### Added
+- Added new `GroupOperation` operation type, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#group-operations)
+
+### Fixed
+- Fixed a `Scheduler` bug that may prevent to correctly call the event handler
+
+### Improved
+- Updated SwiftLint to 0.39.2
+- Improved tests
 
 ---
 
