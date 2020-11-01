@@ -163,6 +163,8 @@ open class ConcurrentOperation: Operation {
             currentAttempt += 1
             shouldRetry = true
         }
+
+        self.success = success
     }
     
     /// Pause the current `Operation`, if it's supported.
