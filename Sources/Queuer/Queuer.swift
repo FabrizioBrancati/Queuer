@@ -143,7 +143,7 @@ public extension Queuer {
     ///
     /// - Parameters:
     ///   - operations: `Operation`s Array.
-    ///   - completionHandler: Completion block to be exectuted when all `Operation`s
+    ///   - completionHandler: Completion block to be executed when all `Operation`s
     ///                        are finished.
     func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
         for (index, operation) in operations.enumerated() {
