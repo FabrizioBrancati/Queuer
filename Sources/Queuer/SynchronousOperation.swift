@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2020 Fabrizio Brancati
+//  Copyright (c) 2017 - 2021 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -31,12 +31,12 @@ import Foundation
 public class SynchronousOperation: ConcurrentOperation {
     /// Private `Semaphore` instance.
     private let semaphore = Semaphore()
-    
+
     /// Set the `Operation` as synchronous.
     override public var isAsynchronous: Bool {
         return false
     }
-    
+
     /// Notify the completion of synchronous task and hence the completion of the `Operation`.
     /// Must be called when the `Operation` is finished.
     ///
@@ -44,22 +44,22 @@ public class SynchronousOperation: ConcurrentOperation {
     ///                      Default is `true`.
     override public func finish(success: Bool = true) {
         super.finish(success: success)
-        
+
         semaphore.continue()
     }
-    
+
     /// Advises the `Operation` object that it should stop executing its task.
     override public func cancel() {
         super.cancel()
-        
+
         semaphore.continue()
     }
-    
+
     /// Execute the `Operation`.
     /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
     override public func execute() {
         super.execute()
-        
+
         semaphore.wait()
     }
 }

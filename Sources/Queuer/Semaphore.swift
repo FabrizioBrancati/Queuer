@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2020 Fabrizio Brancati
+//  Copyright (c) 2017 - 2021 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ import Foundation
 public struct Semaphore {
     /// Private `DispatchSemaphore`.
     private let semaphore: DispatchSemaphore
-    
+
     /// Creates new counting semaphore with an initial value.
     /// Passing zero for the value is useful for when two threads need to reconcile
     /// the completion of a particular event. Passing a value greater than zero is
@@ -43,7 +43,7 @@ public struct Semaphore {
     public init(poolSize: Int = 0) {
         semaphore = DispatchSemaphore(value: poolSize)
     }
-    
+
     /// Wait for a `continue` function call.
     ///
     /// - Parameter timeout: The timeout `DispatchTime`. Default is `.distantFuture`.
@@ -52,7 +52,7 @@ public struct Semaphore {
     public func wait(_ timeout: DispatchTime = .distantFuture) -> DispatchTimeoutResult {
         return semaphore.wait(timeout: timeout)
     }
-    
+
     /// This function returns non-zero if a thread is woken. Otherwise, zero is returned.
     ///
     /// - Returns: Returns non-zero if a thread is woken. Otherwise, zero is returned.

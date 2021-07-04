@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2020 Fabrizio Brancati
+//  Copyright (c) 2017 - 2021 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,15 +30,15 @@ import Foundation
 open class GroupOperation: ConcurrentOperation {
     /// Private `OperationQueue` instance.
     private let queue = OperationQueue()
-    
+
     /// List of `ConcurrentOperation` that should be run in this `GroupOperation`.
     public var operations: [ConcurrentOperation] = []
-    
+
     /// Flag to know if all `ConcurrentOperation` of this `GroupOperation` were successful.
     public var allOperationsSucceeded: Bool {
         return !operations.contains { !$0.success }
     }
-    
+
     /// Creates the `GroupOperation` with a completion handler.
     /// Allows the execution of a block of `Operation`s with a completion handler that will be called
     /// once all the operations are finished.
@@ -56,7 +56,7 @@ open class GroupOperation: ConcurrentOperation {
         self.operations = operations
         self.completionBlock = completionHandler
     }
-    
+
     /// Execute the `Operation`
     /// The execution of a `GroupOperation` will always be considered successful.
     /// Use the variable `allOperationsSucceeded` to know if an error occurred on an operation in the Group.

@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2020 Fabrizio Brancati
+//  Copyright (c) 2017 - 2021 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ public class OperationState: Codable {
     public var progress: Int
     /// `Operation` dependencies. It
     public var dependencies: [String]
-    
+
     /// Initialize an `OperationState`.
     ///
     /// - Parameters:

@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2020 Fabrizio Brancati
+//  Copyright (c) 2017 - 2021 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -33,37 +33,37 @@ internal class SemaphoreTests: XCTestCase {
         let queue = Queuer(name: "SemaphoreTestWithSemaphore")
         let testExpectation = expectation(description: "With Semaphore")
         var testString = ""
-        
+
         let concurrentOperation = ConcurrentOperation { _ in
             Thread.sleep(forTimeInterval: 2)
             testString = "Tested"
             semaphore.continue()
         }
         concurrentOperation.addToQueue(queue)
-        
+
         semaphore.wait()
         XCTAssertEqual(testString, "Tested")
         testExpectation.fulfill()
-        
+
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
         }
     }
-    
+
     internal func testWithoutSemaphore() {
         let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
         let testExpectation = expectation(description: "Without Semaphore")
         var testString = ""
-        
+
         let concurrentOperation = ConcurrentOperation { _ in
             Thread.sleep(forTimeInterval: 2)
             testString = "Tested"
             testExpectation.fulfill()
         }
         concurrentOperation.addToQueue(queue)
-        
+
         XCTAssertEqual(testString, "")
-        
+
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(testString, "Tested")
