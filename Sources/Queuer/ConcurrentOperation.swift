@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2021 Fabrizio Brancati
+//  Copyright (c) 2017 - 2024 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -75,14 +75,6 @@ open class ConcurrentOperation: Operation {
         }
     }
 
-    /// You should use `hasFailed` if you want the retry feature.
-    /// Set it to `true` if the `Operation` has failed, otherwise `false`.
-    /// Default is `false` to avoid retries.
-    @available(*, deprecated, renamed: "success")
-    open var hasFailed: Bool {
-        return !success
-    }
-
     /// You should use `success` if you want the retry feature.
     /// Set it to `false` if the `Operation` has failed, otherwise `true`.
     /// Default is `true` to avoid retries.
@@ -141,12 +133,6 @@ open class ConcurrentOperation: Operation {
 
             retry()
         }
-    }
-
-    /// - Parameter hasFailed: Set it to `true` if the `Operation` has failed, otherwise `false`.
-    @available(*, deprecated, renamed: "finish(success:)")
-    open func finish(_ hasFailed: Bool) {
-        finish(success: !hasFailed)
     }
 
     /// Notify the completion of asynchronous task and hence the completion of the `Operation`.
