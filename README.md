@@ -4,8 +4,6 @@
 [![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FFabrizioBrancati%2FQueuer%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/FabrizioBrancati/Queuer)
 [![Swift Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FFabrizioBrancati%2FQueuer%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/FabrizioBrancati/Queuer)
 
----
-
 ## Features
 
 Queuer is a queue manager, built on top of [OperationQueue](https://developer.apple.com/documentation/foundation/operationqueue) and [Dispatch](https://developer.apple.com/documentation/dispatch) (aka GCD). It allows you to create any asynchronous and synchronous task easily, all managed by a queue, with just a few lines.
@@ -37,7 +35,7 @@ Here is the list of all the features:
 | 4.1        | 9.3...9.4   | 1.3.1...1.3.2 | 8.0+    | 10.10+     | 9.0+      | 2.0+        | ✅        |
 | 4.2        | 10.0...10.1 | 2.0.0...2.0.1 | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ✅        |
 | 5.0...5.10 | 10.2...15.3 | 2.1.0...2.2.0 | 8.0+    | 10.10+     | 9.0+      | 3.0+        | ✅        |
-| 5.9...5.10 | 15.3        | 3.0.0         | 12.0+   | 10.13+     | 12.0+     | 4.0+        | ✅        |
+| 5.0...5.10 | 15.3        | 3.0.0         | 12.0+   | 10.13+     | 12.0+     | 4.0+        | ✅        |
 
 ## Installing
 
@@ -46,7 +44,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 In your `Package.swift` Swift Package Manager manifest, add the following dependency to your `dependencies` argument:
 
 ```swift
-.package(url: "https://github.com/FabrizioBrancati/Queuer.git", from: "2.2.0"),
+.package(url: "https://github.com/FabrizioBrancati/Queuer.git", from: "3.0.0"),
 ```
 
 Add the dependency to any targets you've declared in your manifest:
