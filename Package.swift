@@ -30,10 +30,12 @@ import PackageDescription
 let package = Package(
     name: "Queuer",
     platforms: [
-        .iOS(.v8),
-        .macOS(.v10_10),
-        .tvOS(.v9),
-        .watchOS(.v3)
+        .iOS(.v12),
+        .macOS(.v10_13),
+        .tvOS(.v12),
+        .watchOS(.v4),
+        .visionOS(.v1),
+        .macCatalyst(.v13)
     ],
     products: [
         .library(name: "Queuer", targets: ["Queuer"])
@@ -41,6 +43,5 @@ let package = Package(
     targets: [
         .target(name: "Queuer"),
         .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )
