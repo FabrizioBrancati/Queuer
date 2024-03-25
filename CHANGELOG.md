@@ -1,16 +1,13 @@
 # Changelog
 
----
-
-All notable changes to this project will be documented in this file.
-
-`Queuer` adheres to [Semantic Versioning](http://semver.org/).
-
----
+> [!NOTE]
+> All notable changes to this project will be documented in this file.
+>
+> `Queuer` adheres to [Semantic Versioning](http://semver.org/).
 
 ## 3.x Releases
 
-- `3.0.x` Releases - [3.0.0](#300---xxx)
+- `3.0.x` Releases - [3.0.0](#300---)
 
 ## 2.x Releases
 
@@ -23,8 +20,6 @@ All notable changes to this project will be documented in this file.
 - `1.2.x` Releases - [1.2.0](#120---swift-4-support) | [1.2.1](#121---unwanted-alert)
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
-
----
 
 ## [3.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.0) - ???
 
@@ -74,8 +69,6 @@ All notable changes to this project will be documented in this file.
 
 Thanks to [@Kalzem](https://github.com/Kalzem), [@changmingw96](https://github.com/changmingw96), [cristianilea-lateral](https://github.com/cristianilea-lateral) and [@marinofaggiana](https://github.com/marinofaggiana) for this release.
 
----
-
 ## [2.1.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.1.1) - Swift 5.1 Support
 
 ### 6 Nov 2019
@@ -88,8 +81,6 @@ Thanks to [@Kalzem](https://github.com/Kalzem), [@changmingw96](https://github.c
 
 - Updated SwiftLint to 0.35.0
 
----
-
 ## [2.1.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.1.0) - Swift 5.0 Support
 
 ### 12 Apr 2019
@@ -97,8 +88,6 @@ Thanks to [@Kalzem](https://github.com/Kalzem), [@changmingw96](https://github.c
 ### Added
 
 - Added support to Xcode 10.2 and Swift 5.0
-
----
 
 ## [2.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.0.1) - Better APIs
 
@@ -114,8 +103,6 @@ Thanks to [@Kalzem](https://github.com/Kalzem), [@changmingw96](https://github.c
 - Updated SwiftLint to 0.29.2
 
 Thanks to [@zykloman](https://github.com/zykloman) for this release
-
----
 
 ## [2.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.0.0) - Let Me Retry
 
@@ -154,8 +141,6 @@ Thanks to [@zykloman](https://github.com/zykloman) for this release
 
 Thanks to [@SureshSc](https://github.com/SureshSc), [@zykloman](https://github.com/zykloman) and [@debjitk](https://github.com/debjitk) for this release
 
----
-
 ## [1.3.2](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.3.2) - Linux Quality
 
 ### 7 Jul 2018
@@ -170,8 +155,6 @@ Thanks to [@SureshSc](https://github.com/SureshSc), [@zykloman](https://github.c
 - Updated SwiftLint to 0.26.0
 - Improved code with new SwiftLint rules
 
----
-
 ## [1.3.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.3.1) - Swift 4.1 Support
 
 ### 2 Apr 2018
@@ -185,8 +168,6 @@ Thanks to [@SureshSc](https://github.com/SureshSc), [@zykloman](https://github.c
 - `OperationQueue` in Queuer class is now `open`
 
 Thanks to [@BabyAzerty](https://github.com/BabyAzerty) for this release
-
----
 
 ## [1.3.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.3.0) - Open Everything
 
@@ -209,8 +190,6 @@ Thanks to [@BabyAzerty](https://github.com/BabyAzerty) for this release
 - Now Swift Package Manager correctly builds Queuer with Swift 4
 - Removed `self` captures
 
----
-
 ## [1.2.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.2.1) - Unwanted Alert
 
 ### 22 Oct 2017
@@ -218,8 +197,6 @@ Thanks to [@BabyAzerty](https://github.com/BabyAzerty) for this release
 ### Fixed
 
 - Removed alert on Xcode 9 that shows the ability to convert the code to Swift 4 even it's already written in Swift 4
-
----
 
 ## [1.2.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.2.0) - Swift 4 Support
 
@@ -233,8 +210,6 @@ Thanks to [@BabyAzerty](https://github.com/BabyAzerty) for this release
 
 - Using new Xcode 9 build system
 - Updated SwiftLint to 0.22.0
-
----
 
 ## [1.1.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.1.0) - Quality Of Service
 
@@ -254,8 +229,6 @@ Thanks to [@BabyAzerty](https://github.com/BabyAzerty) for this release
 
 - Now `ConcurrentOperation` is subclassable with `open` instead of `public` Access Control [#2](https://github.com/FabrizioBrancati/Queuer/issues/2)
 - Fixed tests that sometimes fails
-
----
 
 ## [1.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.0.0) - First Queue
 
