@@ -1,4 +1,4 @@
-// swift-tools-version:5.10
+// swift-tools-version:5.9
 //
 //  Package.swift
 //  Queuer
@@ -32,10 +32,10 @@ let package = Package(
     platforms: [
         .iOS(.v12),
         .macOS(.v10_13),
+        .macCatalyst(.v13),
         .tvOS(.v12),
         .watchOS(.v4),
-        .visionOS(.v1),
-        .macCatalyst(.v13)
+        .visionOS(.v1)
     ],
     products: [
         .library(name: "Queuer", targets: ["Queuer"])
