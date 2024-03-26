@@ -24,7 +24,7 @@ Here is the list of all the features:
 - [x] Create and handle schedules
 - [x] Automatically or manually retry an operation
 - [ ] Throttling between each automatic operation retry
-- [ ] Data layer that every operation inside an `OperationQueue` can access
+- [ ] Data layer between operations
 
 ## Requirements
 
@@ -188,38 +188,38 @@ In this case the output will be the following one: `[[A & B -> completionHandler
 
 There are a few method to handle the queue states.
 
-1. Cancel all `Operation`s in queue:
+Cancel all `Operation`s in a queue:
 
-    ```swift
-    queue.cancelAll()
-    ```
+```swift
+queue.cancelAll()
+```
 
-2. Pause queue:
+Pause a queue:
 
-    ```swift
-    queue.pause()
-    ```
+```swift
+queue.pause()
+```
 
-    > [!WARNING]
-    > By calling `pause()` you will not be sure that every `Operation` will be paused. If the `Operation` is already started it will not be on pause until it's a custom `Operation` that overrides `pause()` function.
+> [!WARNING]
+> By calling `pause()` you will not be sure that every `Operation` will be paused. If the `Operation` is already started it will not be on pause until it's a custom `Operation` that overrides `pause()` function.
 
-3. Resume queue:
+Resume a queue:
 
-    ```swift
-    queue.resume()
-    ```
+```swift
+queue.resume()
+```
 
-    > [!WARNING]
-    > To have a complete `pause` and `resume` states you must create a custom `Operation` that overrides `pause()` and `resume()` function.
+> [!WARNING]
+> To have a complete `pause` and `resume` states you must create a custom `Operation` that overrides `pause()` and `resume()` function.
 
-4. Wait until all `Operation`s are finished:
+Wait until all `Operation`s are finished:
 
-    ```swift
-    queue.waitUntilAllOperationsAreFinished()
-    ```
+```swift
+queue.waitUntilAllOperationsAreFinished()
+```
 
-    > [!IMPORTANT]
-    > This function means that the queue will blocks the current thread until all `Operation`s are finished.
+> [!IMPORTANT]
+> This function means that the queue will blocks the current thread until all `Operation`s are finished.
 
 ### Asynchronous Operation
 
