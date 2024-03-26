@@ -40,6 +40,7 @@
 ### Added
 
 - Added visionOS 1.0 support
+- Added full Linux support
 - Added new `GroupOperation` operation type [#14](https://github.com/FabrizioBrancati/Queuer/issues/14) and [#17](https://github.com/FabrizioBrancati/Queuer/pull/17), more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#group-operations)
 - Added support to Xcode 15.3 and Swift 5.10
 - Added `macCatalyst` support
@@ -53,7 +54,6 @@
 ### Improved
 
 - Improved tests
-- Improved Linux support
 - Improved [CONTRIBUTING.md](https://github.com/FabrizioBrancati/Queuer/blob/main/.github/CONTRIBUTING.md) guidelines
 
 ### Removed
