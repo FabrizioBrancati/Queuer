@@ -26,7 +26,7 @@
 ### XX XXX 2024
 
 > [!WARNING]
-> The goal of this release is to make the repo more maintainable. To do so, only Swift Package Manager will be supported. If you rely on any of the removed services, like CocoaPods or Carthage, please stick to the porevious version.
+> The goal of this release is to make the repo more maintainable. To do so, only Swift Package Manager will be supported. If you rely on any of the removed services, like CocoaPods or Carthage, please stick to the previous version.
 
 ### Changed
 
