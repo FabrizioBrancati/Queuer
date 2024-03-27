@@ -20,6 +20,10 @@ Every line of the project must to be commented.
 
 New API should follow the rules documented in Swift's [API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/). Comment every public methods, properties, classes. Make commits as atomic as possible with understandable comment. If you are developing feature or fixing a bug, please mention the issue number (e.g. #1) in commit text.
 
+## Changelog
+
+Once your changes are ready, please add an entry to the [CHANGELOG.md](https://github.com/FabrizioBrancati/Queuer/blob/main/CHANGELOG.md) file.
+
 ## Tests
 
 Add tests for every added function. The aim is to have 100% of code coverage.
