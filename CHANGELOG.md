@@ -7,7 +7,7 @@
 
 ## 3.x Releases
 
-- `3.0.x` Releases - [3.0.0](#300---)
+- `3.0.x` Releases - [3.0.0](#300---the-phoenix)
 
 ## 2.x Releases
 
@@ -21,7 +21,7 @@
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
-## [3.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.0) - ???
+## [3.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.0) - The Phoenix
 
 ### XX XXX 2024
 
