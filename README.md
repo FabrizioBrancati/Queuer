@@ -188,35 +188,35 @@ In this case the output will be the following one: `[[A & B -> completionHandler
 
 There are a few method to handle the queue states.
 
-Cancel all `Operation`s in a queue:
+1. Cancel all `Operation`s in a queue:
 
-```swift
-queue.cancelAll()
-```
+    ```swift
+    queue.cancelAll()
+    ```
 
-Pause a queue:
+2. Pause a queue:
 
-```swift
-queue.pause()
-```
+    ```swift
+    queue.pause()
+    ```
 
 > [!WARNING]
 > By calling `pause()` you will not be sure that every `Operation` will be paused. If the `Operation` is already started it will not be on pause until it's a custom `Operation` that overrides `pause()` function.
 
-Resume a queue:
+3. Resume a queue:
 
-```swift
-queue.resume()
-```
+    ```swift
+    queue.resume()
+    ```
 
 > [!WARNING]
 > To have a complete `pause` and `resume` states you must create a custom `Operation` that overrides `pause()` and `resume()` function.
 
-Wait until all `Operation`s are finished:
+4. Wait until all `Operation`s are finished:
 
-```swift
-queue.waitUntilAllOperationsAreFinished()
-```
+    ```swift
+    queue.waitUntilAllOperationsAreFinished()
+    ```
 
 > [!IMPORTANT]
 > This function means that the queue will blocks the current thread until all `Operation`s are finished.
