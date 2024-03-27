@@ -297,6 +297,7 @@ let concurrentOperation = ConcurrentOperation { operation in
     }
 }
 concurrentOperation.manualRetry = true
+
 /// Later on your code
 concurrentOperation.retry()
 ```
@@ -316,7 +317,7 @@ You can even create a `Scheduler` without the handler and set it later:
 ```swift
 var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
 schedule.setHandler {
-    /// Your task here.
+    /// Your task here
 }
 ```
 
