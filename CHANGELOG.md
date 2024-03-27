@@ -139,7 +139,7 @@ Thanks to [@zykloman](https://github.com/zykloman) for this release
 - Removed watchOS 2.0 support in favor of watchOS 3.0, thanks to an App Store submission bug [#11](https://github.com/FabrizioBrancati/Queuer/issues/11)
 - Removed Hound CI
 
-Thanks to [@SureshSc](https://github.com/SureshSc), [@zykloman](https://github.com/zykloman) and [@debjitk](https://github.com/debjitk) for this release
+Thanks to [SureshSc](https://github.com/SureshSc), [zykloman](https://github.com/zykloman) and [debjitk](https://github.com/debjitk) for this release
 
 ## [1.3.2](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.3.2) - Linux Quality
 
@@ -167,7 +167,7 @@ Thanks to [@SureshSc](https://github.com/SureshSc), [@zykloman](https://github.c
 
 - `OperationQueue` in Queuer class is now `open`
 
-Thanks to [@BabyAzerty](https://github.com/BabyAzerty) for this release
+Thanks to [BabyAzerty](https://github.com/BabyAzerty) for this release
 
 ## [1.3.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/1.3.0) - Open Everything
 
