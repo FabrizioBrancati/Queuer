@@ -53,7 +53,7 @@
 
 ### Improved
 
-- Improved tests
+- Improved tests [#20](https://github.com/FabrizioBrancati/Queuer/pulls/20)
 - Improved [CONTRIBUTING.md](https://github.com/FabrizioBrancati/Queuer/blob/main/.github/CONTRIBUTING.md) guidelines
 
 ### Removed
@@ -67,7 +67,7 @@
 - Removed Slather support
 - Removed Jazzy support
 
-Thanks to [@Kalzem](https://github.com/Kalzem), [@changmingw96](https://github.com/changmingw96), [cristianilea-lateral](https://github.com/cristianilea-lateral) and [@marinofaggiana](https://github.com/marinofaggiana) for this release.
+Thanks to [Kalzem](https://github.com/Kalzem), [changmingw96](https://github.com/changmingw96), [cristianilea-lateral](https://github.com/cristianilea-lateral), [kradalby](https://github.com/kradalby) and [marinofaggiana](https://github.com/marinofaggiana) for this release.
 
 ## [2.1.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.1.1) - Swift 5.1 Support
 

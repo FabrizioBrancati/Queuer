@@ -143,7 +143,10 @@ internal class QueuerTests: XCTestCase {
             check += 1
         }
         queue.addOperation(concurrentOperation1)
+        XCTAssertEqual(queue.operationCount, 1)
+
         queue.addOperation(concurrentOperation2)
+        XCTAssertEqual(queue.operationCount, 2)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             testExpectation.fulfill()
