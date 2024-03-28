@@ -39,7 +39,7 @@ Here is the list of all the features:
 
 ## Installing
 
-See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) section to check Swift, Xcode, Queuer and OS versions.
+See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) section to check Swift, Queuer, and OS versions.
 
 In your `Package.swift` Swift Package Manager manifest, add the following dependency to your `dependencies` argument:
 
