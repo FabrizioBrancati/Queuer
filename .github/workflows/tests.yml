@@ -1,0 +1,43 @@
+name: Tests
+
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        image: 
+          - "swift:5.10"
+          - "swift:5.9"
+    name: Linux
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Swift Version
+      run: swift --version
+    - name: Debug Build
+      run: swift build -v -c debug
+    - name: Debug Test
+      run: swift test -v -c debug --enable-test-discovery
+
+  macos:
+    name: MacOS
+    runs-on: macos-14
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Select Xcode
+      run: xcodes select 15.2
+    - name: Swift Version
+      run: swift --version
+    - name: Debug Build
+      run: swift build -v -c debug
+    - name: Debug Test
+      run: swift test -v -c debug --enable-test-discovery
