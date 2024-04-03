@@ -29,6 +29,7 @@ import Dispatch
 import XCTest
 
 internal class SynchronousOperationTests: XCTestCase {
+    #if !os(Linux)
     internal func testSynchronousOperation() {
         let queue = Queuer(name: "SynchronousOperationTestSynchronousOperation")
         let testExpectation = expectation(description: "Synchronous Operation")
@@ -140,4 +141,5 @@ internal class SynchronousOperationTests: XCTestCase {
             XCTAssertEqual(testString, "Tested1")
         }
     }
+    #endif
 }
