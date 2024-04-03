@@ -28,8 +28,6 @@ import Dispatch
 @testable import Queuer
 import XCTest
 
-// swiftlint:disable type_body_length
-
 internal class QueuerTests: XCTestCase {
     internal func testOperationCount() {
         let queue = Queuer(name: "QueuerTestOperationCount")
