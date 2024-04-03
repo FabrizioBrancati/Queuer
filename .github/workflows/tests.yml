@@ -10,15 +10,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: 
-          - "swift:5.10-jammy"
-          - "swift:5.9-jammy"
-        os:
-          - ubuntu-22.04
+        swift:
+          - image: "swift:5.10-jammy"
+            os: ubuntu-22.04
+          - image: "swift:5.9-jammy"
+            os: ubuntu-22.04
+          - image: "swift:5.10-focal"
+            os: ubuntu-20.04
+          - image: "swift:5.9-focal"
+            os: ubuntu-20.04
     name: Linux
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.swift.os }}
     container:
-      image: ${{ matrix.image }}
+      image: ${{ matrix.swift.image }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
