@@ -40,6 +40,9 @@ let package = Package(
     products: [
         .library(name: "Queuer", targets: ["Queuer"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0")
+    ],
     targets: [
         .target(name: "Queuer"),
         .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
