@@ -13,13 +13,16 @@ jobs:
         image: 
           - "swift:5.10"
           - "swift:5.9"
+        os:
+          - ubuntu-22.04
+          - ubuntu-20.04
     name: Linux
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     container:
       image: ${{ matrix.image }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
     - name: Swift Version
       run: swift --version
     - name: Debug Build
@@ -28,11 +31,11 @@ jobs:
       run: swift test -v -c debug --enable-test-discovery
 
   macos:
-    name: MacOS
+    name: macOS
     runs-on: macos-14
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
     - name: Select Xcode
       run: xcodes select 15.2
     - name: Swift Version
