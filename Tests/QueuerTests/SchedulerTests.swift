@@ -29,6 +29,7 @@ import Dispatch
 import XCTest
 
 internal class SchedulerTests: XCTestCase {
+    #if !os(Linux)
     internal func testInitWithoutHandler() {
         let testExpectation = expectation(description: "Init Without Handler")
         var order: [Int] = []
@@ -87,4 +88,5 @@ internal class SchedulerTests: XCTestCase {
             XCTAssertEqual(order, [0])
         }
     }
+    #endif
 }

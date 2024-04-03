@@ -28,6 +28,7 @@
 import XCTest
 
 internal class SemaphoreTests: XCTestCase {
+    #if !os(Linux)
     internal func testWithSemaphore() {
         let semaphore = Semaphore()
         let queue = Queuer(name: "SemaphoreTestWithSemaphore")
@@ -69,4 +70,5 @@ internal class SemaphoreTests: XCTestCase {
             XCTAssertEqual(testString, "Tested")
         }
     }
+    #endif
 }

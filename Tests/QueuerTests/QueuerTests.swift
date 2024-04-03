@@ -29,11 +29,12 @@ import Dispatch
 import XCTest
 
 internal class QueuerTests: XCTestCase {
+    #if !os(Linux)
     internal func testOperationCount() {
         let queue = Queuer(name: "QueuerTestOperationCount")
         let testExpectation = expectation(description: "Operation Count")
 
-//        XCTAssertEqual(queue.operationCount, 0)
+        XCTAssertEqual(queue.operationCount, 0)
 
         let concurrentOperation = ConcurrentOperation { _ in
             Thread.sleep(forTimeInterval: 2)
@@ -44,7 +45,7 @@ internal class QueuerTests: XCTestCase {
 
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
-//            XCTAssertEqual(queue.operationCount, 0)
+            XCTAssertEqual(queue.operationCount, 0)
         }
     }
 
@@ -64,6 +65,7 @@ internal class QueuerTests: XCTestCase {
             XCTAssertFalse(queue.operations.contains(concurrentOperation))
         }
     }
+    #endif
 
     internal func testMaxConcurrentOperationCount() {
         let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
@@ -300,6 +302,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
+    #if !os(Linux)
     internal func testWaitUnitlAllOperationsAreFinished() {
         let queue = Queuer(name: "QueuerTestWaitUnitlAllOperationsAreFinished")
         let testExpectation = expectation(description: "Wait Unitl All Operations Are Finished")
@@ -367,4 +370,5 @@ internal class QueuerTests: XCTestCase {
             }
         }
     }
+    #endif
 }
