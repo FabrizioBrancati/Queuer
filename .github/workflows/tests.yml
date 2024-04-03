@@ -11,11 +11,10 @@ jobs:
       fail-fast: false
       matrix:
         image: 
-          - "swift:5.10"
-          - "swift:5.9"
+          - "swift:5.10-jammy"
+          - "swift:5.9-jammy"
         os:
           - ubuntu-22.04
-          - ubuntu-20.04
     name: Linux
     runs-on: ${{ matrix.os }}
     container:
@@ -28,7 +27,7 @@ jobs:
     - name: Debug Build
       run: swift build -v -c debug
     - name: Debug Test
-      run: swift test -v -c debug --enable-test-discovery
+      run: swift test -v -c debug
 
   macos:
     name: macOS
@@ -43,4 +42,4 @@ jobs:
     - name: Debug Build
       run: swift build -v -c debug
     - name: Debug Test
-      run: swift test -v -c debug --enable-test-discovery
+      run: swift test -v -c debug
