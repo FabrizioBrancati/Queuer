@@ -25,7 +25,7 @@ jobs:
       image: ${{ matrix.swift.image }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Swift Version
       run: swift --version
     - name: Debug Build
@@ -38,7 +38,7 @@ jobs:
     runs-on: macos-14
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Select Xcode
       run: xcodes select 15.2
     - name: Swift Version
