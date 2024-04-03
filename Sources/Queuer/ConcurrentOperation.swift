@@ -99,11 +99,13 @@ open class ConcurrentOperation: Operation {
     ///
     /// - Parameters:
     ///   - name: Operation name, useful for Queue Restoration. It must be unique.
+    ///   - queuePriority: The execution priority of the operation in an operation queue.
     ///   - executionBlock: Execution block.
-    public init(name: String? = nil, executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
+    public init(name: String? = nil, queuePriority: QueuePriority = .normal, executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
         super.init()
 
         self.name = name
+        self.queuePriority = queuePriority
         self.executionBlock = executionBlock
     }
 
