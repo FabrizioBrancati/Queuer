@@ -28,19 +28,6 @@
 import XCTest
 
 internal class ConcurrentOperationTests: XCTestCase {
-    internal func testProgress() {
-        let concurrentOperation = ConcurrentOperation()
-
-        concurrentOperation.progress = 1000
-        XCTAssertTrue(concurrentOperation.progress == 100)
-
-        concurrentOperation.progress = -1000
-        XCTAssertTrue(concurrentOperation.progress == 0)
-
-        concurrentOperation.progress = 26
-        XCTAssertTrue(concurrentOperation.progress == 26)
-    }
-
     internal func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
 

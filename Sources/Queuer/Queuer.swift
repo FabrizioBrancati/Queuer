@@ -186,34 +186,3 @@ public extension Queuer {
         addOperation(completionOperation)
     }
 }
-
-// MARK: - Queue State Restoration
-
-/// `Queuer` extension with state restoration feature.
-public extension Queuer {
-    /// `OperationState` array typealias.
-    typealias QueueStateList = [OperationState]
-
-    /// Creates the queue state.
-    ///
-    /// - Returns: Returns the current queue state.
-    func state() -> QueueStateList {
-        return Queuer.state(of: queue)
-    }
-
-    /// Creates the state of a given queue.
-    ///
-    /// - Parameter queue: State will be created starting from this `OperationQueue`.
-    /// - Returns: Returns the current queue state.
-    static func state(of queue: OperationQueue) -> QueueStateList {
-        var operations: QueueStateList = []
-
-        for operation in queue.operations {
-            if let concurrentOperation = operation as? ConcurrentOperation, let operationName = concurrentOperation.name {
-                operations.append(OperationState(name: operationName, progress: concurrentOperation.progress, dependencies: operation.dependencies.compactMap { $0.name }))
-            }
-        }
-
-        return operations
-    }
-}

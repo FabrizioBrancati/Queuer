@@ -60,6 +60,7 @@
 
 - Removed `hasFailed` variable from `ConcurrentOperation` class as it was deprecated in version 2.0.1
 - Removed `finish(_ hasFailed: Bool)` function from `ConcurrentOperation` class as it was deprecated in version 2.0.1
+- Removed State Restoration feature as it was not fully working and never went out of beta
 - Removed SwiftLint
 - Removed CocoaPods support
 - Removed Carthage support

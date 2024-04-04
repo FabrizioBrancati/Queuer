@@ -335,40 +335,5 @@ internal class QueuerTests: XCTestCase {
             XCTAssertTrue(queue.isExecuting)
         }
     }
-
-    internal func testQueueState() {
-        let queue = Queuer(name: "QueuerTestPauseAndResume")
-        let testExpectation = expectation(description: "Pause and Resume")
-        var state: Queuer.QueueStateList = []
-
-        let concurrentOperation1 = ConcurrentOperation(name: "Test1") { operation in
-            operation.progress = 50
-            Thread.sleep(forTimeInterval: 4)
-        }
-        let concurrentOperation2 = ConcurrentOperation(name: "Test2") { _ in
-            Thread.sleep(forTimeInterval: 2)
-        }
-        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
-            testExpectation.fulfill()
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            state = queue.state()
-        }
-
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-
-            XCTAssertEqual(state.count, 2)
-            if state.count >= 2 {
-                XCTAssertEqual(state[0].name, "Test1")
-                XCTAssertEqual(state[0].progress, 50)
-                XCTAssertEqual(state[0].dependencies, [])
-                XCTAssertEqual(state[1].name, "Test2")
-                XCTAssertEqual(state[1].progress, 0)
-                XCTAssertEqual(state[1].dependencies, ["Test1"])
-            }
-        }
-    }
     #endif
 }

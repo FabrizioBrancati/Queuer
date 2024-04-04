@@ -67,14 +67,6 @@ open class ConcurrentOperation: Operation {
         return _finished
     }
 
-    /// `Operation` progress, set it as many times as you like within the `Operation` execution.
-    /// Useful for Queue Restoration.
-    open var progress: Int = 0 {
-        didSet {
-            progress = progress < 100 ? (progress > 0 ? progress : 0) : 100
-        }
-    }
-
     /// You should use `success` if you want the retry feature.
     /// Set it to `false` if the `Operation` has failed, otherwise `true`.
     /// Default is `true` to avoid retries.
@@ -98,7 +90,7 @@ open class ConcurrentOperation: Operation {
     /// Creates the `Operation` with an execution block.
     ///
     /// - Parameters:
-    ///   - name: Operation name, useful for Queue Restoration. It must be unique.
+    ///   - name: Operation name.
     ///   - executionBlock: Execution block.
     public init(name: String? = nil, executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
         super.init()
