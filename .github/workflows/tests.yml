@@ -34,13 +34,20 @@ jobs:
       run: swift test -v -c debug
 
   macos:
+    strategy:
+      matrix:
+        xcode:
+          - 15.3
+          - 15.2
+          - 15.1
+          - 15.0.1
     name: macOS
     runs-on: macos-14
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Select Xcode
-      run: xcodes select 15.2
+      run: xcodes select ${{ matrix.xcode }}
     - name: Swift Version
       run: swift --version
     - name: Debug Build
