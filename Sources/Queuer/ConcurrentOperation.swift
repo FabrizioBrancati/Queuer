@@ -108,7 +108,7 @@ open class ConcurrentOperation: Operation {
     /// Retry function.
     /// It only works if `manualRetry` property has been set to `true`.
     open func retry() {
-        if manualRetry, shouldRetry, let executionBlock = executionBlock {
+        if manualRetry, shouldRetry, let executionBlock {
             executionBlock(self)
             finish(success: success)
         }
@@ -117,7 +117,7 @@ open class ConcurrentOperation: Operation {
     /// Execute the `Operation`.
     /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
     open func execute() {
-        if let executionBlock = executionBlock {
+        if let executionBlock {
             while shouldRetry, !manualRetry {
                 executionBlock(self)
                 finish(success: success)

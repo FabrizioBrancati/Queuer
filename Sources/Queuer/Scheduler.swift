@@ -55,7 +55,7 @@ public struct Scheduler {
 
         timer = DispatchSource.makeTimerSource()
         timer.schedule(deadline: deadline, repeating: repeating)
-        if let handler = handler {
+        if let handler {
             timer.setEventHandler(qos: qualityOfService, handler: handler)
             timer.resume()
         }
