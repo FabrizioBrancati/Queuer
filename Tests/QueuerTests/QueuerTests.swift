@@ -28,9 +28,9 @@ import Dispatch
 @testable import Queuer
 import XCTest
 
-internal class QueuerTests: XCTestCase {
+final class QueuerTests: XCTestCase {
     #if !os(Linux)
-    internal func testOperationCount() {
+    func testOperationCount() {
         let queue = Queuer(name: "QueuerTestOperationCount")
         let testExpectation = expectation(description: "Operation Count")
 
@@ -49,7 +49,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testOperations() {
+    func testOperations() {
         let queue = Queuer(name: "QueuerTestOperations")
         let testExpectation = expectation(description: "Operations")
 
@@ -67,7 +67,7 @@ internal class QueuerTests: XCTestCase {
     }
     #endif
 
-    internal func testMaxConcurrentOperationCount() {
+    func testMaxConcurrentOperationCount() {
         let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
 
         queue.maxConcurrentOperationCount = 10
@@ -75,7 +75,7 @@ internal class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
     }
 
-    internal func testQualityOfService() {
+    func testQualityOfService() {
         let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
 
         queue.qualityOfService = .background
@@ -83,7 +83,7 @@ internal class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.qualityOfService, .background)
     }
 
-    internal func testInitWithNameMaxConcurrentOperationCount() {
+    func testInitWithNameMaxConcurrentOperationCount() {
         let queueName = "TestInitWithNameMaxConcurrentOperationCount"
         let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10)
 
@@ -91,7 +91,7 @@ internal class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.queue.maxConcurrentOperationCount, 10)
     }
 
-    internal func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
+    func testInitWithNameMaxConcurrentOperationCountQualityOfService() {
         let queueName = "TestInitWithNameMaxConcurrentOperationCountQualityOfService"
         let queue = Queuer(name: queueName, maxConcurrentOperationCount: 10, qualityOfService: .background)
 
@@ -100,7 +100,7 @@ internal class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.queue.qualityOfService, .background)
     }
 
-    internal func testAddOperationBlock() {
+    func testAddOperationBlock() {
         let queue = Queuer(name: "QueuerTestAddOperationBlock")
         let testExpectation = expectation(description: "Add Operation Block")
 
@@ -114,7 +114,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testAddOperation() {
+    func testAddOperation() {
         let queue = Queuer(name: "QueuerTestAddOperation")
         let testExpectation = expectation(description: "Add Operation")
 
@@ -131,7 +131,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testAddOperations() {
+    func testAddOperations() {
         let queue = Queuer(name: "QueuerTestAddOperations")
         let testExpectation = expectation(description: "Add Operations")
         var check = 0
@@ -159,7 +159,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testAddChainedOperations() {
+    func testAddChainedOperations() {
         let queue = Queuer(name: "QueuerTestAddChainedOperations")
         let testExpectation = expectation(description: "Add Chained Operations")
         var order: [Int] = []
@@ -182,7 +182,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testAddChainedOperationsList() {
+    func testAddChainedOperationsList() {
         let queue = Queuer(name: "QueuerTestAddChainedOperationsList")
         let testExpectation = expectation(description: "Add Chained Operations List")
         var order: [Int] = []
@@ -205,7 +205,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testAddChainedOperationsEmpty() {
+    func testAddChainedOperationsEmpty() {
         let queue = Queuer(name: "QueuerTestAddChainedOperationsEmpty")
         let testExpectation = expectation(description: "Add Chained Operations Empty")
 
@@ -219,7 +219,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testAddChainedOperationsWithoutCompletion() {
+    func testAddChainedOperationsWithoutCompletion() {
         let queue = Queuer(name: "QueuerTestAddChainedOperationsWithoutCompletion")
         let testExpectation = expectation(description: "Add Chained Operations Without Completion")
         var order: [Int] = []
@@ -241,7 +241,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testCancelAll() {
+    func testCancelAll() {
         let queue = Queuer(name: "QueuerTestCancellAll")
         let testExpectation = expectation(description: "Cancell All Operations")
         var order: [Int] = []
@@ -270,7 +270,7 @@ internal class QueuerTests: XCTestCase {
         }
     }
 
-    internal func testPauseAndResume() {
+    func testPauseAndResume() {
         let queue = Queuer(name: "QueuerTestPauseAndResume")
         let testExpectation = expectation(description: "Pause and Resume")
         var order: [Int] = []
@@ -303,7 +303,7 @@ internal class QueuerTests: XCTestCase {
     }
 
     #if !os(Linux)
-    internal func testWaitUnitlAllOperationsAreFinished() {
+    func testWaitUnitlAllOperationsAreFinished() {
         let queue = Queuer(name: "QueuerTestWaitUnitlAllOperationsAreFinished")
         let testExpectation = expectation(description: "Wait Unitl All Operations Are Finished")
         var order: [Int] = []

@@ -28,9 +28,9 @@ import Dispatch
 @testable import Queuer
 import XCTest
 
-internal class SchedulerTests: XCTestCase {
+final class SchedulerTests: XCTestCase {
     #if !os(Linux)
-    internal func testInitWithoutHandler() {
+    func testInitWithoutHandler() {
         let testExpectation = expectation(description: "Init Without Handler")
         var order: [Int] = []
 
@@ -50,7 +50,7 @@ internal class SchedulerTests: XCTestCase {
         }
     }
 
-    internal func testInitWithHandler() {
+    func testInitWithHandler() {
         let testExpectation = expectation(description: "Init With Handler")
         var order: [Int] = []
 
@@ -69,7 +69,7 @@ internal class SchedulerTests: XCTestCase {
         }
     }
 
-    internal func testCancel() {
+    func testCancel() {
         let testExpectation = expectation(description: "Init Without Handler")
         var order: [Int] = []
 

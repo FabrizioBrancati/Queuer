@@ -28,9 +28,9 @@ import Dispatch
 @testable import Queuer
 import XCTest
 
-internal class SynchronousOperationTests: XCTestCase {
+final class SynchronousOperationTests: XCTestCase {
     #if !os(Linux)
-    internal func testSynchronousOperation() {
+    func testSynchronousOperation() {
         let queue = Queuer(name: "SynchronousOperationTestSynchronousOperation")
         let testExpectation = expectation(description: "Synchronous Operation")
         var testString = ""
@@ -56,7 +56,7 @@ internal class SynchronousOperationTests: XCTestCase {
         }
     }
 
-    internal func testSynchronousOperationOnSharedQueuer() {
+    func testSynchronousOperationOnSharedQueuer() {
         let testExpectation = expectation(description: "Synchronous Operation")
         var testString = ""
 
@@ -81,7 +81,7 @@ internal class SynchronousOperationTests: XCTestCase {
         }
     }
 
-    internal func testSynchronousOperationRetry() {
+    func testSynchronousOperationRetry() {
         let queue = Queuer(name: "SynchronousOperationTestRetry")
         let testExpectation = expectation(description: "Synchronous Operation Retry")
         var order: [Int] = []
@@ -111,7 +111,7 @@ internal class SynchronousOperationTests: XCTestCase {
         }
     }
 
-    internal func testCancel() {
+    func testCancel() {
         let queue = Queuer(name: "SynchronousOperationTestCancel")
         queue.maxConcurrentOperationCount = 1
         let testExpectation = expectation(description: "Cancel")

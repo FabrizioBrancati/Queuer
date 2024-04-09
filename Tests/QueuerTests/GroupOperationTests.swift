@@ -25,11 +25,11 @@
 //  SOFTWARE.
 
 import Dispatch
-@testable import Queuer
+import Queuer
 import XCTest
 
-internal class GroupOperationTests: XCTestCase {
-    internal func testGroupOperations() {
+final class GroupOperationTests: XCTestCase {
+    func testGroupOperations() {
         var order: [String] = []
         let testExpectation = expectation(description: "GroupOperations")
         let queue = Queuer(name: "Group Operations")
@@ -79,7 +79,7 @@ internal class GroupOperationTests: XCTestCase {
         }
     }
 
-    internal func testGroupOperationsWithInnerChainedRetry() {
+    func testGroupOperationsWithInnerChainedRetry() {
         var order: [String] = []
         let testExpectation = expectation(description: "GroupOperationsWithInnerChainedRetry")
         let queue = Queuer(name: "Group Operations Chained Retry")
@@ -111,7 +111,7 @@ internal class GroupOperationTests: XCTestCase {
         }
     }
 
-    internal func testGroupOperationsWithCancelledInnerChainedRetry() {
+    func testGroupOperationsWithCancelledInnerChainedRetry() {
         let queue = Queuer(name: "GroupOperationsWithCancelledInnerChainedRetry")
         let testExpectation = expectation(description: "Group Operations Cancelled Inner Chained Retry")
         var order: [String] = []
@@ -148,7 +148,7 @@ internal class GroupOperationTests: XCTestCase {
         }
     }
 
-    internal func testGroupOperationsWithInnerChainedManualRetry() {
+    func testGroupOperationsWithInnerChainedManualRetry() {
         let queue = Queuer(name: "GroupOperationsWithInnerChainedManualRetry")
         let testExpectation = expectation(description: "Group Operations Inner Chained Manual Retry")
         var order: [String] = []

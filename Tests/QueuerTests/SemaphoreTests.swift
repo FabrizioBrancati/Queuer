@@ -27,9 +27,9 @@
 @testable import Queuer
 import XCTest
 
-internal class SemaphoreTests: XCTestCase {
+final class SemaphoreTests: XCTestCase {
     #if !os(Linux)
-    internal func testWithSemaphore() {
+    func testWithSemaphore() {
         let semaphore = Semaphore()
         let queue = Queuer(name: "SemaphoreTestWithSemaphore")
         let testExpectation = expectation(description: "With Semaphore")
@@ -51,7 +51,7 @@ internal class SemaphoreTests: XCTestCase {
         }
     }
 
-    internal func testWithoutSemaphore() {
+    func testWithoutSemaphore() {
         let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
         let testExpectation = expectation(description: "Without Semaphore")
         var testString = ""

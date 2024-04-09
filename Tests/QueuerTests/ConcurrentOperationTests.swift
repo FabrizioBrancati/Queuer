@@ -24,11 +24,11 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-@testable import Queuer
+import Queuer
 import XCTest
 
-internal class ConcurrentOperationTests: XCTestCase {
-    internal func testInitWithExecutionBlock() {
+final class ConcurrentOperationTests: XCTestCase {
+    func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
 
         let testExpectation = expectation(description: "Init With Execution Block")
@@ -43,13 +43,13 @@ internal class ConcurrentOperationTests: XCTestCase {
         }
     }
 
-    internal func testIsAsynchronous() {
+    func testIsAsynchronous() {
         let concurrentOperation = ConcurrentOperation()
 
         XCTAssertTrue(concurrentOperation.isAsynchronous)
     }
 
-    internal func testAddToSharedQueuer() {
+    func testAddToSharedQueuer() {
         let concurrentOperation = ConcurrentOperation()
         concurrentOperation.addToSharedQueuer()
 
@@ -57,7 +57,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         XCTAssertEqual(Queuer.shared.operations, [concurrentOperation])
     }
 
-    internal func testAddToQueue() {
+    func testAddToQueue() {
         let queue = Queuer(name: "ConcurrentOperationTestAddToQueuer")
 
         let concurrentOperation = ConcurrentOperation()
@@ -67,7 +67,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         XCTAssertEqual(queue.operations, [concurrentOperation])
     }
 
-    internal func testSimpleRetry() {
+    func testSimpleRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestSimpleRetry")
 
         let testExpectation = expectation(description: "Simple Retry")
@@ -89,7 +89,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         }
     }
 
-    internal func testChainedRetry() {
+    func testChainedRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
         let testExpectation = expectation(description: "Chained Retry")
         var order: [Int] = []
@@ -114,7 +114,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         }
     }
 
-    internal func testCanceledChainedRetry() {
+    func testCanceledChainedRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestCanceledChainedRetry")
         let testExpectation = expectation(description: "Canceled Chained Retry")
         var order: [Int] = []
@@ -143,7 +143,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         }
     }
 
-    internal func testChainedManualRetry() {
+    func testChainedManualRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedManualRetry")
         let testExpectation = expectation(description: "Chained Manual Retry")
         var order: [Int] = []
@@ -182,7 +182,7 @@ internal class ConcurrentOperationTests: XCTestCase {
         }
     }
 
-    internal func testChainedWrongManualRetry() {
+    func testChainedWrongManualRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedWrongManualRetry")
         let testExpectation = expectation(description: "Chained Wrong Manual Retry")
         var order: [Int] = []
