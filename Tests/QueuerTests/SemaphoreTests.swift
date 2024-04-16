@@ -24,7 +24,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-@testable import Queuer
+import Queuer
 import XCTest
 
 final class SemaphoreTests: XCTestCase {

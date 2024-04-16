@@ -25,7 +25,7 @@
 //  SOFTWARE.
 
 import Dispatch
-@testable import Queuer
+import Queuer
 import XCTest
 
 final class SchedulerTests: XCTestCase {
