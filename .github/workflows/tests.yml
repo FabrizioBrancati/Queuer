@@ -31,7 +31,7 @@ jobs:
     - name: Debug Build
       run: swift build -v -c debug
     - name: Debug Test
-      run: swift test -v -c debug
+      run: swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
 
   macos:
     strategy:
@@ -53,4 +53,4 @@ jobs:
     - name: Debug Build
       run: swift build -v -c debug
     - name: Debug Test
-      run: swift test -v -c debug
+      run: swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
