@@ -24,7 +24,6 @@ Here is the list of all the features:
 - [x] Create and handle schedules
 - [x] Automatically or manually retry an operation
 - [ ] Throttling between each automatic operation retry
-- [ ] Data layer between operations
 
 ## Requirements
 
@@ -66,8 +65,8 @@ Add the dependency to any targets you've declared in your manifest:
 - [Chained Operations](https://github.com/FabrizioBrancati/Queuer#chained-operations)
 - [Group Oprations](https://github.com/FabrizioBrancati/Queuer#group-operations)
 - [Queue States](https://github.com/FabrizioBrancati/Queuer#queue-states)
+- [Synchronous Queue](https://github.com/FabrizioBrancati/Queuer#synchronous-queue)
 - [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#asynchronous-operation)
-- [Synchronous Operation](https://github.com/FabrizioBrancati/Queuer#synchronous-operation)
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
@@ -116,17 +115,8 @@ You have three methods to add an `Operation` block.
     queue.addOperation(concurrentOperation)
     ```
 
-3. Creating a `SynchronousOperation` with a block:
-
-    ```swift
-    let synchronousOperation = SynchronousOperation { _ in
-        /// Your task here
-    }
-    queue.addOperation(synchronousOperation)
-    ```
-
 > [!NOTE]
-> We will see how `ConcurrentOperation` and `SynchronousOperation` works later.
+> We will see how `ConcurrentOperation` works later.
 
 ### Chained Operations
 
@@ -221,6 +211,10 @@ There are a few method to handle the queue states.
 > [!IMPORTANT]
 > This function means that the queue will blocks the current thread until all `Operation`s are finished.
 
+### Synchronous Queue
+
+Setting the `maxConcurrentOperationCount` property of a queue to `1` will make you sure that only one task at a time will be executed.
+
 ### Asynchronous Operation
 
 `ConcurrentOperation` is a class created to be subclassed.
@@ -237,25 +231,6 @@ let concurrentOperation = ConcurrentOperation { _ in
     /// Your task here
 }
 concurrentOperation.addToQueue(queue)
-```
-
-### Synchronous Operation
-
-There are three methods to create synchronous tasks or even queue:
-
-1. Setting `maxConcurrentOperationCount` of the queue to `1`. By setting that property to `1` you will be sure that only one task at time will be executed.
-
-2. Using a `Semaphore` and waiting until a task has finished its job.
-
-3. Using a `SynchronousOperation`. It's a subclass of `ConcurrentOperation` that handles synchronous tasks. It's not awesome as it seems to be and is always better to create an asynchronous task, but some times it may be useful.
-
-For convenience it has an `init` function with a completion block:
-
-```swift
-let synchronousOperation = SynchronousOperation { _ in
-  /// Your task here
-}
-synchronousOperation.addToQueue(queue)
 ```
 
 ### Automatically Retry an Operation
@@ -285,7 +260,7 @@ An `Operation` is passed to every closure, with it you can set and handle the re
 
 By default the manual retry feature is disabled, to enable it simply set the `manualRetry` property to `true`, you must do this outside of the execution closure. You must also set `success` to `true` or `false` to let the `Operation` know when is everything ok, like the automatic retry feature.
 
-To let the `Operation` retry your execution closure, you have to call the `retry()` function. If the `retry()` is not called, you may block the entire queue. Be sure to call it at least `maximumRetries` times, it is not a problem if you call `retry()` more times than is needed, your execution closure will not be executed more times than the `maximumRetries` value.
+To let the `Operation` retry your execution closure, you have to call the `retry()` function. Be sure to call it at least `maximumRetries` times, it is not a problem if you call `retry()` more times than is needed, your execution closure will not be executed more times than the `maximumRetries` value.
 
 ```swift
 let concurrentOperation = ConcurrentOperation { operation in
@@ -301,6 +276,9 @@ concurrentOperation.manualRetry = true
 /// Later on your code
 concurrentOperation.retry()
 ```
+
+> [!CAUTION]
+> If the `retry()` function is not called, you may block the entire queue.
 
 ### Scheduler
 
