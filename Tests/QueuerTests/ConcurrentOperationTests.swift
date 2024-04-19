@@ -43,12 +43,6 @@ final class ConcurrentOperationTests: XCTestCase {
         }
     }
 
-    func testIsAsynchronous() {
-        let concurrentOperation = ConcurrentOperation()
-
-        XCTAssertTrue(concurrentOperation.isAsynchronous)
-    }
-
     func testAddToSharedQueuer() {
         let concurrentOperation = ConcurrentOperation()
         concurrentOperation.addToSharedQueuer()

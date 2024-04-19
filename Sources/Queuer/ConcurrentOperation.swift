@@ -32,11 +32,6 @@ open class ConcurrentOperation: Operation {
     /// `Operation`'s execution block.
     public var executionBlock: ((_ operation: ConcurrentOperation) -> Void)?
 
-    /// Set the `Operation` as asynchronous.
-    override open var isAsynchronous: Bool {
-        return true
-    }
-
     /// Set if the `Operation` is executing.
     private var _executing = false {
         willSet {
