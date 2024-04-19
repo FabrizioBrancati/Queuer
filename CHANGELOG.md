@@ -58,6 +58,7 @@
 
 ### Removed
 
+- Removed `SynchronousOperation`. Use a queue with `maxConcurrentOperationCount` set to `1` to execute a synchronous queue
 - Removed `isAsynchronous` variable from `ConcurrentOperation` as always ignored by `OperationQueue`s. You can override it anyway if you need to, since it's inferred from the `Operation` class
 - Removed `hasFailed` variable from `ConcurrentOperation` class as it was deprecated in version 2.0.1
 - Removed `finish(_ hasFailed: Bool)` function from `ConcurrentOperation` class as it was deprecated in version 2.0.1

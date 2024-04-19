@@ -246,11 +246,11 @@ final class QueuerTests: XCTestCase {
         let testExpectation = expectation(description: "Cancell All Operations")
         var order: [Int] = []
 
-        let concurrentOperation1 = SynchronousOperation { _ in
+        let concurrentOperation1 = ConcurrentOperation { _ in
             Thread.sleep(forTimeInterval: 2)
             order.append(0)
         }
-        let concurrentOperation2 = SynchronousOperation { _ in
+        let concurrentOperation2 = ConcurrentOperation { _ in
             order.append(1)
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
