@@ -203,4 +203,105 @@ final class ConcurrentOperationTests: XCTestCase {
             XCTAssertEqual(order, [0])
         }
     }
+
+    func testConcurrentOperation() {
+        let queue = Queuer(name: "SynchronousOperationTestSynchronousOperation")
+        let testExpectation = expectation(description: "Synchronous Operation")
+        var testString = ""
+
+        let concurrentOperation1 = ConcurrentOperation { _ in
+            testString = "Tested1"
+        }
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            Thread.sleep(forTimeInterval: 2)
+            testString = "Tested2"
+
+            testExpectation.fulfill()
+        }
+        concurrentOperation1.addToQueue(queue)
+        concurrentOperation2.addToQueue(queue)
+
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString, "Tested2")
+        }
+    }
+
+    func testConcurrentOperationOnSharedQueuer() {
+        let testExpectation = expectation(description: "Synchronous Operation")
+        var testString = ""
+
+        let concurrentOperation1 = ConcurrentOperation { _ in
+            Thread.sleep(forTimeInterval: 1.5)
+            testString = "Tested1"
+
+            testExpectation.fulfill()
+        }
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            testString = "Tested2"
+        }
+        Queuer.shared.maxConcurrentOperationCount = 2
+        concurrentOperation2.addToSharedQueuer()
+        concurrentOperation1.addToSharedQueuer()
+
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString, "Tested1")
+        }
+    }
+
+    func testConcurrentOperationRetry() {
+        let queue = Queuer(name: "SynchronousOperationTestRetry")
+        let testExpectation = expectation(description: "Synchronous Operation Retry")
+        var order: [Int] = []
+
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            Thread.sleep(forTimeInterval: 2.5)
+            order.append(0)
+            operation.success = false
+
+            if operation.currentAttempt == 3 {
+                testExpectation.fulfill()
+            }
+        }
+        concurrentOperation1.addToQueue(queue)
+
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            order.append(1)
+        }
+        concurrentOperation2.addToQueue(queue)
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [1, 0, 0, 0])
+        }
+    }
+
+    func testCancel() {
+        let queue = Queuer(name: "SynchronousOperationTestCancel")
+        queue.maxConcurrentOperationCount = 1
+        let testExpectation = expectation(description: "Cancel")
+        var testString = ""
+
+        let deadline = DispatchTime.now() + .seconds(2)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+            queue.cancelAll()
+            testExpectation.fulfill()
+        }
+
+        let concurrentOperation1 = ConcurrentOperation { _ in
+            testString = "Tested1"
+            Thread.sleep(forTimeInterval: 4)
+        }
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            testString = "Tested2"
+        }
+        concurrentOperation1.addToQueue(queue)
+        concurrentOperation2.addToQueue(queue)
+
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString, "Tested1")
+        }
+    }
 }
