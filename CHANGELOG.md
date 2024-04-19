@@ -27,6 +27,8 @@
 
 > [!WARNING]
 > The goal of this release is to make the repo more maintainable. To do so, only Swift Package Manager will be supported. If you rely on any of the removed services, like CocoaPods or Carthage, please stick to the previous version.
+> 
+> Queuer 2.1.1 is compatible with Swift 5.10, so you can still use it in your projects.
 
 ### Changed
 
@@ -63,7 +65,7 @@
 - Removed `hasFailed` variable from `ConcurrentOperation` class as it was deprecated in version 2.0.1
 - Removed `finish(_ hasFailed: Bool)` function from `ConcurrentOperation` class as it was deprecated in version 2.0.1
 - Removed State Restoration feature as it was not fully working and never went out of beta
-- Removed SwiftLint
+- Removed SwiftLint support
 - Removed CocoaPods support
 - Removed Carthage support
 - Removed Coveralls support
