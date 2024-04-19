@@ -75,6 +75,53 @@ final class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
     }
 
+    func testMaxConcurrentOperationCountSetToOne() {
+        let testExpectation = expectation(description: "Synchronous Operation")
+        var testString = ""
+
+        let concurrentOperation1 = ConcurrentOperation { _ in
+            Thread.sleep(forTimeInterval: 3.5)
+            testString = "Tested1"
+
+            testExpectation.fulfill()
+        }
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            testString = "Tested2"
+        }
+        Queuer.shared.maxConcurrentOperationCount = 1
+        Queuer.shared.addOperation(concurrentOperation1)
+        Queuer.shared.addOperation(concurrentOperation2)
+
+
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString, "Tested2")
+        }
+    }
+
+    func testMaxConcurrentOperationCountSetToTwo() {
+        let testExpectation = expectation(description: "Synchronous Operation")
+        var testString = ""
+
+        let concurrentOperation1 = ConcurrentOperation { _ in
+            Thread.sleep(forTimeInterval: 3)
+            testString = "Tested1"
+
+            testExpectation.fulfill()
+        }
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            testString = "Tested2"
+        }
+        Queuer.shared.maxConcurrentOperationCount = 2
+        Queuer.shared.addOperation(concurrentOperation2)
+        Queuer.shared.addOperation(concurrentOperation1)
+
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString, "Tested1")
+        }
+    }
+
     func testQualityOfService() {
         let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
 
