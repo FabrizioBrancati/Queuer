@@ -205,8 +205,8 @@ final class ConcurrentOperationTests: XCTestCase {
     }
 
     func testConcurrentOperation() {
-        let queue = Queuer(name: "SynchronousOperationTestSynchronousOperation")
-        let testExpectation = expectation(description: "Synchronous Operation")
+        let queue = Queuer(name: "ConcurrentOperation")
+        let testExpectation = expectation(description: "Concurrent Operation")
         var testString = ""
 
         let concurrentOperation1 = ConcurrentOperation { _ in
@@ -228,7 +228,7 @@ final class ConcurrentOperationTests: XCTestCase {
     }
 
     func testConcurrentOperationOnSharedQueuer() {
-        let testExpectation = expectation(description: "Synchronous Operation")
+        let testExpectation = expectation(description: "Concurrent Operation")
         var testString = ""
 
         let concurrentOperation1 = ConcurrentOperation { _ in
@@ -251,8 +251,8 @@ final class ConcurrentOperationTests: XCTestCase {
     }
 
     func testConcurrentOperationRetry() {
-        let queue = Queuer(name: "SynchronousOperationTestRetry")
-        let testExpectation = expectation(description: "Synchronous Operation Retry")
+        let queue = Queuer(name: "ConcurrentOperationRetry")
+        let testExpectation = expectation(description: "Concurrent Operation Retry")
         var order: [Int] = []
 
         let concurrentOperation1 = ConcurrentOperation { operation in
@@ -278,7 +278,7 @@ final class ConcurrentOperationTests: XCTestCase {
     }
 
     func testCancel() {
-        let queue = Queuer(name: "SynchronousOperationTestCancel")
+        let queue = Queuer(name: "TestCancel")
         queue.maxConcurrentOperationCount = 1
         let testExpectation = expectation(description: "Cancel")
         var testString = ""

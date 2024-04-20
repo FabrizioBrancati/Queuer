@@ -75,8 +75,9 @@ final class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
     }
 
+    #if !os(Linux)
     func testMaxConcurrentOperationCountSetToOne() {
-        let testExpectation = expectation(description: "Synchronous Operation")
+        let testExpectation = expectation(description: "Max Concurrent Operation Count Set To One")
         var testString = ""
 
         let concurrentOperation1 = ConcurrentOperation { _ in
@@ -98,9 +99,10 @@ final class QueuerTests: XCTestCase {
             XCTAssertEqual(testString, "Tested2")
         }
     }
+    #endif
 
     func testMaxConcurrentOperationCountSetToTwo() {
-        let testExpectation = expectation(description: "Synchronous Operation")
+        let testExpectation = expectation(description: "Max Concurrent Operation Count Set To Two")
         var testString = ""
 
         let concurrentOperation1 = ConcurrentOperation { _ in
