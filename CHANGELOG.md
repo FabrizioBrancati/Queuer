@@ -45,11 +45,11 @@
 
 - Added visionOS 1.0 support
 - Added full Linux support
-- Added new `GroupOperation` operation type [#14](https://github.com/FabrizioBrancati/Queuer/issues/14) and [#17](https://github.com/FabrizioBrancati/Queuer/pull/17), more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#group-operations)
 - Added manual finish feature to `ConcurrentOperation` class, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation) [#28](https://github.com/FabrizioBrancati/Queuer/issues/28)
+- Added new `GroupOperation` operation type [#14](https://github.com/FabrizioBrancati/Queuer/issues/14) [#17](https://github.com/FabrizioBrancati/Queuer/pull/17), more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#group-operations)
 - Added support to Xcode 15.3 and Swift 5.10
 - Added `macCatalyst` support
-- Added Swift Package Index documentation support [#26](https://github.com/FabrizioBrancati/Queuer/issues/26) and [#30](https://github.com/FabrizioBrancati/Queuer/issues/30)
+- Added Swift Package Index documentation support [#26](https://github.com/FabrizioBrancati/Queuer/issues/26) [#30](https://github.com/FabrizioBrancati/Queuer/issues/30)
 - Added Dependabot support
 
 ### Fixed
