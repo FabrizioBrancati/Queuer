@@ -52,5 +52,9 @@ jobs:
       run: swift --version
     - name: Debug Build
       run: swift build -v -c debug
-    - name: Debug Test
+    - name: Debug Test for Commit
+      if: github.event_name != 'pull_request'
+      run: swift test -c debug --parallel 2>&1
+    - name: Debug Test for Pull Request
+      if: github.event_name == 'pull_request'
       run: swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
