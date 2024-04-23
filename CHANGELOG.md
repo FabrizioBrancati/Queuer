@@ -26,9 +26,11 @@
 ### XX XXX 2024
 
 > [!WARNING]
-> The goal of this release is to make the repo more maintainable. To do so, only Swift Package Manager will be supported. If you rely on any of the removed services, like CocoaPods or Carthage, please stick to the previous version.
+> The goal of this release is to make the repo more maintainable.
+> To do so, only Swift Package Manager will be supported. 
+> If you rely on any of the removed dependencies managers, like CocoaPods or Carthage, please stick to the previous version.
 > 
-> Queuer 2.1.1 is compatible with Swift 5.10, so you can still use it in your projects.
+> Queuer 2.1.1 is compatible with Swift 5.10, you can still use it in your projects.
 
 ### Changed
 
@@ -55,7 +57,7 @@
 
 ### Improved
 
-- Improved tests [#20](https://github.com/FabrizioBrancati/Queuer/pulls/20)
+- Improved tests [#20](https://github.com/FabrizioBrancati/Queuer/pull/20)
 - Improved [CONTRIBUTING.md](https://github.com/FabrizioBrancati/Queuer/blob/main/.github/CONTRIBUTING.md) guidelines
 
 ### Removed
