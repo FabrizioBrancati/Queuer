@@ -57,7 +57,7 @@ open class GroupOperation: ConcurrentOperation {
         self.completionBlock = completionHandler
     }
 
-    /// Execute the `Operation`
+    /// Execute the `Operation`.
     /// The execution of a `GroupOperation` will always be considered successful.
     /// Use the variable `allOperationsSucceeded` to know if an error occurred on an operation in the Group.
     override open func execute() {
