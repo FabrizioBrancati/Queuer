@@ -278,8 +278,7 @@ final class ConcurrentOperationTests: XCTestCase {
     }
 
     func testCancel() {
-        let queue = Queuer(name: "TestCancel")
-        queue.maxConcurrentOperationCount = 1
+        let queue = Queuer(name: "TestCancel", maxConcurrentOperationCount: 1)
         let testExpectation = expectation(description: "Cancel")
         var testString = ""
 
@@ -302,6 +301,68 @@ final class ConcurrentOperationTests: XCTestCase {
         waitForExpectations(timeout: 5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(testString, "Tested1")
+        }
+    }
+
+    func testManualFinish() {
+        let queue = Queuer(name: "ManualFinish")
+        let testExpectation = expectation(description: "Manual Finish")
+
+        let concurrentOperation = ConcurrentOperation { _ in
+            Thread.sleep(forTimeInterval: 2)
+        }
+        concurrentOperation.manualFinish = true
+
+        concurrentOperation.addToQueue(queue)
+
+        let deadline = DispatchTime.now() + .seconds(4)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+            XCTAssertFalse(concurrentOperation.isFinished)
+            concurrentOperation.finish()
+            testExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(concurrentOperation.isFinished)
+        }
+    }
+
+    func testChainedManualRetryAndManualFinish() {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedManualRetryAndManualFinish")
+        let testExpectation = expectation(description: "Chained Manual Retry And Manual Finish")
+        var order: [Int] = []
+
+        let concurrentOperation = ConcurrentOperation(name: "concurrentOperation1") { operation in
+            operation.success = false
+            order.append(0)
+        }
+        concurrentOperation.manualRetry = true
+        concurrentOperation.manualFinish = true
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            concurrentOperation.retry()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
+            concurrentOperation.retry()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
+            concurrentOperation.retry()
+        }
+
+        concurrentOperation.addToQueue(queue)
+
+        let deadline = DispatchTime.now() + .seconds(4)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+            XCTAssertFalse(concurrentOperation.isFinished)
+            concurrentOperation.finish()
+            testExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order, [0, 0, 0])
+            XCTAssertTrue(concurrentOperation.isFinished)
         }
     }
 }

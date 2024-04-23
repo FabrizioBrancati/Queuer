@@ -81,6 +81,11 @@ open class ConcurrentOperation: Operation {
 
     /// Specify if the `Operation` should retry another time.
     internal var shouldRetry = true
+    
+    /// Manually control the `finish()` call of the `Operation`.
+    /// If set to `true` it is the developer's responsibility to call the `finish()` method,
+    /// either by passing `false` or `true` to the function.
+    open var manualFinish = false
 
     /// Creates the `Operation` with an execution block.
     ///
@@ -105,17 +110,23 @@ open class ConcurrentOperation: Operation {
     open func retry() {
         if manualRetry, shouldRetry, let executionBlock {
             executionBlock(self)
-            finish(success: success)
+
+            if !manualFinish {
+                finish(success: success)
+            }
         }
     }
 
     /// Execute the `Operation`.
-    /// If `executionBlock` is set, it will be executed and also `finish()` will be called.
+    /// If `executionBlock` is set, it will be executed.
     open func execute() {
         if let executionBlock {
             while shouldRetry, !manualRetry {
                 executionBlock(self)
-                finish(success: success)
+
+                if !manualFinish {
+                    finish(success: success)
+                }
             }
 
             retry()

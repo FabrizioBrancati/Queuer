@@ -69,6 +69,7 @@ Add the dependency to any targets you've declared in your manifest:
 - [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#asynchronous-operation)
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
+- [Manually Finish an Operation](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation)
 - [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
 - [Semaphore](https://github.com/FabrizioBrancati/Queuer#semaphore)
 
@@ -279,6 +280,29 @@ concurrentOperation.retry()
 
 > [!CAUTION]
 > If the `retry()` function is not called, you may block the entire queue.
+
+### Manually Finish an Operation
+
+By default the `Operation` will finish its job when the execution closure is completed.
+
+This means, if you have an asynchronous task insiede the closure, the `Operation` will finish before the task is completed.
+
+If you want to finish it manually, you can set the `manualFinish` property to `true` and call the `finish()` function when the task is completed.
+
+Call the `finish(success:)` function with `success` parameter to `true` or `false` to let the `Operation` know if the task was successful or not. If you don't explicitly set the `success` parameter, it will be set to `true`.
+
+```swift
+let concurrentOperation = ConcurrentOperation { operation in
+    /// Your asynchonous task here
+}
+concurrentOperation.manualFinish = true
+
+/// Later on your code in your asynchronous task
+concurrentOperation.finish(success: true)
+```
+
+> [!CAUTION]
+> If you don't call the `finish()` function, your queue will be blocked and it will never ends.
 
 ### Scheduler
 
