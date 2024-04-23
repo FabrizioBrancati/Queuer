@@ -35,7 +35,7 @@
 ### Changed
 
 - Changed CI service to GitHub Actions
-- Changed minumum iOS version to 12.0 [#24](https://github.com/FabrizioBrancati/Queuer/issues/24)
+- Changed minumum iOS version to 12.0 - [#24](https://github.com/FabrizioBrancati/Queuer/issues/24)
 - Changed minimum macOS version to 10.13
 - Changed minimum tvOS version to 12.0
 - Changed minimum watchOS version to 4.0
@@ -45,11 +45,11 @@
 
 - Added visionOS 1.0 support
 - Added full Linux support
-- Added manual finish feature to `ConcurrentOperation` class, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation) [#28](https://github.com/FabrizioBrancati/Queuer/issues/28)
-- Added new `GroupOperation` operation type [#14](https://github.com/FabrizioBrancati/Queuer/issues/14) [#17](https://github.com/FabrizioBrancati/Queuer/pull/17), more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#group-operations)
+- Added manual finish feature to `ConcurrentOperation` class, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation) - [#28](https://github.com/FabrizioBrancati/Queuer/issues/28)
+- Added new `GroupOperation` operation type, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#group-operations) - [#14](https://github.com/FabrizioBrancati/Queuer/issues/14) [#17](https://github.com/FabrizioBrancati/Queuer/pull/17)
 - Added support to Xcode 15.3 and Swift 5.10
 - Added `macCatalyst` support
-- Added Swift Package Index documentation support [#26](https://github.com/FabrizioBrancati/Queuer/issues/26) [#30](https://github.com/FabrizioBrancati/Queuer/issues/30)
+- Added Swift Package Index documentation support - [#26](https://github.com/FabrizioBrancati/Queuer/issues/26) [#30](https://github.com/FabrizioBrancati/Queuer/issues/30)
 - Added Dependabot support
 
 ### Fixed
@@ -58,7 +58,7 @@
 
 ### Improved
 
-- Improved tests [#20](https://github.com/FabrizioBrancati/Queuer/pull/20)
+- Improved tests - [#20](https://github.com/FabrizioBrancati/Queuer/pull/20)
 - Improved [CONTRIBUTING.md](https://github.com/FabrizioBrancati/Queuer/blob/main/.github/CONTRIBUTING.md) guidelines
 
 ### Removed
@@ -75,7 +75,7 @@
 - Removed Slather support
 - Removed Jazzy support
 
-Thanks to [Kalzem](https://github.com/Kalzem), [changmingw96](https://github.com/changmingw96), [cristianilea-lateral](https://github.com/cristianilea-lateral), [kradalby](https://github.com/kradalby) and [marinofaggiana](https://github.com/marinofaggiana) for this release.
+Thanks to [Kalzem](https://github.com/Kalzem), [changmingw96](https://github.com/changmingw96), [cristianilea-lateral](https://github.com/cristianilea-lateral), [kradalby](https://github.com/kradalby), [mradzinski](https://github.com/mradzinski) and [marinofaggiana](https://github.com/marinofaggiana) for this release.
 
 ## [2.1.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/2.1.1) - Swift 5.1 Support
 
