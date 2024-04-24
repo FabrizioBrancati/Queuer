@@ -23,13 +23,13 @@
 
 ## [3.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.0) - The Phoenix
 
-### XX XXX 2024
+### 24 Apr 2024
 
 > [!WARNING]
 > The goal of this release is to make the repo more maintainable.
-> To do so, only Swift Package Manager will be supported. 
+> To do so, only Swift Package Manager will be supported.
 > If you rely on any of the removed dependencies managers, like CocoaPods or Carthage, please stick to the previous version.
-> 
+>
 > Queuer 2.1.1 is compatible with Swift 5.10, you can still use it in your projects.
 
 ### Changed
