@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2019 Fabrizio Brancati
+//  Copyright (c) 2017 - 2024 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ public struct Scheduler {
     public private(set) var qualityOfService: DispatchQoS
     /// Schedule handler.
     public private(set) var handler: (() -> Void)?
-    
+
     /// Create a schedule.
     ///
     /// - Parameters:
@@ -52,26 +52,22 @@ public struct Scheduler {
         self.repeating = repeating
         self.qualityOfService = qualityOfService
         self.handler = handler
-        
+
         timer = DispatchSource.makeTimerSource()
         timer.schedule(deadline: deadline, repeating: repeating)
-        if let handler = handler {
-            timer.setEventHandler(qos: qualityOfService) {
-                handler()
-            }
+        if let handler {
+            timer.setEventHandler(qos: qualityOfService, handler: handler)
             timer.resume()
         }
     }
-    
+
     /// Set the handler after schedule creation.
     ///
     /// - Parameter handler: Closure handler.
     public mutating func setHandler(_ handler: @escaping () -> Void) {
         self.handler = handler
-        
-        timer.setEventHandler(qos: qualityOfService) {
-            handler()
-        }
+
+        timer.setEventHandler(qos: qualityOfService, handler: handler)
         timer.resume()
     }
 }

@@ -1,11 +1,11 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.9
 //
 //  Package.swift
 //  Queuer
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2018 Fabrizio Brancati.
+//  Copyright (c) 2017 - 2024 Fabrizio Brancati.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,17 +30,21 @@ import PackageDescription
 let package = Package(
     name: "Queuer",
     platforms: [
-        .iOS(.v8),
-        .macOS(.v10_10),
-        .tvOS(.v9),
-        .watchOS(.v3)
+        .iOS(.v12),
+        .macOS(.v10_13),
+        .macCatalyst(.v13),
+        .tvOS(.v12),
+        .watchOS(.v4),
+        .visionOS(.v1)
     ],
     products: [
         .library(name: "Queuer", targets: ["Queuer"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0")
+    ],
     targets: [
         .target(name: "Queuer"),
         .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )

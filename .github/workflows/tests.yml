@@ -1,0 +1,60 @@
+name: Tests
+
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        swift:
+          - image: "swift:5.10-jammy"
+            os: ubuntu-22.04
+          - image: "swift:5.9-jammy"
+            os: ubuntu-22.04
+          - image: "swift:5.10-focal"
+            os: ubuntu-20.04
+          - image: "swift:5.9-focal"
+            os: ubuntu-20.04
+    name: Linux
+    runs-on: ${{ matrix.swift.os }}
+    container:
+      image: ${{ matrix.swift.image }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Swift Version
+      run: swift --version
+    - name: Debug Build
+      run: swift build -v -c debug
+    - name: Debug Test
+      run: swift test -c debug --parallel
+
+  macos:
+    strategy:
+      matrix:
+        xcode:
+          - 15.3
+          - 15.2
+          - 15.1
+          - 15.0.1
+    name: macOS
+    runs-on: macos-14
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Select Xcode
+      run: xcodes select ${{ matrix.xcode }}
+    - name: Swift Version
+      run: swift --version
+    - name: Debug Build
+      run: swift build -v -c debug
+    - name: Debug Test for Commit
+      if: github.event_name != 'pull_request'
+      run: swift test -c debug --parallel 2>&1
+    - name: Debug Test for Pull Request
+      if: github.event_name == 'pull_request'
+      run: swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
