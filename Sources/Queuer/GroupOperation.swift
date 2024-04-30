@@ -1,5 +1,5 @@
 //
-//  ConcurrentOperation.swift
+//  GroupOperation.swift
 //  Queuer
 //
 //  MIT License

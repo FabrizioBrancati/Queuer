@@ -82,8 +82,8 @@ open class ConcurrentOperation: Operation {
     /// Specify if the `Operation` should retry another time.
     internal var shouldRetry = true
     
-    /// Manually control the `finish()` call of the `Operation`.
-    /// If set to `true` it is the developer's responsibility to call the `finish()` method,
+    /// Manually control the `finish(success:)` call of the `Operation`.
+    /// If set to `true` it is the developer's responsibility to call the `finish(success:)` method,
     /// either by passing `false` or `true` to the function.
     open var manualFinish = false
 

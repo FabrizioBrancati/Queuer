@@ -223,7 +223,7 @@ It allows synchronous and asynchronous tasks, has a pause and resume states, can
 
 You can create your custom `ConcurrentOperation` by subclassing it.
 
-You must override `execute()` function and call the `finish()` function inside it, when the task has finished its job to notify the queue.
+You must override `execute()` function and call the `finish(success:)` function inside it, when the task has finished its job to notify the queue.
 
 For convenience it has an `init` function with a completion block:
 
@@ -287,7 +287,7 @@ By default the `Operation` will finish its job when the execution closure is com
 
 This means, if you have an asynchronous task insiede the closure, the `Operation` will finish before the task is completed.
 
-If you want to finish it manually, you can set the `manualFinish` property to `true` and call the `finish()` function when the task is completed.
+If you want to finish it manually, you can set the `manualFinish` property to `true` and call the `finish(success:)` function when the task is completed.
 
 Call the `finish(success:)` function with `success` parameter to `true` or `false` to let the `Operation` know if the task was successful or not. If you don't explicitly set the `success` parameter, it will be set to `true`.
 
@@ -302,7 +302,7 @@ concurrentOperation.finish(success: true)
 ```
 
 > [!CAUTION]
-> If you don't call the `finish()` function, your queue will be blocked and it will never ends.
+> If you don't call the `finish(success:)` function, your queue will be blocked and it will never ends.
 
 ### Scheduler
 
