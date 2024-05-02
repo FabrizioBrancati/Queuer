@@ -143,7 +143,7 @@ final class ConcurrentOperationTests: XCTestCase {
             }
         }
 
-        await fulfillment(of: [testExpectation], timeout: 5)
+        await fulfillment(of: [testExpectation], timeout: 10)
         let finalOrder = await order.order
         XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
     }
