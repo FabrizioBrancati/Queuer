@@ -27,6 +27,14 @@
 import Queuer
 import XCTest
 
+actor Order {
+    var order: [Int] = []
+
+    func append(_ element: Int) {
+        order.append(element)
+    }
+}
+
 final class ConcurrentOperationTests: XCTestCase {
     func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
@@ -106,6 +114,38 @@ final class ConcurrentOperationTests: XCTestCase {
             XCTAssertNil(error)
             XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
         }
+    }
+
+    func testAsyncChainedRetry() async {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+        let testExpectation = expectation(description: "Chained Retry")
+        let order = Order()
+
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            Task {
+                try? await Task.sleep(for: .seconds(1))
+                await order.append(0)
+                operation.finish(success: false)
+            }
+        }
+        concurrentOperation1.manualFinish = true
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            Task {
+                await order.append(1)
+                operation.finish(success: false)
+            }
+        }
+        concurrentOperation2.manualFinish = true
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            Task {
+                await order.append(2)
+                testExpectation.fulfill()
+            }
+        }
+
+        await fulfillment(of: [testExpectation], timeout: 5)
+        let finalOrder = await order.order
+        XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
     }
 
     func testCanceledChainedRetry() {
