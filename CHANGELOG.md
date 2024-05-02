@@ -21,6 +21,16 @@
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
+## Develop
+
+### Fixed
+
+- Fixed a bug that would run the `executionBlock` indefinitely when using async/await APIs - [#32](https://github.com/FabrizioBrancati/Queuer/pull/32)
+
+### Improved
+
+- Improved documentation
+
 ## [3.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.0) - The Phoenix
 
 ### 24 Apr 2024
