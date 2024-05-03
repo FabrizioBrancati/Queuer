@@ -4,7 +4,7 @@ _Provide a description of what your PR addresses, explaining the expected user e
 
 ## Support
 
-_Describe the platforms that your PR supports. If your PR does not support a platform, provide a reason.
+_Describe the platforms that your PR supports. If your PR does not support a platform, provide a reason._
 
 - [ ] iOS
 - [ ] macOS
@@ -16,7 +16,7 @@ _Describe the platforms that your PR supports. If your PR does not support a pla
 
 ## Checklist
 
-Make sure you check off the following items. If they cannot be completed, provide a reason.
+_Make sure you check off the following items. If they cannot be completed, provide a reason._
 
 - [ ] Added tests
 - [ ] Added documentation
