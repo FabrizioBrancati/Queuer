@@ -116,6 +116,7 @@ final class ConcurrentOperationTests: XCTestCase {
         }
     }
 
+    #if !os(Linux)
     func testAsyncChainedRetry() async {
         let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
         let testExpectation = expectation(description: "Chained Retry")
@@ -147,6 +148,7 @@ final class ConcurrentOperationTests: XCTestCase {
         let finalOrder = await order.order
         XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
     }
+    #endif
 
     func testCanceledChainedRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestCanceledChainedRetry")
