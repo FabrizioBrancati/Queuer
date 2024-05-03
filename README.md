@@ -70,6 +70,7 @@ Add the dependency to any targets you've declared in your manifest:
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Manually Finish an Operation](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation)
+- [Async Task in an Operation](https://github.com/FabrizioBrancati/Queuer#async-tasks-in-an-operation)
 - [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
 - [Semaphore](https://github.com/FabrizioBrancati/Queuer#semaphore)
 
@@ -303,6 +304,27 @@ concurrentOperation.finish(success: true)
 
 > [!CAUTION]
 > If you don't call the `finish(success:)` function, your queue will be blocked and it will never ends.
+
+### Async Task in an Operation
+
+If you want to use async/await tasks, you need to set `manualFinish` to `true` in order to be fully in control of the `Operation` lifecycle.
+
+> [!NOTE]
+> Read more about manually finish an `Operation` [here](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation).
+
+```swift
+let concurrentOperation = ConcurrentOperation { operation in
+    Task {
+        /// Your asynchonous task here
+        operation.finish(success: true) // or false
+    }
+    /// Your asynchonous task here
+}
+concurrentOperation.manualFinish = true
+```
+
+> [!CAUTION]
+> If you don't set `manualFinish` to `true`, your `Operation` will finish before the async task is completed.
 
 ### Scheduler
 

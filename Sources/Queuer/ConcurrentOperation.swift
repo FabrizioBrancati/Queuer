@@ -87,6 +87,10 @@ open class ConcurrentOperation: Operation {
     /// either by passing `false` or `true` to the function.
     open var manualFinish = false
 
+    /// Keep track of the last executed attempt.
+    /// This avoids running the `executionBlock` more than once per retry.
+    private var lastExecutedAttempt = 0
+
     /// Creates the `Operation` with an execution block.
     ///
     /// - Parameters:
@@ -122,7 +126,10 @@ open class ConcurrentOperation: Operation {
     open func execute() {
         if let executionBlock {
             while shouldRetry, !manualRetry {
-                executionBlock(self)
+                if lastExecutedAttempt != currentAttempt {
+                    executionBlock(self)
+                    lastExecutedAttempt = currentAttempt
+                }
 
                 if !manualFinish {
                     finish(success: success)
