@@ -7,7 +7,7 @@
 
 ## 3.x Releases
 
-- `3.0.x` Releases - [3.0.0](#300---the-phoenix)
+- `3.0.x` Releases - [3.0.0](#300---the-phoenix) | [3.0.1](#301---no-loop-no-party)
 
 ## 2.x Releases
 
@@ -21,7 +21,9 @@
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
-## Develop
+## [3.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.0) - No Loop No Party
+
+### 4 May 2024
 
 ### Fixed
 
