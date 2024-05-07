@@ -108,39 +108,39 @@ final class ConcurrentOperationTests: XCTestCase {
         }
     }
 
-    #if !os(Linux)
     func testAsyncChainedRetry() async {
-        let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
-        let testExpectation = expectation(description: "Chained Retry")
-        let order = Order()
+        if CIHelper.isRunningOnCI() {
+            let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+            let testExpectation = expectation(description: "Chained Retry")
+            let order = OrderHelper()
 
-        let concurrentOperation1 = ConcurrentOperation { operation in
-            Task {
-                try? await Task.sleep(for: .seconds(1))
-                await order.append(0)
-                operation.finish(success: false)
+            let concurrentOperation1 = ConcurrentOperation { operation in
+                Task {
+                    try? await Task.sleep(for: .seconds(1))
+                    await order.append(0)
+                    operation.finish(success: false)
+                }
             }
-        }
-        concurrentOperation1.manualFinish = true
-        let concurrentOperation2 = ConcurrentOperation { operation in
-            Task {
-                await order.append(1)
-                operation.finish(success: false)
+            concurrentOperation1.manualFinish = true
+            let concurrentOperation2 = ConcurrentOperation { operation in
+                Task {
+                    await order.append(1)
+                    operation.finish(success: false)
+                }
             }
-        }
-        concurrentOperation2.manualFinish = true
-        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
-            Task {
-                await order.append(2)
-                testExpectation.fulfill()
+            concurrentOperation2.manualFinish = true
+            queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+                Task {
+                    await order.append(2)
+                    testExpectation.fulfill()
+                }
             }
-        }
 
-        await fulfillment(of: [testExpectation], timeout: 10)
-        let finalOrder = await order.order
-        XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
+            await fulfillment(of: [testExpectation], timeout: 10)
+            let finalOrder = await order.order
+            XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
+        }
     }
-    #endif
 
     func testCanceledChainedRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestCanceledChainedRetry")

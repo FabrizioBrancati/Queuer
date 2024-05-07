@@ -29,43 +29,45 @@ import Queuer
 import XCTest
 
 final class QueuerTests: XCTestCase {
-    #if !os(Linux)
     func testOperationCount() {
-        let queue = Queuer(name: "QueuerTestOperationCount")
-        let testExpectation = expectation(description: "Operation Count")
+        if CIHelper.isRunningOnCI() {
+            let queue = Queuer(name: "QueuerTestOperationCount")
+            let testExpectation = expectation(description: "Operation Count")
 
-        XCTAssertEqual(queue.operationCount, 0)
-
-        let concurrentOperation = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 2)
-            testExpectation.fulfill()
-        }
-        concurrentOperation.addToQueue(queue)
-        XCTAssertEqual(queue.operationCount, 1)
-
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
             XCTAssertEqual(queue.operationCount, 0)
+
+            let concurrentOperation = ConcurrentOperation { _ in
+                Thread.sleep(forTimeInterval: 2)
+                testExpectation.fulfill()
+            }
+            concurrentOperation.addToQueue(queue)
+            XCTAssertEqual(queue.operationCount, 1)
+
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+                XCTAssertEqual(queue.operationCount, 0)
+            }
         }
     }
 
     func testOperations() {
-        let queue = Queuer(name: "QueuerTestOperations")
-        let testExpectation = expectation(description: "Operations")
+        if CIHelper.isRunningOnCI() {
+            let queue = Queuer(name: "QueuerTestOperations")
+            let testExpectation = expectation(description: "Operations")
 
-        let concurrentOperation = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 2)
-            testExpectation.fulfill()
-        }
-        queue.addOperation(concurrentOperation)
-        XCTAssertTrue(queue.operations.contains(concurrentOperation))
+            let concurrentOperation = ConcurrentOperation { _ in
+                Thread.sleep(forTimeInterval: 2)
+                testExpectation.fulfill()
+            }
+            queue.addOperation(concurrentOperation)
+            XCTAssertTrue(queue.operations.contains(concurrentOperation))
 
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
-            XCTAssertFalse(queue.operations.contains(concurrentOperation))
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+                XCTAssertFalse(queue.operations.contains(concurrentOperation))
+            }
         }
     }
-    #endif
 
     func testMaxConcurrentOperationCount() {
         let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
@@ -75,31 +77,31 @@ final class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.maxConcurrentOperationCount, 10)
     }
 
-    #if !os(Linux)
     func testMaxConcurrentOperationCountSetToOne() {
-        let testExpectation = expectation(description: "Max Concurrent Operation Count Set To One")
-        var testString = ""
+        if CIHelper.isRunningOnCI() {
+            let testExpectation = expectation(description: "Max Concurrent Operation Count Set To One")
+            var testString = ""
 
-        let concurrentOperation1 = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 3.5)
-            testString = "Tested1"
+            let concurrentOperation1 = ConcurrentOperation { _ in
+                Thread.sleep(forTimeInterval: 3.5)
+                testString = "Tested1"
 
-            testExpectation.fulfill()
-        }
-        let concurrentOperation2 = ConcurrentOperation { _ in
-            testString = "Tested2"
-        }
-        Queuer.shared.maxConcurrentOperationCount = 1
-        Queuer.shared.addOperation(concurrentOperation1)
-        Queuer.shared.addOperation(concurrentOperation2)
+                testExpectation.fulfill()
+            }
+            let concurrentOperation2 = ConcurrentOperation { _ in
+                testString = "Tested2"
+            }
+            Queuer.shared.maxConcurrentOperationCount = 1
+            Queuer.shared.addOperation(concurrentOperation1)
+            Queuer.shared.addOperation(concurrentOperation2)
 
 
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(testString, "Tested2")
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+                XCTAssertEqual(testString, "Tested2")
+            }
         }
     }
-    #endif
 
     func testMaxConcurrentOperationCountSetToTwo() {
         let testExpectation = expectation(description: "Max Concurrent Operation Count Set To Two")
@@ -351,38 +353,38 @@ final class QueuerTests: XCTestCase {
         }
     }
 
-    #if !os(Linux)
     func testWaitUnitlAllOperationsAreFinished() {
-        let queue = Queuer(name: "QueuerTestWaitUnitlAllOperationsAreFinished")
-        let testExpectation = expectation(description: "Wait Unitl All Operations Are Finished")
-        var order: [Int] = []
+        if CIHelper.isRunningOnCI() {
+            let queue = Queuer(name: "QueuerTestWaitUnitlAllOperationsAreFinished")
+            let testExpectation = expectation(description: "Wait Unitl All Operations Are Finished")
+            var order: [Int] = []
 
-        let concurrentOperation1 = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 2)
-            order.append(0)
-        }
-        let concurrentOperation2 = ConcurrentOperation { _ in
-            order.append(1)
-        }
-        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
-            order.append(2)
-        }
+            let concurrentOperation1 = ConcurrentOperation { _ in
+                Thread.sleep(forTimeInterval: 2)
+                order.append(0)
+            }
+            let concurrentOperation2 = ConcurrentOperation { _ in
+                order.append(1)
+            }
+            queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+                order.append(2)
+            }
 
-        queue.waitUntilAllOperationsAreFinished()
+            queue.waitUntilAllOperationsAreFinished()
 
-        XCTAssertEqual(order, [0, 1, 2])
-        XCTAssertLessThanOrEqual(queue.operationCount, 3)
-        testExpectation.fulfill()
-
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
-            XCTAssertTrue(queue.isExecuting)
-            XCTAssertLessThanOrEqual(queue.operationCount, 3)
             XCTAssertEqual(order, [0, 1, 2])
+            XCTAssertLessThanOrEqual(queue.operationCount, 3)
+            testExpectation.fulfill()
 
-            queue.resume()
-            XCTAssertTrue(queue.isExecuting)
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+                XCTAssertTrue(queue.isExecuting)
+                XCTAssertLessThanOrEqual(queue.operationCount, 3)
+                XCTAssertEqual(order, [0, 1, 2])
+
+                queue.resume()
+                XCTAssertTrue(queue.isExecuting)
+            }
         }
     }
-    #endif
 }

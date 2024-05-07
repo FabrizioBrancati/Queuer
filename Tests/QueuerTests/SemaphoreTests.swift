@@ -28,47 +28,49 @@ import Queuer
 import XCTest
 
 final class SemaphoreTests: XCTestCase {
-    #if !os(Linux)
     func testWithSemaphore() {
-        let semaphore = Semaphore()
-        let queue = Queuer(name: "SemaphoreTestWithSemaphore")
-        let testExpectation = expectation(description: "With Semaphore")
-        var testString = ""
+        if CIHelper.isRunningOnCI() {
+            let semaphore = Semaphore()
+            let queue = Queuer(name: "SemaphoreTestWithSemaphore")
+            let testExpectation = expectation(description: "With Semaphore")
+            var testString = ""
 
-        let concurrentOperation = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 2)
-            testString = "Tested"
-            semaphore.continue()
-        }
-        concurrentOperation.addToQueue(queue)
+            let concurrentOperation = ConcurrentOperation { _ in
+                Thread.sleep(forTimeInterval: 2)
+                testString = "Tested"
+                semaphore.continue()
+            }
+            concurrentOperation.addToQueue(queue)
 
-        semaphore.wait()
-        XCTAssertEqual(testString, "Tested")
-        testExpectation.fulfill()
+            semaphore.wait()
+            XCTAssertEqual(testString, "Tested")
+            testExpectation.fulfill()
 
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+            }
         }
     }
 
     func testWithoutSemaphore() {
-        let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
-        let testExpectation = expectation(description: "Without Semaphore")
-        var testString = ""
+        if CIHelper.isRunningOnCI() {
+            let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
+            let testExpectation = expectation(description: "Without Semaphore")
+            var testString = ""
 
-        let concurrentOperation = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 2)
-            testString = "Tested"
-            testExpectation.fulfill()
-        }
-        concurrentOperation.addToQueue(queue)
+            let concurrentOperation = ConcurrentOperation { _ in
+                Thread.sleep(forTimeInterval: 2)
+                testString = "Tested"
+                testExpectation.fulfill()
+            }
+            concurrentOperation.addToQueue(queue)
 
-        XCTAssertEqual(testString, "")
+            XCTAssertEqual(testString, "")
 
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(testString, "Tested")
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+                XCTAssertEqual(testString, "Tested")
+            }
         }
     }
-    #endif
 }

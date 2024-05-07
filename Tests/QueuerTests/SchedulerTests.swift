@@ -29,64 +29,68 @@ import Queuer
 import XCTest
 
 final class SchedulerTests: XCTestCase {
-    #if !os(Linux)
     func testInitWithoutHandler() {
-        let testExpectation = expectation(description: "Init Without Handler")
-        var order: [Int] = []
+        if CIHelper.isRunningOnCI() {
+            let testExpectation = expectation(description: "Init Without Handler")
+            var order: [Int] = []
 
-        var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
-        schedule.setHandler {
-            order.append(0)
-        }
+            var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
+            schedule.setHandler {
+                order.append(0)
+            }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
-            testExpectation.fulfill()
-        }
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
+                testExpectation.fulfill()
+            }
 
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(order, [0, 0, 0, 0])
-            schedule.timer.cancel()
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+                XCTAssertEqual(order, [0, 0, 0, 0])
+                schedule.timer.cancel()
+            }
         }
     }
 
     func testInitWithHandler() {
-        let testExpectation = expectation(description: "Init With Handler")
-        var order: [Int] = []
-
-        let schedule = Scheduler(deadline: .now(), repeating: .never) {
-            order.append(0)
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
-            testExpectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(order, [0])
-            schedule.timer.cancel()
+        if CIHelper.isRunningOnCI() {
+            let testExpectation = expectation(description: "Init With Handler")
+            var order: [Int] = []
+            
+            let schedule = Scheduler(deadline: .now(), repeating: .never) {
+                order.append(0)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
+                testExpectation.fulfill()
+            }
+            
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+                XCTAssertEqual(order, [0])
+                schedule.timer.cancel()
+            }
         }
     }
 
     func testCancel() {
-        let testExpectation = expectation(description: "Init Without Handler")
-        var order: [Int] = []
+        if CIHelper.isRunningOnCI() {
+            let testExpectation = expectation(description: "Init Without Handler")
+            var order: [Int] = []
 
-        var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
-        schedule.setHandler {
-            order.append(0)
-            schedule.timer.cancel()
-        }
+            var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
+            schedule.setHandler {
+                order.append(0)
+                schedule.timer.cancel()
+            }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
-            testExpectation.fulfill()
-        }
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
+                testExpectation.fulfill()
+            }
 
-        waitForExpectations(timeout: 5) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(order, [0])
+            waitForExpectations(timeout: 5) { error in
+                XCTAssertNil(error)
+                XCTAssertEqual(order, [0])
+            }
         }
     }
-    #endif
 }
