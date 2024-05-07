@@ -170,3 +170,34 @@ jobs:
       if: github.event_name == 'pull_request'
       run: xcodebuild -scheme Queuer -destination "platform=watchOS Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify --renderer github-actions
 
+  tvos:
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode:
+          - version: 15.3
+            simulator: "Apple TV 4K (3rd generation),OS=17.4"
+          - version: 15.2
+            simulator: "Apple TV 4K (3rd generation),OS=17.2"
+          - version: 15.1
+            simulator: "Apple TV 4K (3rd generation),OS=17.2"
+          - version: 15.0.1
+            simulator: "Apple TV 4K (3rd generation),OS=17.0"
+    name: tvOS
+    runs-on: macos-14
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Select Xcode
+      run: xcodes select ${{ matrix.xcode.version }}
+    - name: Swift Version
+      run: swift --version
+    - name: Debug Build
+      run: xcodebuild -scheme Queuer -destination "platform=tvOS Simulator,name=${{ matrix.xcode.simulator }}" | xcbeautify --renderer github-actions
+    - name: Debug Test for Commit
+      if: github.event_name == 'push'
+      run: xcodebuild -scheme Queuer -destination "platform=tvOS Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify
+    - name: Debug Test for Pull Request
+      if: github.event_name == 'pull_request'
+      run: xcodebuild -scheme Queuer -destination "platform=tvOS Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify --renderer github-actions
+
