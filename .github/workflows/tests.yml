@@ -57,7 +57,7 @@ jobs:
     - name: Debug Build
       run: swift build -v -c debug
     - name: Debug Test for Commit
-      if: github.event_name != 'pull_request'
+      if: github.event_name == 'push'
       run: swift test -c debug --parallel 2>&1
     - name: Debug Test for Pull Request
       if: github.event_name == 'pull_request'
