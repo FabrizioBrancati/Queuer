@@ -73,6 +73,41 @@ jobs:
         swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
         xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test | xcbeautify --renderer github-actions
 
+  maccatalyst:
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode:
+          - version: 15.3
+            arch: "arm64e"
+            variant: Mac Catalyst"
+          - version: 15.2
+            arch: "arm64e"
+            variant: Mac Catalyst"
+          - version: 15.1
+            arch: "arm64e"
+            variant: Mac Catalyst"
+          - version: 15.0.1
+            arch: "arm64e"
+            variant: Mac Catalyst"
+    name: Mac Catalyst
+    runs-on: macos-14
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Select Xcode
+      run: xcodes select ${{ matrix.xcode.version }}
+    - name: Swift Version
+      run: swift --version
+    - name: Debug Build
+      run: xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" | xcbeautify
+    - name: Debug Test for Commit
+      if: github.event_name == 'push'
+      run: xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify
+    - name: Debug Test for Pull Request
+      if: github.event_name == 'pull_request'
+      run: xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify --renderer github-actions
+
   ios:
     strategy:
       fail-fast: false
