@@ -39,6 +39,7 @@ jobs:
   apple:
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         xcode:
           - version: 15.3
