@@ -30,7 +30,7 @@ import XCTest
 
 final class QueuerTests: XCTestCase {
     func testOperationCount() {
-        if CIHelper.isRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() {
             let queue = Queuer(name: "QueuerTestOperationCount")
             let testExpectation = expectation(description: "Operation Count")
 
@@ -51,7 +51,7 @@ final class QueuerTests: XCTestCase {
     }
 
     func testOperations() {
-        if CIHelper.isRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() {
             let queue = Queuer(name: "QueuerTestOperations")
             let testExpectation = expectation(description: "Operations")
 
@@ -78,7 +78,7 @@ final class QueuerTests: XCTestCase {
     }
 
     func testMaxConcurrentOperationCountSetToOne() {
-        if CIHelper.isRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() {
             let testExpectation = expectation(description: "Max Concurrent Operation Count Set To One")
             var testString = ""
 
@@ -354,7 +354,7 @@ final class QueuerTests: XCTestCase {
     }
 
     func testWaitUnitlAllOperationsAreFinished() {
-        if CIHelper.isRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() {
             let queue = Queuer(name: "QueuerTestWaitUnitlAllOperationsAreFinished")
             let testExpectation = expectation(description: "Wait Unitl All Operations Are Finished")
             var order: [Int] = []

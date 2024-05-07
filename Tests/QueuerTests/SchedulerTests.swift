@@ -30,7 +30,7 @@ import XCTest
 
 final class SchedulerTests: XCTestCase {
     func testInitWithoutHandler() {
-        if CIHelper.isRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() {
             let testExpectation = expectation(description: "Init Without Handler")
             var order: [Int] = []
 
@@ -52,7 +52,7 @@ final class SchedulerTests: XCTestCase {
     }
 
     func testInitWithHandler() {
-        if CIHelper.isRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() {
             let testExpectation = expectation(description: "Init With Handler")
             var order: [Int] = []
             
@@ -73,7 +73,7 @@ final class SchedulerTests: XCTestCase {
     }
 
     func testCancel() {
-        if CIHelper.isRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() {
             let testExpectation = expectation(description: "Init Without Handler")
             var order: [Int] = []
 
