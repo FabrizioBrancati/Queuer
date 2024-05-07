@@ -34,7 +34,7 @@ Here is the list of all the features:
 | 4.1        | 1.3.1...1.3.2 | 8.0+    | 10.10+     |                 | 9.0+      | 2.0+        |              | ✅        |
 | 4.2        | 2.0.0...2.0.1 | 8.0+    | 10.10+     |                 | 9.0+      | 3.0+        |              | ✅        |
 | 5.0...5.10 | 2.1.0...2.2.0 | 8.0+    | 10.10+     |                 | 9.0+      | 3.0+        |              | ✅        |
-| 5.9...5.10 | 3.0.0         | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        |
+| 5.9...5.10 | 3.0.0...3.0.1 | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        |
 
 ## Installing
 
@@ -66,7 +66,7 @@ Add the dependency to any targets you've declared in your manifest:
 - [Group Oprations](https://github.com/FabrizioBrancati/Queuer#group-operations)
 - [Queue States](https://github.com/FabrizioBrancati/Queuer#queue-states)
 - [Synchronous Queue](https://github.com/FabrizioBrancati/Queuer#synchronous-queue)
-- [Asynchronous Operation](https://github.com/FabrizioBrancati/Queuer#asynchronous-operation)
+- [Create a Custom Operation](https://github.com/FabrizioBrancati/Queuer#create-a-custom-operation)
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Manually Finish an Operation](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation)
@@ -217,23 +217,14 @@ There are a few method to handle the queue states.
 
 Setting the `maxConcurrentOperationCount` property of a queue to `1` will make you sure that only one task at a time will be executed.
 
-### Asynchronous Operation
+### Create a Custom Operation
 
-`ConcurrentOperation` is a class created to be subclassed.
+If you want to create your custom `Operation`, the class `ConcurrentOperation` is a class ready to be subclassed.
 It allows synchronous and asynchronous tasks, has a pause and resume states, can be easily added to a queue and can be created with a block.
 
 You can create your custom `ConcurrentOperation` by subclassing it.
 
-You must override `execute()` function and call the `finish(success:)` function inside it, when the task has finished its job to notify the queue.
-
-For convenience it has an `init` function with a completion block:
-
-```swift
-let concurrentOperation = ConcurrentOperation { _ in
-    /// Your task here
-}
-concurrentOperation.addToQueue(queue)
-```
+You must override `execute()` function and call the `finish(success:)` function, when the task has finished its job to notify the queue, regardless if it was successful or not.
 
 ### Automatically Retry an Operation
 
