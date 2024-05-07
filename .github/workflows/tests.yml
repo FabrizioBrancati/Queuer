@@ -1,9 +1,12 @@
 name: Tests
 
 on:
-  - push
-  - pull_request
-  - workflow_dispatch
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   linux:
