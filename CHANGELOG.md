@@ -21,7 +21,13 @@
 - `1.1.x` Releases - [1.1.0](#110---quality-of-service)
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
-## [3.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.0) - No Loop No Party
+## Develop
+
+### Added
+
+- Added CIHelper to run test on Linux but not on CI - [#33](https://github.com/FabrizioBrancati/Queuer/pull/33)
+
+## [3.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.1) - No Loop No Party
 
 ### 4 May 2024
 
