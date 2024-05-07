@@ -92,32 +92,32 @@ jobs:
       if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
         swift build -v -c debug
-        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" | xcbeautify
+        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}"
     - name: macOS Debug Test for Commit
       if: github.event_name == 'push' && matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
-        swift test -c debug --parallel 2>&1
-        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test | xcbeautify
+        swift test -c debug --parallel
+        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test
     - name: macOSDebug Test for Pull Request
       if: github.event_name == 'pull_request' && matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
-        swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
-        xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test | xcbeautify --renderer github-actions
+        swift test -c debug --parallel
+        xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test
     - name: Mac Catalyst Debug Build
       if: matrix.xcode.variant == 'Mac Catalyst'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" | xcbeautify
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}"
     - name: Mac Catalyst Debug Test for Commit
       if: github.event_name == 'push' && matrix.xcode.variant == 'Mac Catalyst'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
     - name: Mac Catalyst Debug Test for Pull Request
       if: github.event_name == 'pull_request' && matrix.xcode.variant == 'Mac Catalyst'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify --renderer github-actions
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
     - name: Others Debug Build
       if: matrix.xcode.platform != 'macOS'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" | xcbeautify --renderer github-actions
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}"
     - name: Others Debug Test for Commit
       if: github.event_name == 'push' && matrix.xcode.platform != 'macOS'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test
     - name: Others Debug Test for Pull Request
       if: github.event_name == 'pull_request' && matrix.xcode.platform != 'macOS'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify --renderer github-actions
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test
