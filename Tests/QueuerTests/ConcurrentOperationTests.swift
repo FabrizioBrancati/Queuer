@@ -27,14 +27,6 @@
 import Queuer
 import XCTest
 
-actor Order {
-    var order: [Int] = []
-
-    func append(_ element: Int) {
-        order.append(element)
-    }
-}
-
 final class ConcurrentOperationTests: XCTestCase {
     func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
