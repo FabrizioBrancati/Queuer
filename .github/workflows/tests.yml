@@ -80,16 +80,16 @@ jobs:
         xcode:
           - version: 15.3
             arch: "arm64e"
-            variant: Mac Catalyst"
+            variant: Mac Catalyst
           - version: 15.2
             arch: "arm64e"
-            variant: Mac Catalyst"
+            variant: Mac Catalyst
           - version: 15.1
             arch: "arm64e"
-            variant: Mac Catalyst"
+            variant: Mac Catalyst
           - version: 15.0.1
             arch: "arm64e"
-            variant: Mac Catalyst"
+            variant: Mac Catalyst
     name: Mac Catalyst
     runs-on: macos-14
     steps:
