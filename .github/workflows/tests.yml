@@ -43,17 +43,17 @@ jobs:
         xcode:
           - version: 15.3
             platform: "macOS"
-            arch: "arm64e"
+            arch: "arm64"
           - version: 15.2
             platform: "macOS"
-            arch: "arm64e"
+            arch: "arm64"
           - version: 15.3
             platform: "macOS"
-            arch: "arm64e"
+            arch: "arm64"
             variant: Mac Catalyst
           - version: 15.2
             platform: "macOS"
-            arch: "arm64e"
+            arch: "arm64"
             variant: Mac Catalyst
           - version: 15.3
             platform: "iOS"
