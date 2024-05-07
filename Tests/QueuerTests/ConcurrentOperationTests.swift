@@ -117,6 +117,7 @@ final class ConcurrentOperationTests: XCTestCase {
     }
 
     #if !os(Linux)
+    @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
     func testAsyncChainedRetry() async {
         let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
         let testExpectation = expectation(description: "Chained Retry")
