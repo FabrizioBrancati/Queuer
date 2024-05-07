@@ -83,7 +83,7 @@ final class QueuerTests: XCTestCase {
             var testString = ""
 
             let concurrentOperation1 = ConcurrentOperation { _ in
-                Thread.sleep(forTimeInterval: 3.5)
+                Thread.sleep(forTimeInterval: 2)
                 testString = "Tested1"
 
                 testExpectation.fulfill()
@@ -108,7 +108,7 @@ final class QueuerTests: XCTestCase {
         var testString = ""
 
         let concurrentOperation1 = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 3)
+            Thread.sleep(forTimeInterval: 2)
             testString = "Tested1"
 
             testExpectation.fulfill()
