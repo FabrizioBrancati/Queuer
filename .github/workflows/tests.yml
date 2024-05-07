@@ -89,35 +89,35 @@ jobs:
     - name: Swift Version
       run: swift --version
     - name: macOS Debug Build
-      if: ${{ matrix.xcode.platform }} == "macOS" && ${{ matrix.xcode.variant }} != "Mac Catalyst"
+      if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
         swift build -v -c debug
         xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" | xcbeautify
     - name: macOS Debug Test for Commit
-      if: github.event_name == 'push' && ${{ matrix.xcode.platform }} == "macOS" && ${{ matrix.xcode.variant }} != "Mac Catalyst"
+      if: github.event_name == 'push' && matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
         swift test -c debug --parallel 2>&1
         xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test | xcbeautify
     - name: macOSDebug Test for Pull Request
-      if: github.event_name == 'pull_request' && ${{ matrix.xcode.platform }} == "macOS" && ${{ matrix.xcode.variant }} != "Mac Catalyst"
+      if: github.event_name == 'pull_request' && matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
         swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
         xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test | xcbeautify --renderer github-actions
     - name: Mac Catalyst Debug Build
-      if: ${{ matrix.xcode.variant }} == "Mac Catalyst"
+      if: matrix.xcode.variant == 'Mac Catalyst'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" | xcbeautify
     - name: Mac Catalyst Debug Test for Commit
-      if: github.event_name == 'push' && ${{ matrix.xcode.variant }} == "Mac Catalyst"
+      if: github.event_name == 'push' && matrix.xcode.variant == 'Mac Catalyst'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify
     - name: Mac Catalyst Debug Test for Pull Request
-      if: github.event_name == 'pull_request' && ${{ matrix.xcode.variant }} == "Mac Catalyst"
+      if: github.event_name == 'pull_request' && matrix.xcode.variant == 'Mac Catalyst'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify --renderer github-actions
     - name: Others Debug Build
-      if: ${{ matrix.xcode.platform }} != "macOS"
+      if: matrix.xcode.platform != 'macOS'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" | xcbeautify --renderer github-actions
     - name: Others Debug Test for Commit
-      if: github.event_name == 'push' && ${{ matrix.xcode.platform }} != "macOS"
+      if: github.event_name == 'push' && matrix.xcode.platform != 'macOS'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify
     - name: Others Debug Test for Pull Request
-      if: github.event_name == 'pull_request' && ${{ matrix.xcode.platform }} != "macOS"
+      if: github.event_name == 'pull_request' && matrix.xcode.platform != 'macOS'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify --renderer github-actions
