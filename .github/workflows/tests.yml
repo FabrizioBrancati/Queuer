@@ -36,83 +36,25 @@ jobs:
     - name: Debug Test
       run: swift test -c debug --parallel
 
-  macos:
+  apple:
     strategy:
       fail-fast: false
       matrix:
         xcode:
           - version: 15.3
+            platform: "macOS"
             arch: "arm64e"
           - version: 15.2
+            platform: "macOS"
             arch: "arm64e"
-          - version: 15.1
-            arch: "arm64e"
-          - version: 15.0.1
-            arch: "arm64e"
-    name: macOS
-    runs-on: macos-14
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Select Xcode
-      run: xcodes select ${{ matrix.xcode.version }}
-    - name: Swift Version
-      run: swift --version
-    - name: Debug Build
-      run: |
-        swift build -v -c debug
-        xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" | xcbeautify
-    - name: Debug Test for Commit
-      if: github.event_name == 'push'
-      run: |
-        swift test -c debug --parallel 2>&1
-        xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test | xcbeautify
-    - name: Debug Test for Pull Request
-      if: github.event_name == 'pull_request'
-      run: |
-        swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
-        xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test | xcbeautify --renderer github-actions
-
-  maccatalyst:
-    strategy:
-      fail-fast: false
-      matrix:
-        xcode:
           - version: 15.3
+            platform: "macOS"
             arch: "arm64e"
             variant: Mac Catalyst
           - version: 15.2
+            platform: "macOS"
             arch: "arm64e"
             variant: Mac Catalyst
-          - version: 15.1
-            arch: "arm64e"
-            variant: Mac Catalyst
-          - version: 15.0.1
-            arch: "arm64e"
-            variant: Mac Catalyst
-    name: Mac Catalyst
-    runs-on: macos-14
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Select Xcode
-      run: xcodes select ${{ matrix.xcode.version }}
-    - name: Swift Version
-      run: swift --version
-    - name: Debug Build
-      run: xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" | xcbeautify
-    - name: Debug Test for Commit
-      if: github.event_name == 'push'
-      run: xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify
-    - name: Debug Test for Pull Request
-      if: github.event_name == 'pull_request'
-      run: xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify --renderer github-actions
-
-  ios:
-    strategy:
-      fail-fast: false
-      matrix:
-        xcode:
           - version: 15.3
             platform: "iOS"
             simulator: "iPhone 15,OS=17.4"
@@ -137,7 +79,7 @@ jobs:
           - version: 15.2
             platform: "visionOS"
             simulator: "Apple Vision Pro,OS=1.0"
-    name: iOS
+    name: Apple
     runs-on: macos-14
     steps:
     - name: Checkout
@@ -146,11 +88,36 @@ jobs:
       run: xcodes select ${{ matrix.xcode.version }}
     - name: Swift Version
       run: swift --version
-    - name: Debug Build
+    - name: macOS Debug Build
+      if: ${{ matrix.xcode.platform }} == "macOS" && ${{ matrix.xcode.variant }} != "Mac Catalyst"
+      run: |
+        swift build -v -c debug
+        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" | xcbeautify
+    - name: macOS Debug Test for Commit
+      if: github.event_name == 'push' && ${{ matrix.xcode.platform }} == "macOS" && ${{ matrix.xcode.variant }} != "Mac Catalyst"
+      run: |
+        swift test -c debug --parallel 2>&1
+        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test | xcbeautify
+    - name: macOSDebug Test for Pull Request
+      if: github.event_name == 'pull_request' && ${{ matrix.xcode.platform }} == "macOS" && ${{ matrix.xcode.variant }} != "Mac Catalyst"
+      run: |
+        swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
+        xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test | xcbeautify --renderer github-actions
+    - name: Mac Catalyst Debug Build
+      if: ${{ matrix.xcode.variant }} == "Mac Catalyst"
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" | xcbeautify
+    - name: Mac Catalyst Debug Test for Commit
+      if: github.event_name == 'push' && ${{ matrix.xcode.variant }} == "Mac Catalyst"
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify
+    - name: Mac Catalyst Debug Test for Pull Request
+      if: github.event_name == 'pull_request' && ${{ matrix.xcode.variant }} == "Mac Catalyst"
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test | xcbeautify --renderer github-actions
+    - name: Others Debug Build
+      if: ${{ matrix.xcode.platform }} != "macOS"
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" | xcbeautify --renderer github-actions
-    - name: Debug Test for Commit
-      if: github.event_name == 'push'
+    - name: Others Debug Test for Commit
+      if: github.event_name == 'push' && ${{ matrix.xcode.platform }} != "macOS"
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify
-    - name: Debug Test for Pull Request
-      if: github.event_name == 'pull_request'
+    - name: Others Debug Test for Pull Request
+      if: github.event_name == 'pull_request' && ${{ matrix.xcode.platform }} != "macOS"
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test | xcbeautify --renderer github-actions
