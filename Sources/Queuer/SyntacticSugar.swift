@@ -77,6 +77,12 @@ public extension Queuer {
     }
 
     @available(macOS 13.0, iOS 16.0, *)
+    func barrier(_ block: @escaping @Sendable () -> Void) -> Queuer {
+        addBarrier(block)
+        return self
+    }
+
+    @available(macOS 13.0, iOS 16.0, *)
     @discardableResult
     func asyncWait<C>(_ time: C.Instant.Duration, tolerance: C.Instant.Duration? = nil, clock: C = ContinuousClock()) -> Queuer where C: Clock {
         let operation = ConcurrentOperation()

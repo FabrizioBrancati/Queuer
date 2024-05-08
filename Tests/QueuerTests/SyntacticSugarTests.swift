@@ -73,6 +73,9 @@ final class SyntaxSugarTests: XCTestCase {
                 operations.append("Concurrent 2")
             }
 //            .asyncWait(.seconds(1))
+            .barrier {
+//                operations.append("Barrier")
+            }
             .chained(
                 ConcurrentOperation { _ in
                     operations.append("Chain 1")

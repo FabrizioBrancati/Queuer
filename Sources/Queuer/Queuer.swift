@@ -188,4 +188,9 @@ public extension Queuer {
         }
         addOperation(completionOperation)
     }
+
+    @available(macOS 10.15, *)
+    func addBarrier(_ completionHandler: @escaping @Sendable () -> Void) {
+        queue.addBarrierBlock(completionHandler)
+    }
 }
