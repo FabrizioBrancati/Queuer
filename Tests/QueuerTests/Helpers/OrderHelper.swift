@@ -26,10 +26,10 @@
 
 import Foundation
 
-actor OrderHelper {
-    var order: [Int] = []
+actor OrderHelper<Element: Equatable> {
+    var order: [Element] = []
 
-    func append(_ element: Int) {
+    func append(_ element: Element) {
         order.append(element)
     }
 }
