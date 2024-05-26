@@ -70,7 +70,7 @@ Add the dependency to any targets you've declared in your manifest:
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Manually Finish an Operation](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation)
-- [Async Task in an Operation](https://github.com/FabrizioBrancati/Queuer#async-tasks-in-an-operation)
+- [Async Task in an Operation](https://github.com/FabrizioBrancati/Queuer#async-task-in-an-operation)
 - [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
 - [Semaphore](https://github.com/FabrizioBrancati/Queuer#semaphore)
 
