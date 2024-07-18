@@ -27,7 +27,7 @@
 import Foundation
 
 /// It allows the creation of group `Operation`s by using it's `operations` array of `ConcurrentOperation`.
-open class GroupOperation: ConcurrentOperation {
+open class GroupOperation: ConcurrentOperation, @unchecked Sendable {
     /// Private `OperationQueue` instance.
     private let queue = OperationQueue()
 
@@ -50,7 +50,7 @@ open class GroupOperation: ConcurrentOperation {
     /// - Parameters:
     ///     - operations: Array of ConcurrentOperation to be executed.
     ///     - completionHandler: Block that will be executed once all operations are over.
-    public init(_ operations: [ConcurrentOperation], completionHandler: (() -> Void)? = nil) {
+    public init(_ operations: [ConcurrentOperation], completionHandler: (@Sendable () -> Void)? = nil) {
         super.init()
 
         self.operations = operations
