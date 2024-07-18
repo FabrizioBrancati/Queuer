@@ -1,5 +1,5 @@
 //
-//  OrderHelper.swift
+//  Order.swift
 //  Queuer
 //
 //  MIT License
@@ -26,7 +26,7 @@
 
 import Foundation
 
-actor OrderHelper {
+actor Order {
     var order: [Int] = []
 
     func append(_ element: Int) {

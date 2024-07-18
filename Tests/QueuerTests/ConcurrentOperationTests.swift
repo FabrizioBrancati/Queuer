@@ -112,7 +112,7 @@ final class ConcurrentOperationTests: XCTestCase {
         if CIHelper.isNotRunningOnCI() {
             let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
             let testExpectation = expectation(description: "Chained Retry")
-            let order = OrderHelper()
+            let order = Order()
 
             let concurrentOperation1 = ConcurrentOperation { operation in
                 Task {
