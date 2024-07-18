@@ -168,6 +168,33 @@ public extension Queuer {
     ///     [A, B, C] = A -> B -> C -> completionHandler
     ///
     /// - Parameters:
+    ///   - operations: `Operation`s Array.
+    ///   - completionHandler: Completion block to be executed when all `Operation`s
+    ///                        are finished.
+    @available(macOS 10.15, *)
+    func addChainedAsyncOperations(_ operations: [Operation], completionHandler: (@Sendable () async -> Void)? = nil) {
+        for (index, operation) in operations.enumerated() {
+            if index > 0 {
+                operation.addDependency(operations[index - 1])
+            }
+
+            addOperation(operation)
+        }
+
+        guard let completionHandler = completionHandler else {
+            return
+        }
+
+        addAsyncCompletionHandler(completionHandler)
+    }
+
+    /// Add an Array of chained `Operation`s.
+    ///
+    /// Example:
+    ///
+    ///     [A, B, C] = A -> B -> C -> completionHandler
+    ///
+    /// - Parameters:
     ///   - operations: `Operation`s list.
     ///   - completionHandler: Completion block to be exectuted when all `Operation`s
     ///                        are finished.
@@ -180,6 +207,20 @@ public extension Queuer {
     /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
     func addCompletionHandler(_ completionHandler: @Sendable @escaping () -> Void) {
         let completionOperation = BlockOperation(block: completionHandler)
+        if let lastOperation = operations.last {
+            completionOperation.addDependency(lastOperation)
+        }
+        addOperation(completionOperation)
+    }
+
+    /// Add a completion block to the queue.
+    ///
+    /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
+    @available(macOS 10.15, *)
+    func addAsyncCompletionHandler(_ completionHandler: @Sendable @escaping () async -> Void) {
+        let completionOperation = AsyncConcurrentOperation { operation in
+            await completionHandler()
+        }
         if let lastOperation = operations.last {
             completionOperation.addDependency(lastOperation)
         }
