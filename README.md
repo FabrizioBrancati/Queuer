@@ -4,13 +4,11 @@
 [![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FFabrizioBrancati%2FQueuer%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/FabrizioBrancati/Queuer)
 [![Swift Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FFabrizioBrancati%2FQueuer%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/FabrizioBrancati/Queuer)
 
+Queuer is a queue manager built on top of [OperationQueue](https://developer.apple.com/documentation/foundation/operationqueue) and [Dispatch](https://developer.apple.com/documentation/dispatch) (aka GCD). It allows you to create asynchronous and synchronous tasks easily, all managed by a queue, with just a few lines.
+
 ## Features
 
-Queuer is a queue manager, built on top of [OperationQueue](https://developer.apple.com/documentation/foundation/operationqueue) and [Dispatch](https://developer.apple.com/documentation/dispatch) (aka GCD). It allows you to create any asynchronous and synchronous task easily, all managed by a queue, with just a few lines.
-
-Here is the list of all the features:
-
-- [x] Works on all Swift compatible platforms (even Linux)
+- [x] Works on all Swift compatible platforms (Linux included)
 - [x] Easy to use
 - [x] Well documented (100% documented)
 - [x] Well tested (100% of code coverage)
@@ -18,8 +16,8 @@ Here is the list of all the features:
 - [x] Create a single operation
 - [x] Create chained operations
 - [x] Manage a centralized queue
-- [x] Create unlimited queue
-- [x] Declare how many concurrent operation a queue can handle
+- [x] Create unlimited queues
+- [x] Declare how many concurrent operations a queue can handle
 - [x] Create semaphores
 - [x] Create and handle schedules
 - [x] Automatically or manually retry an operation
@@ -63,7 +61,7 @@ Add the dependency to any targets you've declared in your manifest:
 - [Custom Queue](https://github.com/FabrizioBrancati/Queuer#custom-queue)
 - [Create an Operation Block](https://github.com/FabrizioBrancati/Queuer#create-an-operation-block)
 - [Chained Operations](https://github.com/FabrizioBrancati/Queuer#chained-operations)
-- [Group Oprations](https://github.com/FabrizioBrancati/Queuer#group-operations)
+- [Group Operations](https://github.com/FabrizioBrancati/Queuer#group-operations)
 - [Queue States](https://github.com/FabrizioBrancati/Queuer#queue-states)
 - [Synchronous Queue](https://github.com/FabrizioBrancati/Queuer#synchronous-queue)
 - [Create a Custom Operation](https://github.com/FabrizioBrancati/Queuer#create-a-custom-operation)
