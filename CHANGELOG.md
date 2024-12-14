@@ -26,6 +26,7 @@
 ### Added
 
 - Added CIHelper to run test on Linux but not on CI - [#33](https://github.com/FabrizioBrancati/Queuer/pull/33)
+- Added syntactic sugar helpers to create and chain operations easier and faster, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#syntactic-sugar)
 
 ## [3.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.1) - No Loop No Party
 

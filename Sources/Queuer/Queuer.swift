@@ -112,8 +112,11 @@ public class Queuer {
 
     /// Blocks the current thread until all of the receiver’s queued and executing
     /// `Operation`s finish executing.
-    public func waitUntilAllOperationsAreFinished() {
+    /// - Returns: Returns the current `Queuer` instance.
+    @discardableResult
+    public func waitUntilAllOperationsAreFinished() -> Queuer {
         queue.waitUntilAllOperationsAreFinished()
+        return self
     }
 }
 
@@ -184,5 +187,10 @@ public extension Queuer {
             completionOperation.addDependency(lastOperation)
         }
         addOperation(completionOperation)
+    }
+
+    @available(macOS 10.15, *)
+    func addBarrier(_ completionHandler: @escaping @Sendable () -> Void) {
+        queue.addBarrierBlock(completionHandler)
     }
 }
