@@ -171,18 +171,21 @@ open class ConcurrentOperation: Operation {
     }
 
     /// Pause the current `Operation`, if it's supported.
+    /// It can be overridden to add custom behavior.
     open func pause() {
         pauseBlock?(self)
     }
 
     /// Resume the current `Operation`, if it's supported.
+    /// It can be overridden to add custom behavior.
     open func resume() {
         resumeBlock?(self)
     }
 
     /// Cancel the current `Operation`, if it's supported.
+    /// It can be overridden to add custom behavior.
     override open func cancel() {
-        super.cancel() // to be checked
+        super.cancel()
         cancelBlock?(self)
     }
 }
