@@ -57,22 +57,23 @@ Add the dependency to any targets you've declared in your manifest:
 
 ## Usage
 
-- [Shared Queuer](https://github.com/FabrizioBrancati/Queuer#shared-queuer)
-- [Custom Queue](https://github.com/FabrizioBrancati/Queuer#custom-queue)
+- [Using the Shared Queuer](https://github.com/FabrizioBrancati/Queuer#using-the-shared-queuer)
+- [Create a Custom Queue](https://github.com/FabrizioBrancati/Queuer#create-a-custom-queue)
 - [Create an Operation Block](https://github.com/FabrizioBrancati/Queuer#create-an-operation-block)
-- [Chained Operations](https://github.com/FabrizioBrancati/Queuer#chained-operations)
-- [Group Operations](https://github.com/FabrizioBrancati/Queuer#group-operations)
-- [Queue States](https://github.com/FabrizioBrancati/Queuer#queue-states)
-- [Synchronous Queue](https://github.com/FabrizioBrancati/Queuer#synchronous-queue)
+- [Use Chained Operations](https://github.com/FabrizioBrancati/Queuer#use-chained-operations)
+- [Use Group Operations](https://github.com/FabrizioBrancati/Queuer#use-group-operations)
+- [Available Queue States](https://github.com/FabrizioBrancati/Queuer#available-queue-states)
+- [Control Operation States](https://github.com/FabrizioBrancati/Queuer#control-operation-states)
+- [Use a Synchronous Queue](https://github.com/FabrizioBrancati/Queuer#use-a-synchronous-queue)
 - [Create a Custom Operation](https://github.com/FabrizioBrancati/Queuer#create-a-custom-operation)
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Manually Finish an Operation](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation)
 - [Async Task in an Operation](https://github.com/FabrizioBrancati/Queuer#async-task-in-an-operation)
-- [Scheduler](https://github.com/FabrizioBrancati/Queuer#scheduler)
-- [Semaphore](https://github.com/FabrizioBrancati/Queuer#semaphore)
+- [Set Up a Scheduler](https://github.com/FabrizioBrancati/Queuer#set-up-a-scheduler)
+- [Use a Semaphore](https://github.com/FabrizioBrancati/Queuer#use-a-semaphore)
 
-### Shared Queuer
+### Using the Shared Queuer
 
 Queuer offers a shared instance that you can use to add operations to a centralized queue:
 
@@ -80,7 +81,7 @@ Queuer offers a shared instance that you can use to add operations to a centrali
 Queuer.shared.addOperation(operation)
 ```
 
-### Custom Queue
+### Create a Custom Queue
 
 You can also create a custom queue:
 
@@ -118,7 +119,7 @@ You have three methods to add an `Operation` block.
 > [!NOTE]
 > We will see how `ConcurrentOperation` works later.
 
-### Chained Operations
+### Use Chained Operations
 
 Chained Operations are `Operation`s that add a dependency each other.
 
@@ -144,7 +145,7 @@ queue.addCompletionHandler {
 }
 ```
 
-### Group Operations
+### Use Group Operations
 
 Group Operations are `Operation`s that handles a group of `Operation`s with a completion handler.
 
@@ -174,7 +175,7 @@ queue.addChainedOperations([groupOperationA, concurrentOperationC]) {
 
 In this case the output will be the following one: `[[A & B -> completionHandler] -> C] -> completionHandler`.
 
-### Queue States
+### Available Queue States
 
 There are a few method to handle the queue states.
 
@@ -211,7 +212,34 @@ There are a few method to handle the queue states.
 > [!IMPORTANT]
 > This function means that the queue will blocks the current thread until all `Operation`s are finished.
 
-### Synchronous Queue
+### Control Operation States
+
+You can control the `ConcurrentOperation` states by calling `pause()`, `resume()`, `cancel()`.
+
+> [!NOTE]
+> If you use a `Queuer` object with all `ConcurrentOperation` objects inside to manage your queue, you should avoid calling them directly on the `ConcurrentOperation` object, but you should call them on the `Queuer` one. The `Queuer` object will handle the `ConcurrentOperation` states automatically.
+
+1. Pause a `ConcurrentOperation`:
+
+    ```swift
+    concurrentOperation.pause()
+    ```
+
+2. Resume a `ConcurrentOperation`:
+
+    ```swift
+    concurrentOperation.resume()
+    ```
+
+3. Cancel a `ConcurrentOperation`:
+
+    ```swift
+    concurrentOperation.cancel()
+    ```
+
+For convenience, you can set closures to the `ConcurrentOperation` object to handle the states with `onPause`, `onResume`, and `onCancel` properties. They will be called when the `ConcurrentOperation` is paused, resumed, or canceled.
+
+### Use a Synchronous Queue
 
 Setting the `maxConcurrentOperationCount` property of a queue to `1` will make you sure that only one task at a time will be executed.
 
@@ -315,7 +343,7 @@ concurrentOperation.manualFinish = true
 > [!CAUTION]
 > If you don't set `manualFinish` to `true`, your `Operation` will finish before the async task is completed.
 
-### Scheduler
+### Set Up a Scheduler
 
 A `Scheduler` is a struct that uses the GDC's `DispatchSourceTimer` to create a timer that can execute functions with a specified interval and quality of service.
 
@@ -340,7 +368,7 @@ With `timer` property you can access to all `DispatchSourceTimer` properties and
 schedule.timer.cancel()
 ```
 
-### Semaphore
+### Use a Semaphore
 
 A `Semaphore` is a struct that uses the GCD's `DispatchSemaphore` to create a semaphore on the function and wait until it finish its job.
 
