@@ -26,6 +26,12 @@
 ### Added
 
 - Added CIHelper to run test on Linux but not on CI - [#33](https://github.com/FabrizioBrancati/Queuer/pull/33)
+- Added `onPause`, `onResume`, and `onCancel` closures to `ConcurrentOperation` class - [#37](https://github.com/FabrizioBrancati/Queuer/pull/37)
+
+### Improved
+
+- Improved usage section in README.md file
+- Updated swift-docc-plugin to 1.4.3
 
 ## [3.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.1) - No Loop No Party
 
