@@ -14,12 +14,20 @@ jobs:
       fail-fast: false
       matrix:
         swift:
-          - image: "swift:5.10-jammy"
+          - image: "swift:6.0-noble"
+            os: ubuntu-24.04
+          - image: "swift:6.0-jammy"
             os: ubuntu-22.04
-          - image: "swift:5.9-jammy"
+          - image: "swift:6.0-focal"
+            os: ubuntu-20.04
+          - image: "swift:5.10-noble"
+            os: ubuntu-24.04
+          - image: "swift:5.10-jammy"
             os: ubuntu-22.04
           - image: "swift:5.10-focal"
             os: ubuntu-20.04
+          - image: "swift:5.9-jammy"
+            os: ubuntu-22.04
           - image: "swift:5.9-focal"
             os: ubuntu-20.04
     name: Linux
@@ -42,46 +50,46 @@ jobs:
       max-parallel: 1
       matrix:
         xcode:
-          - version: 15.3
+          - version: 16.2
             platform: "macOS"
             arch: "arm64"
-          - version: 15.2
+          - version: 15.4
             platform: "macOS"
             arch: "arm64"
-          - version: 15.3
-            platform: "macOS"
-            arch: "arm64"
-            variant: Mac Catalyst
-          - version: 15.2
+          - version: 16.2
             platform: "macOS"
             arch: "arm64"
             variant: Mac Catalyst
-          - version: 15.3
+          - version: 15.4
+            platform: "macOS"
+            arch: "arm64"
+            variant: Mac Catalyst
+          - version: 16.2
             platform: "iOS"
-            simulator: "iPhone 15,OS=17.4"
-          - version: 15.2
+            simulator: "iPhone 15,OS=18.2"
+          - version: 15.4
             platform: "iOS"
-            simulator: "iPhone 15,OS=17.0"
-          - version: 15.3
+            simulator: "iPhone 15,OS=17.5"
+          - version: 16.2
             platform: "watchOS"
-            simulator: "Apple Watch Series 9 (45mm),OS=10.4"
-          - version: 15.2
+            simulator: "Apple Watch Series 9 (45mm),OS=11.2"
+          - version: 15.4
             platform: "watchOS"
-            simulator: "Apple Watch Series 9 (45mm),OS=10.0"
-          - version: 15.3
+            simulator: "Apple Watch Series 9 (45mm),OS=10.5"
+          - version: 16.2
             platform: "tvOS"
-            simulator: "Apple TV 4K (3rd generation),OS=17.4"
-          - version: 15.2
+            simulator: "Apple TV 4K (3rd generation),OS=18.2"
+          - version: 15.4
             platform: "tvOS"
-            simulator: "Apple TV 4K (3rd generation),OS=17.0"
-          - version: 15.3
+            simulator: "Apple TV 4K (3rd generation),OS=17.5"
+          - version: 16.2
+            platform: "visionOS"
+            simulator: "Apple Vision Pro,OS=2.2"
+          - version: 15.4
             platform: "visionOS"
             simulator: "Apple Vision Pro,OS=1.2"
-          - version: 15.2
-            platform: "visionOS"
-            simulator: "Apple Vision Pro,OS=1.0"
     name: Apple
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
     - name: Checkout
       uses: actions/checkout@v4
