@@ -45,15 +45,28 @@ The easiest way to test this package on Linux is to use Docker. You can use the 
     docker run --rm --privileged --interactive --tty \
     --volume "$(pwd):/src" \
     --workdir "/src" \
-    swift:5.10
+    swift:6.0
     ```
 
-> [!TIP]
-> Use `swift:5.10` to use a specific Swift version. If you want to use the latest version, you can use `swift:latest`.
->
-> Use `swift:5.10-jammy` to use the Swift 5.10 version with Ubuntu 22.04 and `swift:5.10-focal` to use the Swift 5.10 version with Ubuntu 20.04.
+Also, you can use the following tags:
 
-1. Run the following command to run the test suite:
+- Use `swift:6.0` to use the Swift 6.0 version.
+  - Use `swift:6.0-noble` to use the Swift 6.0 version with Ubuntu 24.04.
+  - Use `swift:6.0-jammy` to use the Swift 6.0 version with Ubuntu 22.04.
+  - Use `swift:6.0-focal` to use the Swift 6.0 version with Ubuntu 20.04.
+- Use `swift:5.10` to use the Swift 5.10 version.
+  - Use `swift:5.10-noble` to use the Swift 5.10 version with Ubuntu 24.04.
+  - Use `swift:5.10-jammy` to use the Swift 5.10 version with Ubuntu 22.04.
+  - Use `swift:5.10-focal` to use the Swift 5.10 version with Ubuntu 20.04.
+- Use `swift:5.9` to use the Swift 5.9 version.
+  - Use `swift:5.9-noble` to use the Swift 5.9 version with Ubuntu 24.04.
+  - Use `swift:5.9-jammy` to use the Swift 5.9 version with Ubuntu 22.04.
+  - Use `swift:5.9-focal` to use the Swift 5.9 version with Ubuntu 20.04.
+
+> [!TIP]
+> If you want to use the latest version, you can use `swift:latest`.
+
+3. Run the following command to run the test suite:
 
     ```bash
     swift test
