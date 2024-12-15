@@ -84,11 +84,17 @@ public class Queuer {
     }
 
     /// Cancel all `Operation`s in queue.
+    @available(*, deprecated, message: "Use `cancel()` instead.")
     public func cancelAll() {
+        cancel()
+    }
+
+    /// Cancel all `Operation`s in queue.
+    public func cancel() {
         queue.cancelAllOperations()
     }
 
-    /// Pause the queue.
+    /// Pause all `Operation`s in queue.
     public func pause() {
         queue.isSuspended = true
 
@@ -99,7 +105,7 @@ public class Queuer {
         }
     }
 
-    /// Resume the queue.
+    /// Resume all `Operation`s in queue.
     public func resume() {
         queue.isSuspended = false
 
