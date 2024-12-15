@@ -32,6 +32,18 @@ open class ConcurrentOperation: Operation {
     /// `Operation`'s execution block.
     public var executionBlock: ((_ operation: ConcurrentOperation) -> Void)?
 
+    /// `Operation`'s pause block.
+    /// This block is called when the `Operation` is paused.
+    public var onPause: ((_ operation: ConcurrentOperation) -> Void)?
+
+    /// `Operation`'s resume block.
+    /// This block is called when the `Operation` is resumed.
+    public var onResume: ((_ operation: ConcurrentOperation) -> Void)?
+
+    /// `Operation`'s resume block.
+    /// This block is called when the `Operation` is canceled.
+    public var onCancel: ((_ operation: ConcurrentOperation) -> Void)?
+
     /// Set if the `Operation` is executing.
     private var _executing = false {
         willSet {
@@ -159,12 +171,23 @@ open class ConcurrentOperation: Operation {
     }
 
     /// Pause the current `Operation`, if it's supported.
-    /// Must be overridden by a subclass to get a custom pause action.
-    open func pause() {}
+    /// It can be overridden to add custom behavior.
+    open func pause() {
+        onPause?(self)
+    }
 
     /// Resume the current `Operation`, if it's supported.
-    /// Must be overridden by a subclass to get a custom resume action.
-    open func resume() {}
+    /// It can be overridden to add custom behavior.
+    open func resume() {
+        onResume?(self)
+    }
+
+    /// Cancel the current `Operation`, if it's supported.
+    /// It can be overridden to add custom behavior.
+    override open func cancel() {
+        super.cancel()
+        onCancel?(self)
+    }
 }
 
 /// `ConcurrentOperation` extension with queue handling.

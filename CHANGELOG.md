@@ -26,7 +26,13 @@
 ### Added
 
 - Added CIHelper to run test on Linux but not on CI - [#33](https://github.com/FabrizioBrancati/Queuer/pull/33)
+- Added `onPause`, `onResume`, and `onCancel` closures to `ConcurrentOperation` class - [#37](https://github.com/FabrizioBrancati/Queuer/pull/37)
 - Added GitHub Actions jobs for Mac Catalyst, iOS, tvOS, watchOS, and visionOS - [#34](https://github.com/FabrizioBrancati/Queuer/pull/34)
+
+### Improved
+
+- Improved usage section in README.md file
+- Updated swift-docc-plugin to 1.4.3
 
 ### Fixed
 
