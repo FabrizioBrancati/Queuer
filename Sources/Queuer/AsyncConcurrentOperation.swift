@@ -28,21 +28,10 @@ import Foundation
 
 /// It allows asynchronous tasks, has a pause and resume states,
 /// can be easily added to a queue and can be created with a block.
-open class ConcurrentOperation: Operation, @unchecked Sendable {
+@available(macOS 10.15, *)
+open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
     /// `Operation`'s execution block.
-    public var executionBlock: ((_ operation: ConcurrentOperation) -> Void)?
-
-    /// `Operation`'s pause block.
-    /// This block is called when the `Operation` is paused.
-    public var onPause: ((_ operation: ConcurrentOperation) -> Void)?
-
-    /// `Operation`'s resume block.
-    /// This block is called when the `Operation` is resumed.
-    public var onResume: ((_ operation: ConcurrentOperation) -> Void)?
-
-    /// `Operation`'s resume block.
-    /// This block is called when the `Operation` is canceled.
-    public var onCancel: ((_ operation: ConcurrentOperation) -> Void)?
+    public var executionBlock: ((_ operation: AsyncConcurrentOperation) async -> Void)?
 
     /// Set if the `Operation` is executing.
     private var _executing = false {
@@ -108,7 +97,7 @@ open class ConcurrentOperation: Operation, @unchecked Sendable {
     /// - Parameters:
     ///   - name: Operation name.
     ///   - executionBlock: Execution block.
-    public init(name: String? = nil, executionBlock: ((_ operation: ConcurrentOperation) -> Void)? = nil) {
+    public init(name: String? = nil, executionBlock: ((_ operation: AsyncConcurrentOperation) async -> Void)? = nil) {
         super.init()
 
         self.name = name
@@ -117,15 +106,17 @@ open class ConcurrentOperation: Operation, @unchecked Sendable {
 
     /// Start the `Operation`.
     override open func start() {
-        _executing = true
-        execute()
+        Task {
+            _executing = true
+            await execute()
+        }
     }
 
     /// Retry function.
     /// It only works if `manualRetry` property has been set to `true`.
-    open func retry() {
+    open func retry() async {
         if manualRetry, shouldRetry, let executionBlock {
-            executionBlock(self)
+            await executionBlock(self)
 
             if !manualFinish {
                 finish(success: success)
@@ -135,11 +126,11 @@ open class ConcurrentOperation: Operation, @unchecked Sendable {
 
     /// Execute the `Operation`.
     /// If `executionBlock` is set, it will be executed.
-    open func execute() {
+    open func execute() async {
         if let executionBlock {
             while shouldRetry, !manualRetry {
                 if lastExecutedAttempt != currentAttempt {
-                    executionBlock(self)
+                    await executionBlock(self)
                     lastExecutedAttempt = currentAttempt
                 }
 
@@ -148,7 +139,7 @@ open class ConcurrentOperation: Operation, @unchecked Sendable {
                 }
             }
 
-            retry()
+            await retry()
         }
     }
 
@@ -171,27 +162,17 @@ open class ConcurrentOperation: Operation, @unchecked Sendable {
     }
 
     /// Pause the current `Operation`, if it's supported.
-    /// It can be overridden to add custom behavior.
-    open func pause() {
-        onPause?(self)
-    }
+    /// Must be overridden by a subclass to get a custom pause action.
+    open func pause() {}
 
     /// Resume the current `Operation`, if it's supported.
-    /// It can be overridden to add custom behavior.
-    open func resume() {
-        onResume?(self)
-    }
-
-    /// Cancel the current `Operation`, if it's supported.
-    /// It can be overridden to add custom behavior.
-    override open func cancel() {
-        super.cancel()
-        onCancel?(self)
-    }
+    /// Must be overridden by a subclass to get a custom resume action.
+    open func resume() {}
 }
 
 /// `ConcurrentOperation` extension with queue handling.
-public extension ConcurrentOperation {
+@available(macOS 10.15, *)
+public extension AsyncConcurrentOperation {
     /// Adds the `Operation` to `shared` Queuer.
     func addToSharedQueuer() {
         Queuer.shared.addOperation(self)

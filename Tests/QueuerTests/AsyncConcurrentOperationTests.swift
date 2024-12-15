@@ -1,11 +1,10 @@
-// swift-tools-version:5.9
 //
-//  Package.swift
+//  AsyncConcurrentOperationTests.swift
 //  Queuer
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati.
+//  Copyright (c) 2017 - 2024 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,28 +24,31 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import PackageDescription
+import Queuer
+import XCTest
 
-let package = Package(
-    name: "Queuer",
-    platforms: [
-        .iOS(.v12),
-        .macOS(.v10_13),
-        .macCatalyst(.v13),
-        .tvOS(.v12),
-        .watchOS(.v4),
-        .visionOS(.v1)
-    ],
-    products: [
-        .library(name: "Queuer", targets: ["Queuer"])
-    ],
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0")
-    ],
-    targets: [
-        .target(name: "Queuer", swiftSettings: [
-            .enableExperimentalFeature("StrictConcurrency")
-        ]),
-        .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
-    ]
-)
+final class AsyncConcurrentOperationTests: XCTestCase {
+    func testAsyncChainedRetry() async {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+        let testExpectation = expectation(description: "Chained Retry")
+        let order = Order()
+
+        let concurrentOperation1 = AsyncConcurrentOperation { operation in
+            try? await Task.sleep(for: .seconds(1))
+            await order.append(0)
+            operation.success = false
+        }
+        let concurrentOperation2 = AsyncConcurrentOperation { operation in
+            await order.append(1)
+            operation.success = false
+        }
+        queue.addChainedAsyncOperations([concurrentOperation1, concurrentOperation2]) {
+            await order.append(2)
+            testExpectation.fulfill()
+        }
+
+        await fulfillment(of: [testExpectation], timeout: 10)
+        let finalOrder = await order.order
+        XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
+    }
+}
