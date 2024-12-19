@@ -72,7 +72,7 @@ jobs:
             simulator: "iPhone 15,OS=17.5"
           - version: 16.2
             platform: "watchOS"
-            simulator: "Apple Watch Series 9 (45mm),OS=11.2"
+            simulator: "Apple Watch Series 10 (46mm),OS=11.2"
           - version: 15.4
             platform: "watchOS"
             simulator: "Apple Watch Series 9 (45mm),OS=10.5"
