@@ -1,9 +1,12 @@
 name: Tests
 
 on:
-  - push
-  - pull_request
-  - workflow_dispatch
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   linux:
@@ -11,12 +14,20 @@ jobs:
       fail-fast: false
       matrix:
         swift:
-          - image: "swift:5.10-jammy"
+          - image: "swift:6.0-noble"
+            os: ubuntu-24.04
+          - image: "swift:6.0-jammy"
             os: ubuntu-22.04
-          - image: "swift:5.9-jammy"
+          - image: "swift:6.0-focal"
+            os: ubuntu-20.04
+          - image: "swift:5.10-noble"
+            os: ubuntu-24.04
+          - image: "swift:5.10-jammy"
             os: ubuntu-22.04
           - image: "swift:5.10-focal"
             os: ubuntu-20.04
+          - image: "swift:5.9-jammy"
+            os: ubuntu-22.04
           - image: "swift:5.9-focal"
             os: ubuntu-20.04
     name: Linux
@@ -33,29 +44,89 @@ jobs:
     - name: Debug Test
       run: swift test -c debug --parallel
 
-  macos:
+  apple:
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         xcode:
-          - 15.3
-          - 15.2
-          - 15.1
-          - 15.0.1
-    name: macOS
-    runs-on: macos-14
+          - version: 16.2
+            platform: "macOS"
+            arch: "arm64"
+          - version: 15.4
+            platform: "macOS"
+            arch: "arm64"
+          - version: 16.2
+            platform: "macOS"
+            arch: "arm64"
+            variant: Mac Catalyst
+          - version: 15.4
+            platform: "macOS"
+            arch: "arm64"
+            variant: Mac Catalyst
+          - version: 16.2
+            platform: "iOS"
+            simulator: "iPhone 15,OS=18.2"
+          - version: 15.4
+            platform: "iOS"
+            simulator: "iPhone 15,OS=17.5"
+          - version: 16.2
+            platform: "watchOS"
+            simulator: "Apple Watch Series 10 (46mm),OS=11.2"
+          - version: 15.4
+            platform: "watchOS"
+            simulator: "Apple Watch Series 9 (45mm),OS=10.5"
+          - version: 16.2
+            platform: "tvOS"
+            simulator: "Apple TV 4K (3rd generation),OS=18.2"
+          - version: 15.4
+            platform: "tvOS"
+            simulator: "Apple TV 4K (3rd generation),OS=17.5"
+          - version: 16.2
+            platform: "visionOS"
+            simulator: "Apple Vision Pro,OS=2.2"
+          - version: 15.4
+            platform: "visionOS"
+            simulator: "Apple Vision Pro,OS=1.2"
+    name: Apple
+    runs-on: macos-15
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Select Xcode
-      run: xcodes select ${{ matrix.xcode }}
+      run: xcodes select ${{ matrix.xcode.version }}
     - name: Swift Version
       run: swift --version
-    - name: Debug Build
-      run: swift build -v -c debug
-    - name: Debug Test for Commit
-      if: github.event_name != 'pull_request'
-      run: swift test -c debug --parallel 2>&1
-    - name: Debug Test for Pull Request
-      if: github.event_name == 'pull_request'
-      run: swift test -c debug --parallel 2>&1 | xcbeautify --renderer github-actions
+    - name: macOS Debug Build
+      if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
+      run: |
+        swift build -v -c debug
+        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}"
+    - name: macOS Debug Test for Commit
+      if: github.event_name == 'push' && matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
+      run: |
+        swift test -c debug --parallel
+        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test
+    - name: macOSDebug Test for Pull Request
+      if: github.event_name == 'pull_request' && matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
+      run: |
+        swift test -c debug --parallel
+        xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test
+    - name: Mac Catalyst Debug Build
+      if: matrix.xcode.variant == 'Mac Catalyst'
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}"
+    - name: Mac Catalyst Debug Test for Commit
+      if: github.event_name == 'push' && matrix.xcode.variant == 'Mac Catalyst'
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
+    - name: Mac Catalyst Debug Test for Pull Request
+      if: github.event_name == 'pull_request' && matrix.xcode.variant == 'Mac Catalyst'
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
+    - name: Others Debug Build
+      if: matrix.xcode.platform != 'macOS'
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}"
+    - name: Others Debug Test for Commit
+      if: github.event_name == 'push' && matrix.xcode.platform != 'macOS'
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test
+    - name: Others Debug Test for Pull Request
+      if: github.event_name == 'pull_request' && matrix.xcode.platform != 'macOS'
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test
