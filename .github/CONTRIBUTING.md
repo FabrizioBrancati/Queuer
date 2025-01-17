@@ -12,9 +12,27 @@ Remember to open the pull request against the `develop` branch.
 
 If you find a bug or you have a suggestion create an issue.
 
-## Comments
+## Documentation
 
-Every line of the project must to be commented.
+Every public method, property, class, struct, enum, protocol, etc. should be documented. The documentation should be written in the code, and in the README file (for features only).
+
+You can generate the documentation by using the following command:
+
+```bash
+swift package \
+  --allow-writing-to-directory docs \
+  generate-documentation \
+  --target swift-bundler \
+  --disable-indexing \
+  --transform-for-static-hosting \
+  --hosting-base-path swift-bundler \
+  --output-path docs \
+  --enable-inherited-docs \
+  --experimental-documentation-coverage \
+  --level detailed \
+```
+
+If you find a typo or you think that something is not well explained, please open an issue or submit a pull request.
 
 ## Writing code
 
@@ -28,7 +46,7 @@ Once your changes are ready, please add an entry to the [CHANGELOG.md](https://g
 
 Add tests for every added function. The aim is to have 100% of code coverage.
 
-## Linux
+## Linux Support
 
 This library supports Linux, so please be sure that the feature that you are adding is compatible with it. If not, due to platform limitations, please wrap the code with `#if !os(Linux)`
 
