@@ -25,30 +25,32 @@
 //  SOFTWARE.
 
 import Queuer
-import XCTest
+import Testing
 
-final class AsyncConcurrentOperationTests: XCTestCase {
-    func testAsyncChainedRetry() async {
-        let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
-        let testExpectation = expectation(description: "Chained Retry")
-        let order = Order()
+@Suite struct AsyncConcurrentOperationTests {
+    @Test func asyncChainedRetry() async throws {
+        try await confirmation("Chainer Retry") { confirmation in
+            let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+            let order = Order()
 
-        let concurrentOperation1 = AsyncConcurrentOperation { operation in
-            try? await Task.sleep(for: .seconds(1))
-            await order.append(0)
-            operation.success = false
-        }
-        let concurrentOperation2 = AsyncConcurrentOperation { operation in
-            await order.append(1)
-            operation.success = false
-        }
-        queue.addChainedAsyncOperations([concurrentOperation1, concurrentOperation2]) {
-            await order.append(2)
-            testExpectation.fulfill()
-        }
+            let concurrentOperation1 = AsyncConcurrentOperation { operation in
+                try await Task.sleep(for: .seconds(1))
+                await order.append(0)
+                operation.success = false
+            }
+            let concurrentOperation2 = AsyncConcurrentOperation { operation in
+                await order.append(1)
+                operation.success = false
+            }
+            queue.addChainedAsyncOperations([concurrentOperation1, concurrentOperation2]) {
+                await order.append(2)
+                confirmation()
+            }
 
-        await fulfillment(of: [testExpectation], timeout: 10)
-        let finalOrder = await order.order
-        XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
+            try await Task.sleep(for: .seconds(5))
+
+            let finalOrder = await order.order
+            #expect(finalOrder == [0, 0, 0, 1, 1, 1, 2])   
+        }
     }
 }
