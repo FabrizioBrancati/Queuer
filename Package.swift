@@ -44,9 +44,11 @@ let package = Package(
         .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.4.0")
     ],
     targets: [
-        .target(name: "Queuer", swiftSettings: [
-            .enableExperimentalFeature("StrictConcurrency")
-        ]),
+        .target(
+            name: "Queuer",
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
     ]
 )

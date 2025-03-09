@@ -27,12 +27,12 @@ open: # Open the project in Xcode
 .PHONY: lint
 lint: # Lint the project using swift-format
 	@echo "Linting $(SRC_NAME) project..."
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-format lint ./$(SRC_NAME) --recursive --configuration swift-format-config.json
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-format lint ./ --recursive --configuration swift-format-config.json
 
 .PHONY: format
 format: # Format the project using swift-format
 	@echo "Formatting $(SRC_NAME) project..."
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-format format ./$(SRC_NAME) --recursive --configuration swift-format-config.json --in-place
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-format format ./ --recursive --configuration swift-format-config.json --in-place
 
 .PHONY: pre-commit-install
 pre-commit-install: # Install pre-commit hooks

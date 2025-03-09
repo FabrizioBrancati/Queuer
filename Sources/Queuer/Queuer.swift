@@ -126,7 +126,7 @@ public final class Queuer: Sendable {
 // MARK: - Queuer Operations and Chaining
 
 /// `Queuer` extension with `Operation`s and chaining handling.
-public extension Queuer {
+extension Queuer {
     /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter block: Block to be executed.
@@ -137,7 +137,7 @@ public extension Queuer {
     /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter operation: `Operation` to be executed.
-    func addOperation(_ operation: Operation) {
+    public func addOperation(_ operation: Operation) {
         queue.addOperation(operation)
     }
 

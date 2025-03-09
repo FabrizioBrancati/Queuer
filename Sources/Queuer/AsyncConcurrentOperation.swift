@@ -82,7 +82,7 @@ open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
 
     /// Specify if the `Operation` should retry another time.
     internal var shouldRetry = true
-    
+
     /// Manually control the `finish(success:)` call of the `Operation`.
     /// If set to `true` it is the developer's responsibility to call the `finish(success:)` method,
     /// either by passing `false` or `true` to the function.
@@ -114,7 +114,7 @@ open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
 
     /// Retry function.
     /// It only works if `manualRetry` property has been set to `true`.
-    open func retry() async throws  {
+    open func retry() async throws {
         if manualRetry, shouldRetry, let executionBlock {
             try await executionBlock(self)
 
@@ -172,16 +172,16 @@ open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
 
 /// `ConcurrentOperation` extension with queue handling.
 @available(macOS 10.15, *)
-public extension AsyncConcurrentOperation {
+extension AsyncConcurrentOperation {
     /// Adds the `Operation` to `shared` Queuer.
-    func addToSharedQueuer() {
+    public func addToSharedQueuer() {
         Queuer.shared.addOperation(self)
     }
 
     /// Adds the `Operation` to the custom queue.
     ///
     /// - Parameter queue: Custom queue where the `Operation` will be added.
-    func addToQueue(_ queue: Queuer) {
+    public func addToQueue(_ queue: Queuer) {
         queue.addOperation(self)
     }
 }
