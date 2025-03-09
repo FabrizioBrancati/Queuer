@@ -30,14 +30,14 @@ struct CIHelper {
     /// This method is needed because some tests cannot successfully run on CI,
     /// but they do on a Linux Docker image.
     /// - Returns: Returns `true` if running on CI, otherwise `false`.
-    static func isRunningOnCI() -> Bool {
+    static func isCI() -> Bool {
         ProcessInfo.processInfo.environment["GITHUB_RUN_ID"] != nil
     }
 
     /// This method is needed because some tests cannot successfully run on CI,
     /// but they do on a Linux Docker image.
     /// - Returns: Returns `true` if not running on CI, otherwise `false`.
-    static func isNotRunningOnCI() -> Bool {
-        !isRunningOnCI()
+    static func isNotCI() -> Bool {
+        !isCI()
     }
 }
