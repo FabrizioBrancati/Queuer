@@ -37,6 +37,7 @@ format: # Format the project using swift-format
 .PHONY: pre-commit-install
 pre-commit-install: # Install pre-commit hooks
 	@echo "Installing pre-commit hooks..."
+	@pip install pre-commit
 	@pre-commit install --hook-type commit-msg
 
 .PHONY: setup
