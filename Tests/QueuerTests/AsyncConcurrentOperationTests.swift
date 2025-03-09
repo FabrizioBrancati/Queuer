@@ -47,7 +47,7 @@ import Testing
                 confirmation()
             }
 
-            try await Task.sleep(for: .seconds(5))
+            try await Task.sleep(for: .seconds(2))
 
             let finalOrder = await order.order
             #expect(finalOrder == [0, 0, 0, 1, 1, 1, 2])   
