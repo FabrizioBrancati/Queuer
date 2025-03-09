@@ -130,7 +130,7 @@ extension Queuer {
     /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter block: Block to be executed.
-    func addOperation(_ operation: @Sendable @escaping () -> Void) {
+    public func addOperation(_ operation: @Sendable @escaping () -> Void) {
         queue.addOperation(operation)
     }
 
@@ -151,7 +151,7 @@ extension Queuer {
     ///   - operations: `Operation`s Array.
     ///   - completionHandler: Completion block to be executed when all `Operation`s
     ///                        are finished.
-    func addChainedOperations(_ operations: [Operation], completionHandler: (@Sendable () -> Void)? = nil) {
+    public func addChainedOperations(_ operations: [Operation], completionHandler: (@Sendable () -> Void)? = nil) {
         for (index, operation) in operations.enumerated() {
             if index > 0 {
                 operation.addDependency(operations[index - 1])
@@ -178,7 +178,7 @@ extension Queuer {
     ///   - completionHandler: Completion block to be executed when all `Operation`s
     ///                        are finished.
     @available(macOS 10.15, *)
-    func addChainedAsyncOperations(_ operations: [Operation], completionHandler: (@Sendable () async -> Void)? = nil) {
+    public func addChainedAsyncOperations(_ operations: [Operation], completionHandler: (@Sendable () async -> Void)? = nil) {
         for (index, operation) in operations.enumerated() {
             if index > 0 {
                 operation.addDependency(operations[index - 1])
@@ -204,14 +204,14 @@ extension Queuer {
     ///   - operations: `Operation`s list.
     ///   - completionHandler: Completion block to be exectuted when all `Operation`s
     ///                        are finished.
-    func addChainedOperations(_ operations: Operation..., completionHandler: (@Sendable () -> Void)? = nil) {
+    public func addChainedOperations(_ operations: Operation..., completionHandler: (@Sendable () -> Void)? = nil) {
         addChainedOperations(operations, completionHandler: completionHandler)
     }
 
     /// Add a completion block to the queue.
     ///
     /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
-    func addCompletionHandler(_ completionHandler: @Sendable @escaping () -> Void) {
+    public func addCompletionHandler(_ completionHandler: @Sendable @escaping () -> Void) {
         let completionOperation = BlockOperation(block: completionHandler)
         if let lastOperation = operations.last {
             completionOperation.addDependency(lastOperation)
@@ -223,7 +223,7 @@ extension Queuer {
     ///
     /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
     @available(macOS 10.15, *)
-    func addAsyncCompletionHandler(_ completionHandler: @Sendable @escaping () async -> Void) {
+    public func addAsyncCompletionHandler(_ completionHandler: @Sendable @escaping () async -> Void) {
         let completionOperation = AsyncConcurrentOperation { operation in
             await completionHandler()
         }
