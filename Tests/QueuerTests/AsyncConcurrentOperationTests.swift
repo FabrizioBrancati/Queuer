@@ -29,7 +29,7 @@ import Testing
 
 @Suite struct AsyncConcurrentOperationTests {
     @Test func asyncChainedRetry() async throws {
-        try await confirmation("Chainer Retry") { confirmation in
+        try await confirmation("Chained Retry") { confirmation in
             let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
             let order = Order()
 
