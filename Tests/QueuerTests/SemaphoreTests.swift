@@ -25,51 +25,47 @@
 //  SOFTWARE.
 
 import Queuer
-import XCTest
+import Testing
 
-final class SemaphoreTests: XCTestCase {
-    func testWithSemaphore() {
-        if CIHelper.isNotRunningOnCI() {
-            let semaphore = Semaphore()
-            let queue = Queuer(name: "SemaphoreTestWithSemaphore")
-            let testExpectation = expectation(description: "With Semaphore")
-            var testString = ""
+@Suite struct SemaphoreTests {
+    @Test func testWithSemaphore() async {
+        if CIHelper.isNotCI() {
+            await confirmation("With Semaphore") { confirmation in
+                let semaphore = Semaphore()
+                let queue = Queuer(name: "SemaphoreTestWithSemaphore")
+                var testString = ""
 
-            let concurrentOperation = ConcurrentOperation { _ in
-                Thread.sleep(forTimeInterval: 2)
-                testString = "Tested"
-                semaphore.continue()
-            }
-            concurrentOperation.addToQueue(queue)
+                let concurrentOperation = ConcurrentOperation { _ in
+                    // Thread.sleep(forTimeInterval: 2)
+                    testString = "Tested"
+                    semaphore.continue()
+                }
+                concurrentOperation.addToQueue(queue)
 
-            semaphore.wait()
-            XCTAssertEqual(testString, "Tested")
-            testExpectation.fulfill()
-
-            waitForExpectations(timeout: 5) { error in
-                XCTAssertNil(error)
+                semaphore.wait()
+                #expect(testString == "Tested")
+                confirmation()
             }
         }
     }
 
-    func testWithoutSemaphore() {
-        if CIHelper.isNotRunningOnCI() {
-            let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
-            let testExpectation = expectation(description: "Without Semaphore")
-            var testString = ""
+    @Test func testWithoutSemaphore() async throws {
+        if CIHelper.isNotCI() {
+            try await confirmation("Without Semaphore") { confirmation in
+                let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
+                var testString = ""
 
-            let concurrentOperation = ConcurrentOperation { _ in
-                Thread.sleep(forTimeInterval: 2)
-                testString = "Tested"
-                testExpectation.fulfill()
-            }
-            concurrentOperation.addToQueue(queue)
+                let concurrentOperation = ConcurrentOperation { _ in
+                    // Thread.sleep(forTimeInterval: 2)
+                    testString = "Tested"
+                    confirmation()
+                }
+                concurrentOperation.addToQueue(queue)
 
-            XCTAssertEqual(testString, "")
+                #expect(testString == "")
 
-            waitForExpectations(timeout: 5) { error in
-                XCTAssertNil(error)
-                XCTAssertEqual(testString, "Tested")
+                try await Task.sleep(for: .seconds(2))
+                #expect(testString == "Tested")
             }
         }
     }
