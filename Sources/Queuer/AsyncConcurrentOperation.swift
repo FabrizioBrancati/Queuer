@@ -31,7 +31,7 @@ import Foundation
 @available(macOS 10.15, *)
 open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
     /// `Operation`'s execution block.
-    public var executionBlock: ((_ operation: AsyncConcurrentOperation) async -> Void)?
+    public var executionBlock: ((_ operation: AsyncConcurrentOperation) async throws -> Void)?
 
     /// Set if the `Operation` is executing.
     private var _executing = false {
@@ -97,7 +97,7 @@ open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
     /// - Parameters:
     ///   - name: Operation name.
     ///   - executionBlock: Execution block.
-    public init(name: String? = nil, executionBlock: ((_ operation: AsyncConcurrentOperation) async -> Void)? = nil) {
+    public init(name: String? = nil, executionBlock: ((_ operation: AsyncConcurrentOperation) async throws -> Void)? = nil) {
         super.init()
 
         self.name = name
@@ -108,15 +108,15 @@ open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
     override open func start() {
         Task {
             _executing = true
-            await execute()
+            try await execute()
         }
     }
 
     /// Retry function.
     /// It only works if `manualRetry` property has been set to `true`.
-    open func retry() async {
+    open func retry() async throws  {
         if manualRetry, shouldRetry, let executionBlock {
-            await executionBlock(self)
+            try await executionBlock(self)
 
             if !manualFinish {
                 finish(success: success)
@@ -126,11 +126,11 @@ open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
 
     /// Execute the `Operation`.
     /// If `executionBlock` is set, it will be executed.
-    open func execute() async {
+    open func execute() async throws {
         if let executionBlock {
             while shouldRetry, !manualRetry {
                 if lastExecutedAttempt != currentAttempt {
-                    await executionBlock(self)
+                    try await executionBlock(self)
                     lastExecutedAttempt = currentAttempt
                 }
 
@@ -139,7 +139,7 @@ open class AsyncConcurrentOperation: Operation, @unchecked Sendable {
                 }
             }
 
-            await retry()
+            try await retry()
         }
     }
 
