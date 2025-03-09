@@ -25,14 +25,15 @@ Queuer is a queue manager built on top of [OperationQueue](https://developer.app
 
 ## Requirements
 
-| **Swift**  | **Queuer**    | **iOS** | **macOS**  | **macCatalyst** | **tvOS**  | **watchOS** | **visionOS** | **Linux** |
-|------------|---------------|---------|------------|-----------------|-----------|-------------|--------------|-----------|
-| 3.1...3.2  | 1.0.0...1.1.0 | 8.0+    | 10.10+     |                 | 9.0+      | 2.0+        |              | ✅        |
-| 4.0        | 1.3.0         | 8.0+    | 10.10+     |                 | 9.0+      | 2.0+        |              | ✅        |
-| 4.1        | 1.3.1...1.3.2 | 8.0+    | 10.10+     |                 | 9.0+      | 2.0+        |              | ✅        |
-| 4.2        | 2.0.0...2.0.1 | 8.0+    | 10.10+     |                 | 9.0+      | 3.0+        |              | ✅        |
-| 5.0...5.10 | 2.1.0...2.2.0 | 8.0+    | 10.10+     |                 | 9.0+      | 3.0+        |              | ✅        |
-| 5.9...5.10 | 3.0.0...3.0.1 | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        |
+| **Swift**  | **Queuer**    | **iOS** | **macOS**  | **macCatalyst** | **tvOS**  | **watchOS** | **visionOS** | **Linux** | **Windows** |
+|------------|---------------|---------|------------|-----------------|-----------|-------------|--------------|-----------|-------------|
+| 3.1...3.2  | 1.0.0...1.1.0 | 8.0+    | 10.10+     |                 | 9.0+      | 2.0+        |              | ✅        |             |
+| 4.0        | 1.3.0         | 8.0+    | 10.10+     |                 | 9.0+      | 2.0+        |              | ✅        |             |
+| 4.1        | 1.3.1...1.3.2 | 8.0+    | 10.10+     |                 | 9.0+      | 2.0+        |              | ✅        |             |
+| 4.2        | 2.0.0...2.0.1 | 8.0+    | 10.10+     |                 | 9.0+      | 3.0+        |              | ✅        |             |
+| 5.0...5.10 | 2.1.0...2.2.0 | 8.0+    | 10.10+     |                 | 9.0+      | 3.0+        |              | ✅        |             |
+| 5.9...5.10 | 3.0.0...3.0.1 | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        |             |
+| 6.0        | 3.1.0         | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        | ✅          |
 
 ## Installing
 
@@ -41,7 +42,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 In your `Package.swift` Swift Package Manager manifest, add the following dependency to your `dependencies` argument:
 
 ```swift
-.package(url: "https://github.com/FabrizioBrancati/Queuer.git", from: "3.0.0"),
+.package(url: "https://github.com/FabrizioBrancati/Queuer.git", from: "3.1.0"),
 ```
 
 Add the dependency to any targets you've declared in your manifest:
