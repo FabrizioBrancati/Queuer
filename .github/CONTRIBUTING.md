@@ -38,6 +38,18 @@ If you find a typo or you think that something is not well explained, please ope
 
 New API should follow the rules documented in Swift's [API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/). Comment every public methods, properties, classes. Make commits as atomic as possible with understandable comment. If you are developing feature or fixing a bug, please mention the issue number (e.g. #1) in commit text.
 
+## Commit Messages
+
+Please follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
+
+To make it easier, you can use `pre-commit` and configure it with the following command:
+
+```bash
+make pre-commit-install
+```
+
+This will install the `pre-commit` hooks that will check your commit messages.
+
 ## Changelog
 
 Once your changes are ready, please add an entry to the [CHANGELOG.md](https://github.com/FabrizioBrancati/Queuer/blob/main/CHANGELOG.md) file.
