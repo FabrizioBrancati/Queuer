@@ -5,7 +5,7 @@
   "indentConditionalCompilationBlocks" : true,
   "indentSwitchCaseLabels" : true,
   "indentation" : {
-    "spaces" : 2
+    "spaces" : 4
   },
   "lineBreakAroundMultilineExpressionChainComponents" : false,
   "lineBreakBeforeControlFlowKeywords" : false,
@@ -65,6 +65,6 @@
     "ValidateDocumentationComments" : false
   },
   "spacesAroundRangeFormationOperators" : false,
-  "tabWidth" : 2,
+  "tabWidth" : 4,
   "version" : 1
 }
