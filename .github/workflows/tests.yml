@@ -160,16 +160,16 @@ jobs:
       if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
         swift test -c debug --parallel
-        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test
+        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" -testenv GITHUB_RUN_ID=$GITHUB_RUN_ID test
     - name: Build (Mac Catalyst)
       if: matrix.xcode.variant == 'Mac Catalyst'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}"
     - name: Test (Mac Catalyst)
       if: matrix.xcode.variant == 'Mac Catalyst'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" -testenv GITHUB_RUN_ID=$GITHUB_RUN_ID test
     - name: Build (Simulator)
       if: matrix.xcode.platform != 'macOS'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}"
     - name: Test (Simulator)
       if: matrix.xcode.platform != 'macOS'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" -testenv GITHUB_RUN_ID=$GITHUB_RUN_ID test
