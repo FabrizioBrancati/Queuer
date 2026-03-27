@@ -14,22 +14,26 @@ jobs:
       fail-fast: false
       matrix:
         swift:
-          - image: "swift:6.0-noble"
-            os: ubuntu-24.04
-          - image: "swift:6.0-jammy"
-            os: ubuntu-22.04
-          - image: "swift:6.0-focal"
-            os: ubuntu-20.04
-          - image: "swift:5.10-noble"
-            os: ubuntu-24.04
-          - image: "swift:5.10-jammy"
-            os: ubuntu-22.04
-          - image: "swift:5.10-focal"
-            os: ubuntu-20.04
           - image: "swift:5.9-jammy"
             os: ubuntu-22.04
-          - image: "swift:5.9-focal"
-            os: ubuntu-20.04
+          - image: "swift:5.10-jammy"
+            os: ubuntu-22.04
+          - image: "swift:5.10-noble"
+            os: ubuntu-24.04
+          - image: "swift:6.0-noble"
+            os: ubuntu-24.04
+          - image: "swift:6.1-jammy"
+            os: ubuntu-22.04
+          - image: "swift:6.1-noble"
+            os: ubuntu-24.04
+          - image: "swift:6.2-jammy"
+            os: ubuntu-22.04
+          - image: "swift:6.2-noble"
+            os: ubuntu-24.04
+          - image: "swift:6.3-jammy"
+            os: ubuntu-22.04
+          - image: "swift:6.3-noble"
+            os: ubuntu-24.04
     name: Linux
     runs-on: ${{ matrix.swift.os }}
     container:
@@ -39,10 +43,23 @@ jobs:
       uses: actions/checkout@v4
     - name: Swift Version
       run: swift --version
-    - name: Debug Build
+    - name: Build
       run: swift build -v -c debug
-    - name: Debug Test
+    - name: Test
       run: swift test -c debug --parallel
+
+  android:
+    name: Android
+    runs-on: ubuntu-24.04
+    container:
+      image: swift:6.3-noble
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install Android SDK
+      run: swift sdk install https://download.swift.org/swift-6.3-release/android-sdk/swift-6.3-RELEASE/swift-6.3-RELEASE_android.artifactbundle.tar.gz --checksum 2f2942c4bcea7965a08665206212c66991dabe23725aeec7c4365fc91acad088
+    - name: Build
+      run: swift build --swift-sdk aarch64-unknown-linux-android28
 
   apple:
     strategy:
@@ -50,46 +67,83 @@ jobs:
       max-parallel: 1
       matrix:
         xcode:
-          - version: 16.2
+          - version: "26.4"
+            runner: macos-26
             platform: "macOS"
             arch: "arm64"
-          - version: 15.4
+          - version: "16.4"
+            runner: macos-15
             platform: "macOS"
             arch: "arm64"
-          - version: 16.2
+          - version: "15.4"
+            runner: macos-14
             platform: "macOS"
             arch: "arm64"
-            variant: Mac Catalyst
-          - version: 15.4
+          - version: "26.4"
+            runner: macos-26
             platform: "macOS"
             arch: "arm64"
-            variant: Mac Catalyst
-          - version: 16.2
+            variant: "Mac Catalyst"
+          - version: "16.4"
+            runner: macos-15
+            platform: "macOS"
+            arch: "arm64"
+            variant: "Mac Catalyst"
+          - version: "15.4"
+            runner: macos-14
+            platform: "macOS"
+            arch: "arm64"
+            variant: "Mac Catalyst"
+          - version: "26.4"
+            runner: macos-26
             platform: "iOS"
-            simulator: "iPhone 15,OS=18.2"
-          - version: 15.4
+            simulator: "iPhone 17,OS=26.4"
+          - version: "16.4"
+            runner: macos-15
+            platform: "iOS"
+            simulator: "iPhone 16,OS=18.5"
+          - version: "15.4"
+            runner: macos-14
             platform: "iOS"
             simulator: "iPhone 15,OS=17.5"
-          - version: 16.2
+          - version: "26.4"
+            runner: macos-26
             platform: "watchOS"
-            simulator: "Apple Watch Series 10 (46mm),OS=11.2"
-          - version: 15.4
+            simulator: "Apple Watch Series 11 (46mm),OS=26.4"
+          - version: "16.4"
+            runner: macos-15
+            platform: "watchOS"
+            simulator: "Apple Watch Series 10 (46mm),OS=11.5"
+          - version: "15.4"
+            runner: macos-14
             platform: "watchOS"
             simulator: "Apple Watch Series 9 (45mm),OS=10.5"
-          - version: 16.2
+          - version: "26.4"
+            runner: macos-26
             platform: "tvOS"
-            simulator: "Apple TV 4K (3rd generation),OS=18.2"
-          - version: 15.4
+            simulator: "Apple TV 4K (3rd generation),OS=26.4"
+          - version: "16.4"
+            runner: macos-15
+            platform: "tvOS"
+            simulator: "Apple TV 4K (3rd generation),OS=18.5"
+          - version: "15.4"
+            runner: macos-14
             platform: "tvOS"
             simulator: "Apple TV 4K (3rd generation),OS=17.5"
-          - version: 16.2
+          - version: "26.4"
+            runner: macos-26
             platform: "visionOS"
-            simulator: "Apple Vision Pro,OS=2.2"
-          - version: 15.4
+            simulator: "Apple Vision Pro,OS=26.4"
+          - version: "16.4"
+            runner: macos-15
+            platform: "visionOS"
+            simulator: "Apple Vision Pro,OS=2.5"
+          - version: "15.4"
+            runner: macos-14
             platform: "visionOS"
             simulator: "Apple Vision Pro,OS=1.2"
     name: Apple
-    runs-on: macos-15
+    runs-on: ${{ matrix.xcode.runner }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -97,36 +151,25 @@ jobs:
       run: xcodes select ${{ matrix.xcode.version }}
     - name: Swift Version
       run: swift --version
-    - name: macOS Debug Build
+    - name: Build (macOS)
       if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
         swift build -v -c debug
         xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}"
-    - name: macOS Debug Test for Commit
-      if: github.event_name == 'push' && matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
+    - name: Test (macOS)
+      if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
         swift test -c debug --parallel
         xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test
-    - name: macOSDebug Test for Pull Request
-      if: github.event_name == 'pull_request' && matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
-      run: |
-        swift test -c debug --parallel
-        xcodebuild -scheme Queuer -destination "platform=macOS,arch=${{ matrix.xcode.arch }}" test
-    - name: Mac Catalyst Debug Build
+    - name: Build (Mac Catalyst)
       if: matrix.xcode.variant == 'Mac Catalyst'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}"
-    - name: Mac Catalyst Debug Test for Commit
-      if: github.event_name == 'push' && matrix.xcode.variant == 'Mac Catalyst'
+    - name: Test (Mac Catalyst)
+      if: matrix.xcode.variant == 'Mac Catalyst'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
-    - name: Mac Catalyst Debug Test for Pull Request
-      if: github.event_name == 'pull_request' && matrix.xcode.variant == 'Mac Catalyst'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
-    - name: Others Debug Build
+    - name: Build (Simulator)
       if: matrix.xcode.platform != 'macOS'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}"
-    - name: Others Debug Test for Commit
-      if: github.event_name == 'push' && matrix.xcode.platform != 'macOS'
-      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test
-    - name: Others Debug Test for Pull Request
-      if: github.event_name == 'pull_request' && matrix.xcode.platform != 'macOS'
+    - name: Test (Simulator)
+      if: matrix.xcode.platform != 'macOS'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test
