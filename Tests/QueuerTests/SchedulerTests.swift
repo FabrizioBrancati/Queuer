@@ -55,15 +55,15 @@ final class SchedulerTests: XCTestCase {
         if CIHelper.isNotRunningOnCI() {
             let testExpectation = expectation(description: "Init With Handler")
             var order: [Int] = []
-            
+
             let schedule = Scheduler(deadline: .now(), repeating: .never) {
                 order.append(0)
             }
-            
+
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
                 testExpectation.fulfill()
             }
-            
+
             waitForExpectations(timeout: 5) { error in
                 XCTAssertNil(error)
                 XCTAssertEqual(order, [0])

@@ -95,7 +95,6 @@ final class QueuerTests: XCTestCase {
             Queuer.shared.addOperation(concurrentOperation1)
             Queuer.shared.addOperation(concurrentOperation2)
 
-
             waitForExpectations(timeout: 5) { error in
                 XCTAssertNil(error)
                 XCTAssertEqual(testString, "Tested2")

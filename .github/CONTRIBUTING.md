@@ -12,13 +12,43 @@ Remember to open the pull request against the `develop` branch.
 
 If you find a bug or you have a suggestion create an issue.
 
-## Comments
+## Documentation
 
-Every line of the project must to be commented.
+Every public method, property, class, struct, enum, protocol, etc. should be documented. The documentation should be written in the code, and in the README file (for features only).
+
+You can generate the documentation by using the following command:
+
+```bash
+swift package \
+  --allow-writing-to-directory docs \
+  generate-documentation \
+  --target swift-bundler \
+  --disable-indexing \
+  --transform-for-static-hosting \
+  --hosting-base-path swift-bundler \
+  --output-path docs \
+  --enable-inherited-docs \
+  --experimental-documentation-coverage \
+  --level detailed \
+```
+
+If you find a typo or you think that something is not well explained, please open an issue or submit a pull request.
 
 ## Writing code
 
 New API should follow the rules documented in Swift's [API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/). Comment every public methods, properties, classes. Make commits as atomic as possible with understandable comment. If you are developing feature or fixing a bug, please mention the issue number (e.g. #1) in commit text.
+
+## Commit Messages
+
+Please follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
+
+To make it easier, you can use `pre-commit` and configure it with the following command:
+
+```bash
+make pre-commit-install
+```
+
+This will install the `pre-commit` hooks that will check your commit messages.
 
 ## Changelog
 
@@ -28,7 +58,7 @@ Once your changes are ready, please add an entry to the [CHANGELOG.md](https://g
 
 Add tests for every added function. The aim is to have 100% of code coverage.
 
-## Linux
+## Linux Support
 
 This library supports Linux, so please be sure that the feature that you are adding is compatible with it. If not, due to platform limitations, please wrap the code with `#if !os(Linux)`
 

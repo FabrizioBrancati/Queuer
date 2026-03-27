@@ -93,7 +93,7 @@ open class ConcurrentOperation: Operation {
 
     /// Specify if the `Operation` should retry another time.
     internal var shouldRetry = true
-    
+
     /// Manually control the `finish(success:)` call of the `Operation`.
     /// If set to `true` it is the developer's responsibility to call the `finish(success:)` method,
     /// either by passing `false` or `true` to the function.
@@ -191,16 +191,16 @@ open class ConcurrentOperation: Operation {
 }
 
 /// `ConcurrentOperation` extension with queue handling.
-public extension ConcurrentOperation {
+extension ConcurrentOperation {
     /// Adds the `Operation` to `shared` Queuer.
-    func addToSharedQueuer() {
+    public func addToSharedQueuer() {
         Queuer.shared.addOperation(self)
     }
 
     /// Adds the `Operation` to the custom queue.
     ///
     /// - Parameter queue: Custom queue where the `Operation` will be added.
-    func addToQueue(_ queue: Queuer) {
+    public func addToQueue(_ queue: Queuer) {
         queue.addOperation(self)
     }
 }
