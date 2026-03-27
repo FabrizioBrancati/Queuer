@@ -51,15 +51,13 @@ jobs:
   android:
     name: Android
     runs-on: ubuntu-24.04
-    container:
-      image: swift:6.3-noble
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Install Android SDK
-      run: swift sdk install https://download.swift.org/swift-6.3-release/android-sdk/swift-6.3-RELEASE/swift-6.3-RELEASE_android.artifactbundle.tar.gz --checksum 2f2942c4bcea7965a08665206212c66991dabe23725aeec7c4365fc91acad088
-    - name: Build
-      run: swift build --swift-sdk aarch64-unknown-linux-android28
+    - name: Build for Android
+      uses: skiptools/swift-android-action@v2
+      with:
+        swift-version: "6.3"
 
   apple:
     strategy:
