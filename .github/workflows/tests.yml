@@ -59,10 +59,10 @@ jobs:
       with:
         free-disk-space: true
         swift-version: "6.3"
-        test-env: "GITHUB_RUN_ID=${{ github.run_id }}"
+        run-tests: true
 
   windows:
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
       - uses: actions/checkout@v6
       - name: "Setup Swift on Windows"
