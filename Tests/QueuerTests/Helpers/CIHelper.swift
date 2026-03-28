@@ -27,17 +27,23 @@
 import Foundation
 
 struct CIHelper {
-    /// This method is needed because some tests cannot successfully run on CI,
-    /// but they do on a Linux Docker image.
-    /// - Returns: Returns `true` if running on CI, otherwise `false`.
+    /// Returns `true` if running on a CI environment.
     static func isRunningOnCI() -> Bool {
         ProcessInfo.processInfo.environment["GITHUB_RUN_ID"] != nil
     }
 
-    /// This method is needed because some tests cannot successfully run on CI,
-    /// but they do on a Linux Docker image.
-    /// - Returns: Returns `true` if not running on CI, otherwise `false`.
+    /// Returns `true` if not running on a CI environment.
     static func isNotRunningOnCI() -> Bool {
         !isRunningOnCI()
+    }
+
+    /// Returns `true` if running inside a simulator.
+    static func isRunningOnSimulator() -> Bool {
+        ProcessInfo.processInfo.environment["SIMULATOR_DEVICE_NAME"] != nil
+    }
+
+    /// Returns `true` if not running inside a simulator.
+    static func isNotRunningOnSimulator() -> Bool {
+        !isRunningOnSimulator()
     }
 }

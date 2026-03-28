@@ -57,6 +57,7 @@ jobs:
     - name: Build for Android
       uses: skiptools/swift-android-action@v2
       with:
+        free-disk-space: true
         swift-version: "6.3"
         test-env: "GITHUB_RUN_ID=${{ github.run_id }}"
 
@@ -171,16 +172,16 @@ jobs:
       if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
         swift test -c debug --parallel
-        xcodebuild -scheme Queuer -testPlan QueuerTests -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test
+        xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test
     - name: Build (Mac Catalyst)
       if: matrix.xcode.variant == 'Mac Catalyst'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}"
     - name: Test (Mac Catalyst)
       if: matrix.xcode.variant == 'Mac Catalyst'
-      run: xcodebuild -scheme Queuer -testPlan QueuerTests -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
     - name: Build (Simulator)
       if: matrix.xcode.platform != 'macOS'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}"
     - name: Test (Simulator)
       if: matrix.xcode.platform != 'macOS'
-      run: xcodebuild -scheme Queuer -testPlan QueuerTests -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test
+      run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test

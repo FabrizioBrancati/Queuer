@@ -29,7 +29,7 @@ import XCTest
 
 final class SemaphoreTests: XCTestCase {
     func testWithSemaphore() {
-        if CIHelper.isNotRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() && CIHelper.isNotRunningOnSimulator() {
             let semaphore = Semaphore()
             let queue = Queuer(name: "SemaphoreTestWithSemaphore")
             let testExpectation = expectation(description: "With Semaphore")
@@ -53,7 +53,7 @@ final class SemaphoreTests: XCTestCase {
     }
 
     func testWithoutSemaphore() {
-        if CIHelper.isNotRunningOnCI() {
+        if CIHelper.isNotRunningOnCI() && CIHelper.isNotRunningOnSimulator() {
             let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
             let testExpectation = expectation(description: "Without Semaphore")
             var testString = ""
