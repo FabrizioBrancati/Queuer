@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "id": "CI",
+      "name": "CI",
+      "options": {
+        "environmentVariableEntries": [
+          {
+            "key": "GITHUB_RUN_ID",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  ],
+  "defaultOptions": {},
+  "testTargets": [],
+  "version": 1
+}
