@@ -43,6 +43,7 @@
 
 - Improved usage section in README.md file
 - Improved test suite to be deterministic, without sleeps and CI skips - [#34](https://github.com/FabrizioBrancati/Queuer/pull/34)
+- Improved `GroupOperation` to propagate its quality of service to the inner operations, avoiding a priority inversion while waiting for them - [#35](https://github.com/FabrizioBrancati/Queuer/pull/35)
 - Updated swift-docc-plugin to 1.4.3
 
 ### Fixed
