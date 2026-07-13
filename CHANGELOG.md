@@ -25,22 +25,31 @@
 
 ### Added
 
-- Added TestHelper to run test on Linux but not on CI - [#33](https://github.com/FabrizioBrancati/Queuer/pull/33)
-- Added syntactic sugar helpers to create and chain operations easier and faster, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#syntactic-sugar)
+- Added TestHelper with thread safe utilities to write deterministic tests on every platform - [#33](https://github.com/FabrizioBrancati/Queuer/pull/33)
+- Added syntactic sugar helpers to create and chain operations easier and faster, more info on how to use it [here](https://github.com/FabrizioBrancati/Queuer#syntactic-sugar) - [#35](https://github.com/FabrizioBrancati/Queuer/pull/35)
+- Added `addBarrier(_:)` and its chainable `barrier(_:)` variant to `Queuer`, to wait for all the operations currently in a queue - [#35](https://github.com/FabrizioBrancati/Queuer/pull/35)
+- Added `asyncWait(_:tolerance:clock:)` and `syncWait(_:)` to `Queuer`, to add wait operations to a queue - [#35](https://github.com/FabrizioBrancati/Queuer/pull/35)
 - Added `onPause`, `onResume`, and `onCancel` closures to `ConcurrentOperation` class - [#37](https://github.com/FabrizioBrancati/Queuer/pull/37)
 - Added `pre-commit` hook [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
 - Added Makefile [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
 - Added swift-format support [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
 - Added GitHub Actions jobs for Mac Catalyst, iOS, tvOS, watchOS, visionOS, Android, and Windows - [#34](https://github.com/FabrizioBrancati/Queuer/pull/34)
 
+### Changed
+
+- Changed `waitUntilAllOperationsAreFinished()` to return the `Queuer` instance, to allow chaining - [#35](https://github.com/FabrizioBrancati/Queuer/pull/35)
+
 ### Improved
 
 - Improved usage section in README.md file
+- Improved test suite to be deterministic, without sleeps and CI skips - [#34](https://github.com/FabrizioBrancati/Queuer/pull/34)
 - Updated swift-docc-plugin to 1.4.3
 
 ### Fixed
 
 - Fixed tests build on iOS 15, macOS 12, watchOS 8, and tvOS 15
+- Fixed `ConcurrentOperation` executing the block of an operation canceled before starting, it now moves directly to the finished state - [#34](https://github.com/FabrizioBrancati/Queuer/pull/34)
+- Fixed a race condition in automatic retries combined with `manualFinish`, where an asynchronous `finish(success:)` could skip an attempt and make the operation spin forever - [#34](https://github.com/FabrizioBrancati/Queuer/pull/34)
 
 ## [3.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.1) - No Loop No Party
 
