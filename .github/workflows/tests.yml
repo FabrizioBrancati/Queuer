@@ -78,7 +78,7 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
-          - version: "26.4"
+          - version: "26.4.1"
             runner: macos-26
             platform: "macOS"
             arch: "arm64"
@@ -90,7 +90,7 @@ jobs:
             runner: macos-14
             platform: "macOS"
             arch: "arm64"
-          - version: "26.4"
+          - version: "26.4.1"
             runner: macos-26
             platform: "macOS"
             arch: "arm64"
@@ -105,7 +105,7 @@ jobs:
             platform: "macOS"
             arch: "arm64"
             variant: "Mac Catalyst"
-          - version: "26.4"
+          - version: "26.4.1"
             runner: macos-26
             platform: "iOS"
             simulator: "iPhone 17,OS=26.4"
@@ -117,7 +117,7 @@ jobs:
             runner: macos-14
             platform: "iOS"
             simulator: "iPhone 15,OS=17.5"
-          - version: "26.4"
+          - version: "26.4.1"
             runner: macos-26
             platform: "watchOS"
             simulator: "Apple Watch Series 11 (46mm),OS=26.4"
@@ -129,7 +129,7 @@ jobs:
             runner: macos-14
             platform: "watchOS"
             simulator: "Apple Watch Series 9 (45mm),OS=10.5"
-          - version: "26.4"
+          - version: "26.4.1"
             runner: macos-26
             platform: "tvOS"
             simulator: "Apple TV 4K (3rd generation),OS=26.4"
@@ -141,7 +141,7 @@ jobs:
             runner: macos-14
             platform: "tvOS"
             simulator: "Apple TV 4K (3rd generation),OS=17.5"
-          - version: "26.4"
+          - version: "26.4.1"
             runner: macos-26
             platform: "visionOS"
             simulator: "Apple Vision Pro,OS=26.4"
