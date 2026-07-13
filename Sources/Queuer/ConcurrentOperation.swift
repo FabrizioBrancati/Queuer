@@ -32,6 +32,18 @@ open class ConcurrentOperation: Operation {
     /// `Operation`'s execution block.
     public var executionBlock: ((_ operation: ConcurrentOperation) -> Void)?
 
+    /// `Operation`'s pause block.
+    /// This block is called when the `Operation` is paused.
+    public var onPause: ((_ operation: ConcurrentOperation) -> Void)?
+
+    /// `Operation`'s resume block.
+    /// This block is called when the `Operation` is resumed.
+    public var onResume: ((_ operation: ConcurrentOperation) -> Void)?
+
+    /// `Operation`'s resume block.
+    /// This block is called when the `Operation` is canceled.
+    public var onCancel: ((_ operation: ConcurrentOperation) -> Void)?
+
     /// Set if the `Operation` is executing.
     private var _executing = false {
         willSet {
@@ -81,7 +93,7 @@ open class ConcurrentOperation: Operation {
 
     /// Specify if the `Operation` should retry another time.
     internal var shouldRetry = true
-    
+
     /// Manually control the `finish(success:)` call of the `Operation`.
     /// If set to `true` it is the developer's responsibility to call the `finish(success:)` method,
     /// either by passing `false` or `true` to the function.
@@ -105,6 +117,15 @@ open class ConcurrentOperation: Operation {
 
     /// Start the `Operation`.
     override open func start() {
+        /// As required by the `Operation` contract, a canceled `Operation`
+        /// must move directly to the finished state without executing.
+        /// `OperationQueue` calls `start()` even on operations that were
+        /// canceled before ever starting.
+        guard !isCancelled else {
+            _finished = true
+            return
+        }
+
         _executing = true
         execute()
     }
@@ -126,9 +147,15 @@ open class ConcurrentOperation: Operation {
     open func execute() {
         if let executionBlock {
             while shouldRetry, !manualRetry {
-                if lastExecutedAttempt != currentAttempt {
+                /// Read the current attempt once, before executing the block.
+                /// With `manualFinish`, `finish(success:)` can be called from another thread
+                /// while the block is being executed: re-reading `currentAttempt` afterwards
+                /// would mark the new attempt as already executed and spin this loop forever.
+                let attempt = currentAttempt
+
+                if lastExecutedAttempt != attempt {
                     executionBlock(self)
-                    lastExecutedAttempt = currentAttempt
+                    lastExecutedAttempt = attempt
                 }
 
                 if !manualFinish {
@@ -159,25 +186,36 @@ open class ConcurrentOperation: Operation {
     }
 
     /// Pause the current `Operation`, if it's supported.
-    /// Must be overridden by a subclass to get a custom pause action.
-    open func pause() {}
+    /// It can be overridden to add custom behavior.
+    open func pause() {
+        onPause?(self)
+    }
 
     /// Resume the current `Operation`, if it's supported.
-    /// Must be overridden by a subclass to get a custom resume action.
-    open func resume() {}
+    /// It can be overridden to add custom behavior.
+    open func resume() {
+        onResume?(self)
+    }
+
+    /// Cancel the current `Operation`, if it's supported.
+    /// It can be overridden to add custom behavior.
+    override open func cancel() {
+        super.cancel()
+        onCancel?(self)
+    }
 }
 
 /// `ConcurrentOperation` extension with queue handling.
-public extension ConcurrentOperation {
+extension ConcurrentOperation {
     /// Adds the `Operation` to `shared` Queuer.
-    func addToSharedQueuer() {
+    public func addToSharedQueuer() {
         Queuer.shared.addOperation(self)
     }
 
     /// Adds the `Operation` to the custom queue.
     ///
     /// - Parameter queue: Custom queue where the `Operation` will be added.
-    func addToQueue(_ queue: Queuer) {
+    public func addToQueue(_ queue: Queuer) {
         queue.addOperation(self)
     }
 }

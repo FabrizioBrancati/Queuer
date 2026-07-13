@@ -84,11 +84,17 @@ public class Queuer {
     }
 
     /// Cancel all `Operation`s in queue.
+    @available(*, deprecated, message: "Use `cancel()` instead.")
     public func cancelAll() {
+        cancel()
+    }
+
+    /// Cancel all `Operation`s in queue.
+    public func cancel() {
         queue.cancelAllOperations()
     }
 
-    /// Pause the queue.
+    /// Pause all `Operation`s in queue.
     public func pause() {
         queue.isSuspended = true
 
@@ -99,7 +105,7 @@ public class Queuer {
         }
     }
 
-    /// Resume the queue.
+    /// Resume all `Operation`s in queue.
     public func resume() {
         queue.isSuspended = false
 
@@ -123,18 +129,18 @@ public class Queuer {
 // MARK: - Queuer Operations and Chaining
 
 /// `Queuer` extension with `Operation`s and chaining handling.
-public extension Queuer {
+extension Queuer {
     /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter block: Block to be executed.
-    func addOperation(_ operation: @escaping () -> Void) {
+    public func addOperation(_ operation: @escaping () -> Void) {
         queue.addOperation(operation)
     }
 
     /// Add an `Operation` to be executed asynchronously.
     ///
     /// - Parameter operation: `Operation` to be executed.
-    func addOperation(_ operation: Operation) {
+    public func addOperation(_ operation: Operation) {
         queue.addOperation(operation)
     }
 
@@ -148,7 +154,7 @@ public extension Queuer {
     ///   - operations: `Operation`s Array.
     ///   - completionHandler: Completion block to be executed when all `Operation`s
     ///                        are finished.
-    func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
+    public func addChainedOperations(_ operations: [Operation], completionHandler: (() -> Void)? = nil) {
         for (index, operation) in operations.enumerated() {
             if index > 0 {
                 operation.addDependency(operations[index - 1])
@@ -174,14 +180,14 @@ public extension Queuer {
     ///   - operations: `Operation`s list.
     ///   - completionHandler: Completion block to be exectuted when all `Operation`s
     ///                        are finished.
-    func addChainedOperations(_ operations: Operation..., completionHandler: (() -> Void)? = nil) {
+    public func addChainedOperations(_ operations: Operation..., completionHandler: (() -> Void)? = nil) {
         addChainedOperations(operations, completionHandler: completionHandler)
     }
 
     /// Add a completion block to the queue.
     ///
     /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
-    func addCompletionHandler(_ completionHandler: @escaping () -> Void) {
+    public func addCompletionHandler(_ completionHandler: @escaping () -> Void) {
         let completionOperation = BlockOperation(block: completionHandler)
         if let lastOperation = operations.last {
             completionOperation.addDependency(lastOperation)

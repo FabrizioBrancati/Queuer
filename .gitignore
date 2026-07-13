@@ -64,3 +64,4 @@ xcuserdata/
 ### Custom ###
 .swiftpm
 .build
+.vscode
