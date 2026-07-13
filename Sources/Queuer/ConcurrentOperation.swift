@@ -117,6 +117,15 @@ open class ConcurrentOperation: Operation {
 
     /// Start the `Operation`.
     override open func start() {
+        /// As required by the `Operation` contract, a canceled `Operation`
+        /// must move directly to the finished state without executing.
+        /// `OperationQueue` calls `start()` even on operations that were
+        /// canceled before ever starting.
+        guard !isCancelled else {
+            _finished = true
+            return
+        }
+
         _executing = true
         execute()
     }
