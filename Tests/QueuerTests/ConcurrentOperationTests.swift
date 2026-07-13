@@ -128,7 +128,7 @@ final class ConcurrentOperationTests: XCTestCase {
     func testAsyncChainedRetry() async {
         let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
         let testExpectation = expectation(description: "Chained Retry")
-        let order = OrderHelper()
+        let order = OrderHelper<Int>()
 
         let concurrentOperation1 = ConcurrentOperation { operation in
             Task {

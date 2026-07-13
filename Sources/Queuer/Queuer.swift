@@ -195,8 +195,13 @@ extension Queuer {
         addOperation(completionOperation)
     }
 
-    @available(macOS 10.15, *)
-    func addBarrier(_ completionHandler: @escaping @Sendable () -> Void) {
+    /// Adds a barrier block to the queue.
+    /// The barrier waits for all the `Operation`s currently in the queue,
+    /// and every `Operation` added afterwards waits for the barrier to finish.
+    ///
+    /// - Parameter completionHandler: Barrier block to be executed.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    public func addBarrier(_ completionHandler: @escaping @Sendable () -> Void) {
         queue.addBarrierBlock(completionHandler)
     }
 }
