@@ -109,7 +109,7 @@ jobs:
           - version: "26.4.1"
             runner: macos-26
             platform: "iOS"
-            simulator: "iPhone 18,OS=26.4"
+            simulator: "iPhone 17,OS=26.4.1"
           - version: "16.4"
             runner: macos-15
             platform: "iOS"
@@ -145,7 +145,7 @@ jobs:
           - version: "26.4.1"
             runner: macos-26
             platform: "visionOS"
-            simulator: "Apple Vision Pro,OS=26.4"
+            simulator: "Apple Vision Pro,OS=26.4.1"
           - version: "16.4"
             runner: macos-15
             platform: "visionOS"
@@ -163,11 +163,6 @@ jobs:
       run: xcodes select ${{ matrix.xcode.version }}
     - name: Swift Version
       run: swift --version
-    - name: Download visionOS Simulator
-      if: matrix.xcode.platform == 'visionOS'
-      run: |
-        xcodebuild -runFirstLaunch
-        xcodebuild -downloadPlatform visionOS
     - name: Build (macOS)
       if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
