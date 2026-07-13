@@ -84,6 +84,20 @@ public extension Queuer {
         return self
     }
 
+    /// Adds a list of chained `ConcurrentOperation`s created from the given execution blocks.
+    ///
+    /// Example:
+    ///
+    ///     [A, B, C] = A -> B -> C
+    ///
+    /// - Parameter blocks: Execution blocks list.
+    /// - Returns: Returns the current `Queuer` instance.
+    @discardableResult
+    func chained(_ blocks: ((_ operation: ConcurrentOperation) -> Void)...) -> Queuer {
+        addChainedOperations(blocks.map { ConcurrentOperation(executionBlock: $0) })
+        return self
+    }
+
     /// Adds a `ConcurrentOperation` with the given execution block.
     ///
     /// - Parameter block: Execution block.
@@ -91,6 +105,20 @@ public extension Queuer {
     @discardableResult
     func concurrent(_ block: @escaping (_ operation: ConcurrentOperation) -> Void) -> Queuer {
         addOperation(ConcurrentOperation(executionBlock: block))
+        return self
+    }
+
+    /// Adds a `ConcurrentOperation` with the given execution block and maximum allowed retries.
+    ///
+    /// - Parameters:
+    ///   - retries: Maximum allowed retries.
+    ///   - block: Execution block.
+    /// - Returns: Returns the current `Queuer` instance.
+    @discardableResult
+    func concurrent(retries: Int, _ block: @escaping (_ operation: ConcurrentOperation) -> Void) -> Queuer {
+        let operation = ConcurrentOperation(executionBlock: block)
+        operation.maximumRetries = retries
+        addOperation(operation)
         return self
     }
 
@@ -196,6 +224,66 @@ public extension ConcurrentOperation {
     @discardableResult
     func maximumRetries(_ retries: Int) -> ConcurrentOperation {
         maximumRetries = retries
+        return self
+    }
+
+    /// Sets the `Operation` name.
+    ///
+    /// - Parameter name: `Operation` name.
+    /// - Returns: Returns the current `ConcurrentOperation` instance.
+    @discardableResult
+    func name(_ name: String) -> ConcurrentOperation {
+        self.name = name
+        return self
+    }
+
+    /// Sets the execution priority in its queue.
+    ///
+    /// - Parameter priority: Execution priority.
+    /// - Returns: Returns the current `ConcurrentOperation` instance.
+    @discardableResult
+    func queuePriority(_ priority: Operation.QueuePriority) -> ConcurrentOperation {
+        self.queuePriority = priority
+        return self
+    }
+
+    /// Sets the service level to apply to the `Operation`.
+    ///
+    /// - Parameter quality: The service level.
+    /// - Returns: Returns the current `ConcurrentOperation` instance.
+    @discardableResult
+    func qualityOfService(_ quality: QualityOfService) -> ConcurrentOperation {
+        self.qualityOfService = quality
+        return self
+    }
+
+    /// Sets the block to be called when the `Operation` is paused.
+    ///
+    /// - Parameter block: Pause block.
+    /// - Returns: Returns the current `ConcurrentOperation` instance.
+    @discardableResult
+    func onPause(_ block: @escaping (_ operation: ConcurrentOperation) -> Void) -> ConcurrentOperation {
+        self.onPause = block
+        return self
+    }
+
+    /// Sets the block to be called when the `Operation` is resumed.
+    ///
+    /// - Parameter block: Resume block.
+    /// - Returns: Returns the current `ConcurrentOperation` instance.
+    @discardableResult
+    func onResume(_ block: @escaping (_ operation: ConcurrentOperation) -> Void) -> ConcurrentOperation {
+        self.onResume = block
+        return self
+    }
+
+    /// Sets the block to be called when the `Operation` is canceled.
+    ///
+    /// - Parameter block: Cancel block.
+    /// - Returns: Returns the current `ConcurrentOperation` instance.
+    @discardableResult
+    func onCancel(_ block: @escaping (_ operation: ConcurrentOperation) -> Void) -> ConcurrentOperation {
+        self.onCancel = block
         return self
     }
 }

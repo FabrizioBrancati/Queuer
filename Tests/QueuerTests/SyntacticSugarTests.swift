@@ -30,15 +30,59 @@ import XCTest
 final class SyntacticSugarTests: XCTestCase {
     func testConcurrentOperationSugar() {
         let concurrentOperation = ConcurrentOperation()
+            .name("SugarOperation")
+            .queuePriority(.high)
+            .qualityOfService(.utility)
             .manualFinish()
             .manualRetry()
             .maximumRetries(5)
             .executionBlock { _ in }
+            .onPause { _ in }
+            .onResume { _ in }
+            .onCancel { _ in }
 
+        XCTAssertEqual(concurrentOperation.name, "SugarOperation")
+        XCTAssertEqual(concurrentOperation.queuePriority, .high)
+        XCTAssertEqual(concurrentOperation.qualityOfService, .utility)
         XCTAssertTrue(concurrentOperation.manualFinish)
         XCTAssertTrue(concurrentOperation.manualRetry)
         XCTAssertEqual(concurrentOperation.maximumRetries, 5)
         XCTAssertNotNil(concurrentOperation.executionBlock)
+        XCTAssertNotNil(concurrentOperation.onPause)
+        XCTAssertNotNil(concurrentOperation.onResume)
+        XCTAssertNotNil(concurrentOperation.onCancel)
+    }
+
+    func testChainedBlocksAndConcurrentRetries() {
+        let testExpectation = expectation(description: "Chained Blocks And Concurrent Retries")
+        let order = Protected<[String]>([])
+
+        Queuer(name: "SyntacticSugarTestChainedBlocks")
+            .maxConcurrentOperationCount(1)
+            .chained(
+                { _ in
+                    order.append("First")
+                },
+                { operation in
+                    order.append("Second")
+                    operation.success = false
+                }
+            )
+            .concurrent(retries: 2) { operation in
+                order.append("Retry")
+                operation.success = false
+            }
+            .completion {
+                order.append("Finished")
+                testExpectation.fulfill()
+            }
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            /// "Second" fails with the default 3 maximum retries,
+            /// "Retry" fails with 2 maximum retries.
+            XCTAssertEqual(order.value, ["First", "Second", "Second", "Second", "Retry", "Retry", "Finished"])
+        }
     }
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
