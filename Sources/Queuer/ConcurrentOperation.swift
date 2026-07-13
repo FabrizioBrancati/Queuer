@@ -138,9 +138,15 @@ open class ConcurrentOperation: Operation {
     open func execute() {
         if let executionBlock {
             while shouldRetry, !manualRetry {
-                if lastExecutedAttempt != currentAttempt {
+                /// Read the current attempt once, before executing the block.
+                /// With `manualFinish`, `finish(success:)` can be called from another thread
+                /// while the block is being executed: re-reading `currentAttempt` afterwards
+                /// would mark the new attempt as already executed and spin this loop forever.
+                let attempt = currentAttempt
+
+                if lastExecutedAttempt != attempt {
                     executionBlock(self)
-                    lastExecutedAttempt = currentAttempt
+                    lastExecutedAttempt = attempt
                 }
 
                 if !manualFinish {
