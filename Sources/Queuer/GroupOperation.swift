@@ -61,6 +61,11 @@ open class GroupOperation: ConcurrentOperation {
     /// The execution of a `GroupOperation` will always be considered successful.
     /// Use the variable `allOperationsSucceeded` to know if an error occurred on an operation in the Group.
     override open func execute() {
+        /// Propagate the `GroupOperation` service level to the inner queue.
+        /// Without this, the inner `Operation`s would run at the queue's default
+        /// service level, even when the group runs at a higher one, creating a
+        /// priority inversion while the group is blocked waiting for them.
+        queue.qualityOfService = qualityOfService
         queue.addOperations(operations, waitUntilFinished: true)
         finish(success: true)
     }

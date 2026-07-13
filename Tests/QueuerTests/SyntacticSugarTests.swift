@@ -107,9 +107,12 @@ final class SyntacticSugarTests: XCTestCase {
                 operations.append("Operation 2")
             }
 
+        /// `.background` quality of service must be avoided here:
+        /// loaded CI runners can defer background work for tens of seconds,
+        /// making the test time out.
         Queuer(name: "SyntacticSugar")
             .maxConcurrentOperationCount(1)
-            .qualityOfService(.background)
+            .qualityOfService(.userInitiated)
             .concurrent { _ in
                 operations.append("Concurrent 1")
             }
