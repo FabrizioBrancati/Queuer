@@ -29,48 +29,48 @@ import XCTest
 
 final class SemaphoreTests: XCTestCase {
     func testWithSemaphore() {
-        if CIHelper.isNotRunningOnCI() {
-            let semaphore = Semaphore()
-            let queue = Queuer(name: "SemaphoreTestWithSemaphore")
-            let testExpectation = expectation(description: "With Semaphore")
-            var testString = ""
+        let semaphore = Semaphore()
+        let queue = Queuer(name: "SemaphoreTestWithSemaphore")
+        let testExpectation = expectation(description: "With Semaphore")
+        let testString = Protected("")
 
-            let concurrentOperation = ConcurrentOperation { _ in
-                Thread.sleep(forTimeInterval: 2)
-                testString = "Tested"
-                semaphore.continue()
-            }
-            concurrentOperation.addToQueue(queue)
+        let concurrentOperation = ConcurrentOperation { _ in
+            testString.mutate { $0 = "Tested" }
+            semaphore.continue()
+        }
+        concurrentOperation.addToQueue(queue)
 
-            semaphore.wait()
-            XCTAssertEqual(testString, "Tested")
-            testExpectation.fulfill()
+        /// Use a bounded wait so a failure doesn't hang the whole test run.
+        XCTAssertEqual(semaphore.wait(.now() + .seconds(8)), .success)
+        XCTAssertEqual(testString.value, "Tested")
+        testExpectation.fulfill()
 
-            waitForExpectations(timeout: 5) { error in
-                XCTAssertNil(error)
-            }
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
         }
     }
 
     func testWithoutSemaphore() {
-        if CIHelper.isNotRunningOnCI() {
-            let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
-            let testExpectation = expectation(description: "Without Semaphore")
-            var testString = ""
+        let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
+        let testExpectation = expectation(description: "Without Semaphore")
+        let testString = Protected("")
+        let releaseOperation = DispatchSemaphore(value: 0)
 
-            let concurrentOperation = ConcurrentOperation { _ in
-                Thread.sleep(forTimeInterval: 2)
-                testString = "Tested"
-                testExpectation.fulfill()
-            }
-            concurrentOperation.addToQueue(queue)
+        let concurrentOperation = ConcurrentOperation { _ in
+            /// Hold the operation until the initial assert has been made,
+            /// instead of relying on it being slower than the main thread.
+            _ = releaseOperation.wait(timeout: .now() + .seconds(8))
+            testString.mutate { $0 = "Tested" }
+            testExpectation.fulfill()
+        }
+        concurrentOperation.addToQueue(queue)
 
-            XCTAssertEqual(testString, "")
+        XCTAssertEqual(testString.value, "")
+        releaseOperation.signal()
 
-            waitForExpectations(timeout: 5) { error in
-                XCTAssertNil(error)
-                XCTAssertEqual(testString, "Tested")
-            }
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString.value, "Tested")
         }
     }
 }

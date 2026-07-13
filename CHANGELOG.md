@@ -30,11 +30,16 @@
 - Added `pre-commit` hook [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
 - Added Makefile [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
 - Added swift-format support [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
+- Added GitHub Actions jobs for Mac Catalyst, iOS, tvOS, watchOS, and visionOS - [#34](https://github.com/FabrizioBrancati/Queuer/pull/34)
 
 ### Improved
 
 - Improved usage section in README.md file
 - Updated swift-docc-plugin to 1.4.3
+
+### Fixed
+
+- Fixed tests build on iOS 15, macOS 12, watchOS 8, and tvOS 15
 
 ## [3.0.1](https://github.com/FabrizioBrancati/Queuer/releases/tag/3.0.1) - No Loop No Party
 

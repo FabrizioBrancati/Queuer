@@ -30,67 +30,70 @@ import XCTest
 
 final class SchedulerTests: XCTestCase {
     func testInitWithoutHandler() {
-        if CIHelper.isNotRunningOnCI() {
-            let testExpectation = expectation(description: "Init Without Handler")
-            var order: [Int] = []
+        let testExpectation = expectation(description: "Init Without Handler")
+        let order = Protected<[Int]>([])
 
-            var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
-            schedule.setHandler {
-                order.append(0)
+        var schedule = Scheduler(deadline: .now(), repeating: .milliseconds(100))
+        schedule.setHandler {
+            /// Count the ticks instead of measuring time.
+            /// Cancel on the fourth one, the timer's queue is serial so no other tick can race this.
+            let count = order.mutate { value -> Int in
+                value.append(0)
+                return value.count
             }
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
+            if count == 4 {
+                schedule.timer.cancel()
                 testExpectation.fulfill()
             }
+        }
 
-            waitForExpectations(timeout: 5) { error in
-                XCTAssertNil(error)
-                XCTAssertEqual(order, [0, 0, 0, 0])
-                schedule.timer.cancel()
-            }
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0, 0, 0, 0])
         }
     }
 
     func testInitWithHandler() {
-        if CIHelper.isNotRunningOnCI() {
-            let testExpectation = expectation(description: "Init With Handler")
-            var order: [Int] = []
+        let testExpectation = expectation(description: "Init With Handler")
+        let order = Protected<[Int]>([])
 
-            let schedule = Scheduler(deadline: .now(), repeating: .never) {
-                order.append(0)
-            }
+        let schedule = Scheduler(deadline: .now(), repeating: .never) {
+            order.append(0)
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
+            /// A `.never` repeating timer must only fire once.
+            /// Give it a short, bounded amount of time to (wrongly) fire again before asserting.
+            DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) {
                 testExpectation.fulfill()
             }
+        }
 
-            waitForExpectations(timeout: 5) { error in
-                XCTAssertNil(error)
-                XCTAssertEqual(order, [0])
-                schedule.timer.cancel()
-            }
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0])
+            schedule.timer.cancel()
         }
     }
 
     func testCancel() {
-        if CIHelper.isNotRunningOnCI() {
-            let testExpectation = expectation(description: "Init Without Handler")
-            var order: [Int] = []
+        let testExpectation = expectation(description: "Cancel")
+        let order = Protected<[Int]>([])
 
-            var schedule = Scheduler(deadline: .now(), repeating: .seconds(1))
-            schedule.setHandler {
-                order.append(0)
-                schedule.timer.cancel()
-            }
+        var schedule = Scheduler(deadline: .now(), repeating: .milliseconds(100))
+        schedule.setHandler {
+            order.append(0)
+            schedule.timer.cancel()
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3500)) {
+            /// The timer has been canceled on the first tick.
+            /// Give it a short, bounded amount of time to (wrongly) fire again before asserting.
+            DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) {
                 testExpectation.fulfill()
             }
+        }
 
-            waitForExpectations(timeout: 5) { error in
-                XCTAssertNil(error)
-                XCTAssertEqual(order, [0])
-            }
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0])
         }
     }
 }

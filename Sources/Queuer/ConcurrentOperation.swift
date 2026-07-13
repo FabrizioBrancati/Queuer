@@ -117,6 +117,15 @@ open class ConcurrentOperation: Operation {
 
     /// Start the `Operation`.
     override open func start() {
+        /// As required by the `Operation` contract, a canceled `Operation`
+        /// must move directly to the finished state without executing.
+        /// `OperationQueue` calls `start()` even on operations that were
+        /// canceled before ever starting.
+        guard !isCancelled else {
+            _finished = true
+            return
+        }
+
         _executing = true
         execute()
     }
@@ -138,9 +147,15 @@ open class ConcurrentOperation: Operation {
     open func execute() {
         if let executionBlock {
             while shouldRetry, !manualRetry {
-                if lastExecutedAttempt != currentAttempt {
+                /// Read the current attempt once, before executing the block.
+                /// With `manualFinish`, `finish(success:)` can be called from another thread
+                /// while the block is being executed: re-reading `currentAttempt` afterwards
+                /// would mark the new attempt as already executed and spin this loop forever.
+                let attempt = currentAttempt
+
+                if lastExecutedAttempt != attempt {
                     executionBlock(self)
-                    lastExecutedAttempt = currentAttempt
+                    lastExecutedAttempt = attempt
                 }
 
                 if !manualFinish {
