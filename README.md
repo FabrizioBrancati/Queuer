@@ -21,6 +21,7 @@ Queuer is a queue manager built on top of [OperationQueue](https://developer.app
 - [x] Create semaphores
 - [x] Create and handle schedules
 - [x] Automatically or manually retry an operation
+- [x] Syntactic sugar to create and chain operations easier and faster
 - [ ] Throttling between each automatic operation retry
 
 ## Requirements
@@ -397,6 +398,91 @@ let concurrentOperation = ConcurrentOperation {
 }
 concurrentOperation.addToQueue(queue)
 semaphore.wait()
+```
+
+### Syntactic Sugar
+
+Queuer offers a set of chainable helpers to create queues and operations in a more compact way.
+Every helper returns its instance, so the calls can be chained:
+
+```swift
+Queuer(name: "MyQueue")
+    .maxConcurrentOperationCount(1)
+    .qualityOfService(.background)
+    .concurrent { _ in
+        /// Your task here
+    }
+    .concurrent(retries: 2) { operation in
+        /// Your retryable task here
+        operation.success = false
+    }
+    .completion {
+        /// Executed once the last operation currently in the queue is finished
+    }
+    .chained(operation1, operation2)
+    .chained(
+        { _ in
+            /// First chained task here
+        },
+        { _ in
+            /// Second chained task here
+        }
+    )
+    .group(concurrentOperation1, concurrentOperation2)
+    .completion {
+        /// Executed at the end
+    }
+```
+
+`ConcurrentOperation`s can be configured with the same style:
+
+```swift
+let operation = ConcurrentOperation()
+    .name("MyOperation")
+    .queuePriority(.high)
+    .qualityOfService(.utility)
+    .manualFinish()
+    .manualRetry()
+    .maximumRetries(5)
+    .executionBlock { operation in
+        /// Your task here
+        operation.finish()
+    }
+    .onPause { operation in
+        /// Executed when the operation is paused
+    }
+    .onResume { operation in
+        /// Executed when the operation is resumed
+    }
+    .onCancel { operation in
+        /// Executed when the operation is canceled
+    }
+```
+
+A barrier waits for all the operations currently in the queue and blocks every operation added after it, until the barrier is finished (requires macOS 10.15, iOS 13, tvOS 13 or watchOS 6):
+
+```swift
+queue
+    .concurrent { _ in
+        /// Your task here
+    }
+    .barrier {
+        /// Executed once every operation added before the barrier is finished
+    }
+    .concurrent { _ in
+        /// Executed after the barrier is finished
+    }
+```
+
+You can also make the queue wait, either without blocking a thread (requires macOS 13, iOS 16, tvOS 16 or watchOS 9) or by blocking one of its threads:
+
+```swift
+queue
+    .asyncWait(.seconds(1))
+    .syncWait(1)
+    .completion {
+        /// Executed after both waits are finished
+    }
 ```
 
 ## Changelog
