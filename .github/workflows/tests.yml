@@ -76,7 +76,6 @@ jobs:
   apple:
     strategy:
       fail-fast: false
-      max-parallel: 1
       matrix:
         xcode:
           - version: "26.4"
@@ -163,6 +162,11 @@ jobs:
       run: xcodes select ${{ matrix.xcode.version }}
     - name: Swift Version
       run: swift --version
+    - name: Download visionOS Simulator
+      if: matrix.xcode.platform == 'visionOS'
+      run: |
+        sudo xcodebuild -runFirstLaunch
+        sudo xcodebuild -downloadPlatform visionOS
     - name: Build (macOS)
       if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |
