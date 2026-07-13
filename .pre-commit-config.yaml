@@ -15,12 +15,12 @@ repos:
       # args: [--branch, main]
       - id: trailing-whitespace
   - repo: https://github.com/crate-ci/typos
-    rev: v1.30.0
+    rev: v1.48.0
     hooks:
       - id: typos
 
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.0.0
+    rev: v4.4.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
