@@ -39,7 +39,7 @@ public struct Semaphore {
     /// to the value.
     ///
     /// - Parameter poolSize: The starting value for the semaphore.
-    ///                       Passing a value less than zero will cause `nil` to be returned.
+    ///                       It must be greater than or equal to zero.
     public init(poolSize: Int = 0) {
         semaphore = DispatchSemaphore(value: poolSize)
     }

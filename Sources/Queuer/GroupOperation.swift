@@ -61,7 +61,52 @@ open class GroupOperation: ConcurrentOperation, @unchecked Sendable {
     /// The execution of a `GroupOperation` will always be considered successful.
     /// Use the variable `allOperationsSucceeded` to know if an error occurred on an operation in the Group.
     override open func execute() {
+        /// A `GroupOperation` canceled between its start and this point
+        /// must not execute the operations of its group.
+        guard !isCancelled else {
+            finish(success: true)
+            return
+        }
+
+        /// Propagate the `GroupOperation` service level to the inner queue.
+        /// Without this, the inner `Operation`s would run at the queue's default
+        /// service level, even when the group runs at a higher one, creating a
+        /// priority inversion while the group is blocked waiting for them.
+        queue.qualityOfService = qualityOfService
         queue.addOperations(operations, waitUntilFinished: true)
         finish(success: true)
+    }
+
+    /// Cancel the `GroupOperation` and all the `ConcurrentOperation`s of its group.
+    override open func cancel() {
+        /// The operations are canceled directly and not only through the inner queue,
+        /// since they may not have been added to it yet.
+        for operation in operations {
+            operation.cancel()
+        }
+        queue.cancelAllOperations()
+        super.cancel()
+    }
+
+    /// Pause the `GroupOperation` and all the `ConcurrentOperation`s of its group.
+    override open func pause() {
+        queue.isSuspended = true
+
+        for operation in operations {
+            operation.pause()
+        }
+
+        super.pause()
+    }
+
+    /// Resume the `GroupOperation` and all the `ConcurrentOperation`s of its group.
+    override open func resume() {
+        queue.isSuspended = false
+
+        for operation in operations {
+            operation.resume()
+        }
+
+        super.resume()
     }
 }
