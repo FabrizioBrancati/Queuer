@@ -40,7 +40,7 @@ jobs:
       image: ${{ matrix.swift.image }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Swift Version
       run: swift --version
     - name: Build
@@ -158,7 +158,7 @@ jobs:
     runs-on: ${{ matrix.xcode.runner }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Select Xcode
       run: xcodes select ${{ matrix.xcode.version }}
     - name: Swift Version
