@@ -62,6 +62,7 @@ jobs:
         run-tests: true
 
   windows:
+    name: Windows
     runs-on: windows-2025
     steps:
       - uses: actions/checkout@v6
@@ -108,7 +109,7 @@ jobs:
           - version: "26.4.1"
             runner: macos-26
             platform: "iOS"
-            simulator: "iPhone 17,OS=26.4"
+            simulator: "iPhone 18,OS=26.4"
           - version: "16.4"
             runner: macos-15
             platform: "iOS"
@@ -165,8 +166,8 @@ jobs:
     - name: Download visionOS Simulator
       if: matrix.xcode.platform == 'visionOS'
       run: |
-        sudo xcodebuild -runFirstLaunch
-        sudo xcodebuild -downloadPlatform visionOS
+        xcodebuild -runFirstLaunch
+        xcodebuild -downloadPlatform visionOS
     - name: Build (macOS)
       if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
       run: |

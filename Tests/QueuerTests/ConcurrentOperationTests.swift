@@ -350,12 +350,9 @@ final class ConcurrentOperationTests: XCTestCase {
             /// Keep the operation running until the queue has been canceled.
             _ = queueCanceled.wait(timeout: .now() + .seconds(8))
         }
-        /// `OperationQueue` still calls `start()` on operations that were canceled
-        /// before starting, so the block must bail out on its own.
-        let concurrentOperation2 = ConcurrentOperation { operation in
-            guard !operation.isCancelled else {
-                return
-            }
+        /// A canceled `Operation` must never execute its block,
+        /// so `testString` has to remain "Tested1".
+        let concurrentOperation2 = ConcurrentOperation { _ in
             testString.mutate { $0 = "Tested2" }
         }
         concurrentOperation1.addToQueue(queue)

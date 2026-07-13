@@ -319,23 +319,17 @@ final class QueuerTests: XCTestCase {
         /// Pause the queue so that no operation can start before `cancel()` is called.
         queue.pause()
 
-        /// `OperationQueue` still calls `start()` on operations that were canceled
-        /// before starting, so the blocks must bail out on their own.
-        let concurrentOperation1 = ConcurrentOperation { operation in
-            guard !operation.isCancelled else {
-                return
-            }
+        /// The operations are intentionally not chained: on Linux, canceling
+        /// dependency-linked operations can crash inside corelibs-foundation's
+        /// KVO handling when dependents finish before their prerequisites.
+        let concurrentOperation1 = ConcurrentOperation { _ in
             order.append(0)
         }
-        let concurrentOperation2 = ConcurrentOperation { operation in
-            guard !operation.isCancelled else {
-                return
-            }
+        let concurrentOperation2 = ConcurrentOperation { _ in
             order.append(1)
         }
-        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
-            order.append(2)
-        }
+        queue.addOperation(concurrentOperation1)
+        queue.addOperation(concurrentOperation2)
 
         queue.cancel()
         queue.resume()
