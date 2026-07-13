@@ -38,27 +38,44 @@ final class ConcurrentOperationTests: XCTestCase {
         }
         concurrentOperation.addToQueue(queue)
 
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
         }
     }
 
     func testAddToSharedQueuer() {
-        let concurrentOperation = ConcurrentOperation()
+        let releaseOperation = DispatchSemaphore(value: 0)
+
+        /// Hold the operation in the queue until the asserts have been made.
+        let concurrentOperation = ConcurrentOperation { _ in
+            _ = releaseOperation.wait(timeout: .now() + .seconds(8))
+        }
         concurrentOperation.addToSharedQueuer()
 
-        XCTAssertEqual(Queuer.shared.operationCount, 1)
-        XCTAssertEqual(Queuer.shared.operations, [concurrentOperation])
+        XCTAssertGreaterThanOrEqual(Queuer.shared.operationCount, 1)
+        XCTAssertTrue(Queuer.shared.operations.contains(concurrentOperation))
+
+        releaseOperation.signal()
+
+        /// Leave the shared queue clean for the other tests.
+        Queuer.shared.waitUntilAllOperationsAreFinished()
     }
 
     func testAddToQueue() {
         let queue = Queuer(name: "ConcurrentOperationTestAddToQueuer")
+        let releaseOperation = DispatchSemaphore(value: 0)
 
-        let concurrentOperation = ConcurrentOperation()
+        /// Hold the operation in the queue until the asserts have been made.
+        let concurrentOperation = ConcurrentOperation { _ in
+            _ = releaseOperation.wait(timeout: .now() + .seconds(8))
+        }
         concurrentOperation.addToQueue(queue)
 
         XCTAssertEqual(queue.operationCount, 1)
         XCTAssertEqual(queue.operations, [concurrentOperation])
+
+        releaseOperation.signal()
+        queue.waitUntilAllOperationsAreFinished()
     }
 
     func testSimpleRetry() {
@@ -69,14 +86,14 @@ final class ConcurrentOperationTests: XCTestCase {
         let concurrentOperation = ConcurrentOperation { operation in
             operation.success = false
         }
-        queue.addCompletionHandler {
-            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(1)) {
-                testExpectation.fulfill()
-            }
+        /// `completionBlock` is only called once the operation is finished,
+        /// so every retry is guaranteed to be over by then.
+        concurrentOperation.completionBlock = {
+            testExpectation.fulfill()
         }
         concurrentOperation.addToQueue(queue)
 
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertFalse(concurrentOperation.success)
             XCTAssertEqual(concurrentOperation.currentAttempt, 3)
@@ -86,10 +103,9 @@ final class ConcurrentOperationTests: XCTestCase {
     func testChainedRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
         let testExpectation = expectation(description: "Chained Retry")
-        var order: [Int] = []
+        let order = Protected<[Int]>([])
 
         let concurrentOperation1 = ConcurrentOperation { operation in
-            Thread.sleep(forTimeInterval: 1)
             order.append(0)
             operation.success = false
         }
@@ -102,54 +118,50 @@ final class ConcurrentOperationTests: XCTestCase {
             testExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
+            XCTAssertEqual(order.value, [0, 0, 0, 1, 1, 1, 2])
         }
     }
 
     @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
     func testAsyncChainedRetry() async {
-        if CIHelper.isNotRunningOnCI() && CIHelper.isNotRunningOnSimulator() {
-            let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
-            let testExpectation = expectation(description: "Chained Retry")
-            let order = OrderHelper()
+        let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+        let testExpectation = expectation(description: "Chained Retry")
+        let order = OrderHelper()
 
-            let concurrentOperation1 = ConcurrentOperation { operation in
-                Task {
-                    try? await Task.sleep(for: .seconds(1))
-                    await order.append(0)
-                    operation.finish(success: false)
-                }
+        let concurrentOperation1 = ConcurrentOperation { operation in
+            Task {
+                await order.append(0)
+                operation.finish(success: false)
             }
-            concurrentOperation1.manualFinish = true
-            let concurrentOperation2 = ConcurrentOperation { operation in
-                Task {
-                    await order.append(1)
-                    operation.finish(success: false)
-                }
-            }
-            concurrentOperation2.manualFinish = true
-            queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
-                Task {
-                    await order.append(2)
-                    testExpectation.fulfill()
-                }
-            }
-
-            await fulfillment(of: [testExpectation], timeout: 10)
-            let finalOrder = await order.order
-            XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
         }
+        concurrentOperation1.manualFinish = true
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            Task {
+                await order.append(1)
+                operation.finish(success: false)
+            }
+        }
+        concurrentOperation2.manualFinish = true
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            Task {
+                await order.append(2)
+                testExpectation.fulfill()
+            }
+        }
+
+        await fulfillment(of: [testExpectation], timeout: 10)
+        let finalOrder = await order.order
+        XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
     }
 
     func testCanceledChainedRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestCanceledChainedRetry")
         let testExpectation = expectation(description: "Canceled Chained Retry")
-        var order: [Int] = []
+        let order = Protected<[Int]>([])
 
         let concurrentOperation1 = ConcurrentOperation { operation in
-            Thread.sleep(forTimeInterval: 1)
             order.append(0)
             operation.success = false
         }
@@ -166,16 +178,16 @@ final class ConcurrentOperationTests: XCTestCase {
             testExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, [0, 0, 0, 2])
+            XCTAssertEqual(order.value, [0, 0, 0, 2])
         }
     }
 
     func testChainedManualRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedManualRetry")
         let testExpectation = expectation(description: "Chained Manual Retry")
-        var order: [Int] = []
+        let order = Protected<[Int]>([])
 
         let concurrentOperation1 = ConcurrentOperation(name: "concurrentOperation1") { operation in
             operation.success = false
@@ -183,38 +195,35 @@ final class ConcurrentOperationTests: XCTestCase {
         }
         concurrentOperation1.manualRetry = true
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            concurrentOperation1.retry()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
-            concurrentOperation1.retry()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
-            concurrentOperation1.retry()
-        }
-
         let concurrentOperation2 = ConcurrentOperation(name: "concurrentOperation2") { operation in
             operation.success = false
             order.append(1)
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
-                order.append(2)
-                testExpectation.fulfill()
-            }
+        queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
+            order.append(2)
+            testExpectation.fulfill()
+        }
+
+        /// Trigger a retry as soon as the previous attempt has been executed,
+        /// instead of relying on wall clock delays.
+        onBackgroundThread {
+            waitUntil(timeout: 8) { order.count >= 1 && concurrentOperation1.currentAttempt == 2 }
+            concurrentOperation1.retry()
+            waitUntil(timeout: 8) { order.count >= 2 && concurrentOperation1.currentAttempt == 3 }
+            concurrentOperation1.retry()
         }
 
         waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, [0, 0, 0, 1, 1, 1, 2])
+            XCTAssertEqual(order.value, [0, 0, 0, 1, 1, 1, 2])
         }
     }
 
     func testChainedWrongManualRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedWrongManualRetry")
         let testExpectation = expectation(description: "Chained Wrong Manual Retry")
-        var order: [Int] = []
+        let order = Protected<[Int]>([])
 
         let concurrentOperation1 = ConcurrentOperation { operation in
             order.append(0)
@@ -229,69 +238,90 @@ final class ConcurrentOperationTests: XCTestCase {
             order.append(2)
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
+        /// `retry()` is never called, so the chain must stall after the first attempt.
+        /// Give it a bounded amount of time to (wrongly) make progress before asserting.
+        DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(2)) {
             testExpectation.fulfill()
         }
 
         waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, [0])
+            XCTAssertEqual(order.value, [0])
         }
     }
 
     func testConcurrentOperation() {
         let queue = Queuer(name: "ConcurrentOperation")
         let testExpectation = expectation(description: "Concurrent Operation")
-        var testString = ""
+        let testString = Protected("")
+        let firstOperationDone = DispatchSemaphore(value: 0)
 
         let concurrentOperation1 = ConcurrentOperation { _ in
-            testString = "Tested1"
+            testString.mutate { $0 = "Tested1" }
+            firstOperationDone.signal()
         }
         let concurrentOperation2 = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 2)
-            testString = "Tested2"
+            /// Deterministically run after `concurrentOperation1`, without sleeping.
+            _ = firstOperationDone.wait(timeout: .now() + .seconds(8))
+            testString.mutate { $0 = "Tested2" }
 
             testExpectation.fulfill()
         }
         concurrentOperation1.addToQueue(queue)
         concurrentOperation2.addToQueue(queue)
 
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(testString, "Tested2")
+            XCTAssertEqual(testString.value, "Tested2")
         }
     }
 
     func testConcurrentOperationOnSharedQueuer() {
         let testExpectation = expectation(description: "Concurrent Operation")
-        var testString = ""
+        let testString = Protected("")
+        let secondOperationDone = DispatchSemaphore(value: 0)
 
         let concurrentOperation1 = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 1.5)
-            testString = "Tested1"
+            _ = secondOperationDone.wait(timeout: .now() + .seconds(8))
+            testString.mutate { $0 = "Tested1" }
 
             testExpectation.fulfill()
         }
         let concurrentOperation2 = ConcurrentOperation { _ in
-            testString = "Tested2"
+            testString.mutate { $0 = "Tested2" }
+            secondOperationDone.signal()
         }
         Queuer.shared.maxConcurrentOperationCount = 2
         concurrentOperation2.addToSharedQueuer()
         concurrentOperation1.addToSharedQueuer()
 
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(testString, "Tested1")
+            XCTAssertEqual(testString.value, "Tested1")
         }
     }
 
     func testConcurrentOperationRetry() {
         let queue = Queuer(name: "ConcurrentOperationRetry")
         let testExpectation = expectation(description: "Concurrent Operation Retry")
-        var order: [Int] = []
+        let order = Protected<[Int]>([])
+        let secondOperationDone = DispatchSemaphore(value: 0)
+
+        /// The signaling operation is enqueued first so the test also works
+        /// if the queue is effectively serial on a starved runner.
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            order.append(1)
+            secondOperationDone.signal()
+        }
+        concurrentOperation2.addToQueue(queue)
 
         let concurrentOperation1 = ConcurrentOperation { operation in
-            Thread.sleep(forTimeInterval: 2.5)
+            /// Wait for the other operation only on the first attempt,
+            /// the retries happen after it has already finished.
+            if operation.currentAttempt == 1 {
+                _ = secondOperationDone.wait(timeout: .now() + .seconds(8))
+            }
+
             order.append(0)
             operation.success = false
 
@@ -301,63 +331,70 @@ final class ConcurrentOperationTests: XCTestCase {
         }
         concurrentOperation1.addToQueue(queue)
 
-        let concurrentOperation2 = ConcurrentOperation { _ in
-            order.append(1)
-        }
-        concurrentOperation2.addToQueue(queue)
-
         waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, [1, 0, 0, 0])
+            XCTAssertEqual(order.value, [1, 0, 0, 0])
         }
     }
 
     func testCancel() {
         let queue = Queuer(name: "TestCancel", maxConcurrentOperationCount: 1)
         let testExpectation = expectation(description: "Cancel")
-        var testString = ""
-
-        let deadline = DispatchTime.now() + .seconds(2)
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
-            queue.cancelAll()
-            testExpectation.fulfill()
-        }
+        let testString = Protected("")
+        let firstOperationStarted = DispatchSemaphore(value: 0)
+        let queueCanceled = DispatchSemaphore(value: 0)
 
         let concurrentOperation1 = ConcurrentOperation { _ in
-            testString = "Tested1"
-            Thread.sleep(forTimeInterval: 4)
+            testString.mutate { $0 = "Tested1" }
+            firstOperationStarted.signal()
+            /// Keep the operation running until the queue has been canceled.
+            _ = queueCanceled.wait(timeout: .now() + .seconds(8))
         }
-        let concurrentOperation2 = ConcurrentOperation { _ in
-            testString = "Tested2"
+        /// `OperationQueue` still calls `start()` on operations that were canceled
+        /// before starting, so the block must bail out on its own.
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            guard !operation.isCancelled else {
+                return
+            }
+            testString.mutate { $0 = "Tested2" }
         }
         concurrentOperation1.addToQueue(queue)
         concurrentOperation2.addToQueue(queue)
 
-        waitForExpectations(timeout: 5) { error in
+        onBackgroundThread {
+            _ = firstOperationStarted.wait(timeout: .now() + .seconds(8))
+            queue.cancel()
+            queueCanceled.signal()
+            testExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(testString, "Tested1")
+            XCTAssertEqual(testString.value, "Tested1")
+            XCTAssertTrue(concurrentOperation2.isCancelled)
         }
     }
 
     func testManualFinish() {
         let queue = Queuer(name: "ManualFinish")
         let testExpectation = expectation(description: "Manual Finish")
+        let operationStarted = DispatchSemaphore(value: 0)
 
         let concurrentOperation = ConcurrentOperation { _ in
-            Thread.sleep(forTimeInterval: 2)
+            operationStarted.signal()
         }
         concurrentOperation.manualFinish = true
 
         concurrentOperation.addToQueue(queue)
 
-        let deadline = DispatchTime.now() + .seconds(4)
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+        onBackgroundThread {
+            _ = operationStarted.wait(timeout: .now() + .seconds(8))
             XCTAssertFalse(concurrentOperation.isFinished)
             concurrentOperation.finish()
             testExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 5) { error in
+        waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertTrue(concurrentOperation.isFinished)
         }
@@ -366,7 +403,7 @@ final class ConcurrentOperationTests: XCTestCase {
     func testChainedManualRetryAndManualFinish() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedManualRetryAndManualFinish")
         let testExpectation = expectation(description: "Chained Manual Retry And Manual Finish")
-        var order: [Int] = []
+        let order = Protected<[Int]>([])
 
         let concurrentOperation = ConcurrentOperation(name: "concurrentOperation1") { operation in
             operation.success = false
@@ -375,20 +412,14 @@ final class ConcurrentOperationTests: XCTestCase {
         concurrentOperation.manualRetry = true
         concurrentOperation.manualFinish = true
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            concurrentOperation.retry()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(4)) {
-            concurrentOperation.retry()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
-            concurrentOperation.retry()
-        }
-
         concurrentOperation.addToQueue(queue)
 
-        let deadline = DispatchTime.now() + .seconds(4)
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: deadline) {
+        onBackgroundThread {
+            waitUntil(timeout: 8) { order.count >= 1 }
+            concurrentOperation.retry()
+            waitUntil(timeout: 8) { order.count >= 2 }
+            concurrentOperation.retry()
+            waitUntil(timeout: 8) { order.count >= 3 }
             XCTAssertFalse(concurrentOperation.isFinished)
             concurrentOperation.finish()
             testExpectation.fulfill()
@@ -396,7 +427,7 @@ final class ConcurrentOperationTests: XCTestCase {
 
         waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
-            XCTAssertEqual(order, [0, 0, 0])
+            XCTAssertEqual(order.value, [0, 0, 0])
             XCTAssertTrue(concurrentOperation.isFinished)
         }
     }
