@@ -110,6 +110,11 @@ open class ConcurrentOperation: Operation, @unchecked Sendable {
     /// Default are 3 retries.
     open var maximumRetries = 3
 
+    /// Throttling between each automatic retry.
+    /// The first attempt is never delayed.
+    /// Default is 0, retries happen immediately.
+    open var retryDelay: TimeInterval = 0
+
     /// Current retry attempt.
     open var currentAttempt: Int {
         stateLock.lock()
@@ -261,14 +266,29 @@ open class ConcurrentOperation: Operation, @unchecked Sendable {
             /// Claim the current attempt once, before executing the block.
             /// `finish(success:)` can be called from another thread while
             /// the block is being executed.
-            let alreadyExecuted = lastExecutedAttempt == _currentAttempt
+            let attempt = _currentAttempt
+            let alreadyExecuted = lastExecutedAttempt == attempt
             if !alreadyExecuted {
-                lastExecutedAttempt = _currentAttempt
+                lastExecutedAttempt = attempt
                 attemptInFlight = true
             }
             stateLock.unlock()
 
             if !alreadyExecuted {
+                /// Throttle automatic retries, the first attempt is never delayed.
+                if attempt > 1, retryDelay > 0 {
+                    Thread.sleep(forTimeInterval: retryDelay)
+
+                    if isCancelled {
+                        stateLock.lock()
+                        attemptInFlight = false
+                        stateLock.unlock()
+
+                        finish(success: success)
+                        return
+                    }
+                }
+
                 executionBlock?(self)
 
                 stateLock.lock()

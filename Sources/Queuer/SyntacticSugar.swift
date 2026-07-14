@@ -227,6 +227,16 @@ public extension ConcurrentOperation {
         return self
     }
 
+    /// Sets the throttling between each automatic retry.
+    ///
+    /// - Parameter delay: Delay between each automatic retry.
+    /// - Returns: Returns the current `ConcurrentOperation` instance.
+    @discardableResult
+    func retryDelay(_ delay: TimeInterval) -> ConcurrentOperation {
+        retryDelay = delay
+        return self
+    }
+
     /// Sets the `Operation` name.
     ///
     /// - Parameter name: `Operation` name.
