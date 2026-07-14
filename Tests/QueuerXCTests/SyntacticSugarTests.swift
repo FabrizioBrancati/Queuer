@@ -235,4 +235,58 @@ final class SyntacticSugarTests: XCTestCase {
             XCTAssertGreaterThanOrEqual(Date().timeIntervalSince(start), 0.05)
         }
     }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    func testAsyncConcurrentOperationSugar() {
+        let concurrentOperation = AsyncConcurrentOperation()
+            .name("AsyncSugarOperation")
+            .queuePriority(.high)
+            .qualityOfService(.utility)
+            .manualFinish()
+            .manualRetry()
+            .maximumRetries(5)
+            .retryDelay(1)
+            .executionBlock { _ in }
+            .onPause { _ in }
+            .onResume { _ in }
+            .onCancel { _ in }
+
+        XCTAssertEqual(concurrentOperation.name, "AsyncSugarOperation")
+        XCTAssertEqual(concurrentOperation.queuePriority, .high)
+        XCTAssertEqual(concurrentOperation.qualityOfService, .utility)
+        XCTAssertTrue(concurrentOperation.manualFinish)
+        XCTAssertTrue(concurrentOperation.manualRetry)
+        XCTAssertEqual(concurrentOperation.maximumRetries, 5)
+        XCTAssertEqual(concurrentOperation.retryDelay, 1)
+        XCTAssertNotNil(concurrentOperation.executionBlock)
+        XCTAssertNotNil(concurrentOperation.onPause)
+        XCTAssertNotNil(concurrentOperation.onResume)
+        XCTAssertNotNil(concurrentOperation.onCancel)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    func testAsyncConcurrentAndAsyncCompletion() {
+        let testExpectation = expectation(description: "Async Concurrent And Async Completion")
+        let order = Protected<[String]>([])
+
+        Queuer(name: "SyntacticSugarTestAsyncConcurrent")
+            .maxConcurrentOperationCount(1)
+            .asyncConcurrent { _ in
+                order.append("First")
+            }
+            .asyncConcurrent(retries: 2) { operation in
+                order.append("Retry")
+                operation.success = false
+            }
+            .asyncCompletion {
+                order.append("Finished")
+                testExpectation.fulfill()
+            }
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            /// "Retry" fails with 2 maximum retries.
+            XCTAssertEqual(order.value, ["First", "Retry", "Retry", "Finished"])
+        }
+    }
 }
