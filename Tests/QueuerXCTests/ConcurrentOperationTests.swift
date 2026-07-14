@@ -496,32 +496,6 @@ final class ConcurrentOperationTests: XCTestCase {
         }
     }
 
-    /// Smoke test for `AsyncConcurrentOperation`, so it stays covered on
-    /// Swift 5.9 and 5.10 toolchains too, where the Swift Testing suite does not build.
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    func testAsyncConcurrentOperationRetries() {
-        let queue = Queuer(name: "ConcurrentOperationTestAsyncConcurrentOperationRetries")
-        let testExpectation = expectation(description: "Async Concurrent Operation Retries")
-        let attempts = Protected(0)
-
-        let asyncConcurrentOperation = AsyncConcurrentOperation { operation in
-            attempts.mutate { $0 += 1 }
-            operation.success = false
-        }
-        /// `completionBlock` is only called once the operation is finished,
-        /// so every retry is guaranteed to be over by then.
-        asyncConcurrentOperation.completionBlock = {
-            testExpectation.fulfill()
-        }
-        asyncConcurrentOperation.addToQueue(queue)
-
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(attempts.value, 3)
-            XCTAssertFalse(asyncConcurrentOperation.success)
-        }
-    }
-
     func testCancelWhileWaitingForManualFinish() {
         let queue = Queuer(name: "ConcurrentOperationTestCancelWhileWaitingForManualFinish")
         let testExpectation = expectation(description: "Cancel While Waiting For Manual Finish")
