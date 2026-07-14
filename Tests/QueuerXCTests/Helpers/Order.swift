@@ -1,11 +1,10 @@
-// swift-tools-version:5.9
 //
-//  Package.swift
+//  Order.swift
 //  Queuer
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2026 Fabrizio Brancati.
+//  Copyright (c) 2017 - 2024 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,33 +24,12 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import PackageDescription
+import Foundation
 
-let package = Package(
-    name: "Queuer",
-    platforms: [
-        .iOS(.v12),
-        .macOS(.v10_13),
-        .macCatalyst(.v13),
-        .tvOS(.v12),
-        .watchOS(.v4),
-        .visionOS(.v1)
-    ],
-    products: [
-        .library(name: "Queuer", targets: ["Queuer"])
-    ],
-    dependencies: [
-        .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.5.0")
-    ],
-    targets: [
-        .target(
-            name: "Queuer",
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]),
-        /// The XCTest suite runs on every supported toolchain.
-        /// The Swift Testing suite lives in `Tests/QueuerTests`,
-        /// and is only declared in the Swift 6 manifest.
-        .testTarget(name: "QueuerXCTests", dependencies: ["Queuer"])
-    ]
-)
+actor Order<Element: Equatable> {
+    var order: [Element] = []
+
+    func append(_ element: Element) {
+        order.append(element)
+    }
+}

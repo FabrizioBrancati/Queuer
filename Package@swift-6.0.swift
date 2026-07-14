@@ -47,8 +47,16 @@ let package = Package(
         /// The library builds in the Swift 6 language mode,
         /// with strict concurrency enabled by default.
         .target(name: "Queuer"),
-        /// The test suite uses the Swift Testing framework,
-        /// so it is only declared in this manifest and runs on Swift 6 and later toolchains.
-        .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
+        /// The Swift Testing suite runs on Swift 6 and later toolchains only.
+        .testTarget(name: "QueuerTests", dependencies: ["Queuer"]),
+        /// The XCTest suite runs on every supported toolchain.
+        /// It intentionally stays in the Swift 5 language mode:
+        /// it must compile on Swift 5.9 and 5.10 toolchains too.
+        .testTarget(
+            name: "QueuerXCTests",
+            dependencies: ["Queuer"],
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ])
     ]
 )
