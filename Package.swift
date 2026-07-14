@@ -5,7 +5,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati.
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -44,11 +44,13 @@ let package = Package(
         .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.5.0")
     ],
     targets: [
+        /// The test suite uses the Swift Testing framework,
+        /// so it is only declared in the Swift 6 manifest.
+        /// On Swift 5.9 and 5.10 toolchains only the library is built.
         .target(
             name: "Queuer",
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
-            ]),
-        .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
+            ])
     ]
 )

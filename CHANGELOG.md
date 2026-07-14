@@ -33,7 +33,7 @@
 - Added Swift 6 language mode support with strict concurrency, the package now ships a `Package@swift-6.0.swift` manifest and stays compatible with Swift 5.9 and 5.10 - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added `AsyncConcurrentOperation`, an `Operation` based on async/await with automatic retries on thrown errors and cooperative `Task` cancellation - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added `addChainedAsyncOperations(_:completionHandler:)` and `addAsyncCompletionHandler(_:)` to `Queuer`, to chain operations with async completion handlers - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
-- Added a Swift Testing test suite, running on Swift 6 and later toolchains - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
+- Added a Swift Testing test suite, replacing XCTest entirely, tests run on Swift 6 and later toolchains, while Swift 5.9 and 5.10 only build the library - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added `retryDelay` to `ConcurrentOperation` and `AsyncConcurrentOperation`, with its chainable `retryDelay(_:)` variant, to throttle automatic retries - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added Dependabot for Swift packages and GitHub Actions dependencies, targeting the `develop` branch - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added `pre-commit` hook [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)

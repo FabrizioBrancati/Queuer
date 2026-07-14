@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,14 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+import Foundation
 import Queuer
-import XCTest
+import Testing
 
-final class SyntacticSugarTests: XCTestCase {
-    func testConcurrentOperationSugar() {
+@Suite("SyntacticSugar")
+struct SyntacticSugarTests {
+    @Test("Fluent setters configure the operation")
+    func concurrentOperationSugar() {
         let concurrentOperation = ConcurrentOperation()
             .name("SugarOperation")
             .queuePriority(.high)
@@ -36,60 +39,30 @@ final class SyntacticSugarTests: XCTestCase {
             .manualFinish()
             .manualRetry()
             .maximumRetries(5)
+            .retryDelay(1)
             .executionBlock { _ in }
             .onPause { _ in }
             .onResume { _ in }
             .onCancel { _ in }
 
-        XCTAssertEqual(concurrentOperation.name, "SugarOperation")
-        XCTAssertEqual(concurrentOperation.queuePriority, .high)
-        XCTAssertEqual(concurrentOperation.qualityOfService, .utility)
-        XCTAssertTrue(concurrentOperation.manualFinish)
-        XCTAssertTrue(concurrentOperation.manualRetry)
-        XCTAssertEqual(concurrentOperation.maximumRetries, 5)
-        XCTAssertNotNil(concurrentOperation.executionBlock)
-        XCTAssertNotNil(concurrentOperation.onPause)
-        XCTAssertNotNil(concurrentOperation.onResume)
-        XCTAssertNotNil(concurrentOperation.onCancel)
-    }
-
-    func testChainedBlocksAndConcurrentRetries() {
-        let testExpectation = expectation(description: "Chained Blocks And Concurrent Retries")
-        let order = Protected<[String]>([])
-
-        Queuer(name: "SyntacticSugarTestChainedBlocks")
-            .maxConcurrentOperationCount(1)
-            .chained(
-                { _ in
-                    order.append("First")
-                },
-                { operation in
-                    order.append("Second")
-                    operation.success = false
-                }
-            )
-            .concurrent(retries: 2) { operation in
-                order.append("Retry")
-                operation.success = false
-            }
-            .completion {
-                order.append("Finished")
-                testExpectation.fulfill()
-            }
-
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            /// "Second" fails with the default 3 maximum retries,
-            /// "Retry" fails with 2 maximum retries.
-            XCTAssertEqual(order.value, ["First", "Second", "Second", "Second", "Retry", "Retry", "Finished"])
-        }
+        #expect(concurrentOperation.name == "SugarOperation")
+        #expect(concurrentOperation.queuePriority == .high)
+        #expect(concurrentOperation.qualityOfService == .utility)
+        #expect(concurrentOperation.manualFinish)
+        #expect(concurrentOperation.manualRetry)
+        #expect(concurrentOperation.maximumRetries == 5)
+        #expect(concurrentOperation.retryDelay == 1)
+        #expect(concurrentOperation.executionBlock != nil)
+        #expect(concurrentOperation.onPause != nil)
+        #expect(concurrentOperation.onResume != nil)
+        #expect(concurrentOperation.onCancel != nil)
     }
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    func testComplexCaseOfSyntacticSugar() {
-        let testExpectation = expectation(description: "Complex Case Of Syntactic Sugar")
-
+    @Test("Complex chain runs with the barrier in the middle")
+    func complexCaseOfSyntacticSugar() async {
         let operations = Protected<[String]>([])
+        let completed = Protected(false)
 
         let operation = ConcurrentOperation()
             .manualFinish()
@@ -159,80 +132,108 @@ final class SyntacticSugarTests: XCTestCase {
             .syncWait(0.5)
             .completion {
                 operations.append("Finished")
-                testExpectation.fulfill()
+                completed.mutate { $0 = true }
             }
 
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
+        #expect(await waitUntil { completed.value })
 
-            let order = operations.value
-            XCTAssertEqual(order.count, 15)
-            XCTAssertEqual(
-                Set(order),
-                [
-                    "Concurrent 1", "Add", "Step 1", "Operation 1", "Operation 2", "Step 2", "Concurrent 2",
-                    "Barrier",
-                    "Chain 1", "Chain 2", "Step 3", "Step 4", "Group 1", "Group 2", "Finished"
-                ]
-            )
+        let order = operations.value
+        #expect(order.count == 15)
+        #expect(
+            Set(order) == [
+                "Concurrent 1", "Add", "Step 1", "Operation 1", "Operation 2", "Step 2", "Concurrent 2",
+                "Barrier",
+                "Chain 1", "Chain 2", "Step 3", "Step 4", "Group 1", "Group 2", "Finished"
+            ]
+        )
 
-            /// The barrier must run after everything added before it,
-            /// and before everything added after it.
-            let beforeBarrier = ["Concurrent 1", "Add", "Step 1", "Operation 1", "Operation 2", "Step 2", "Concurrent 2"]
-            let afterBarrier = ["Chain 1", "Chain 2", "Step 3", "Step 4", "Group 1", "Group 2", "Finished"]
-            if let barrierIndex = order.firstIndex(of: "Barrier") {
-                for element in beforeBarrier {
-                    if let index = order.firstIndex(of: element) {
-                        XCTAssertLessThan(index, barrierIndex, "\(element) should run before the barrier")
-                    }
-                }
-                for element in afterBarrier {
-                    if let index = order.firstIndex(of: element) {
-                        XCTAssertGreaterThan(index, barrierIndex, "\(element) should run after the barrier")
-                    }
+        /// The barrier must run after everything added before it,
+        /// and before everything added after it.
+        let beforeBarrier = ["Concurrent 1", "Add", "Step 1", "Operation 1", "Operation 2", "Step 2", "Concurrent 2"]
+        let afterBarrier = ["Chain 1", "Chain 2", "Step 3", "Step 4", "Group 1", "Group 2", "Finished"]
+        if let barrierIndex = order.firstIndex(of: "Barrier") {
+            for element in beforeBarrier {
+                if let index = order.firstIndex(of: element) {
+                    #expect(index < barrierIndex, "\(element) should run before the barrier")
                 }
             }
-
-            /// Chained operations and their completions must preserve their order.
-            if let chain1 = order.firstIndex(of: "Chain 1"), let chain2 = order.firstIndex(of: "Chain 2") {
-                XCTAssertLessThan(chain1, chain2)
+            for element in afterBarrier {
+                if let index = order.firstIndex(of: element) {
+                    #expect(index > barrierIndex, "\(element) should run after the barrier")
+                }
             }
-            XCTAssertEqual(order.last, "Finished")
         }
+
+        /// Chained operations and their completions must preserve their order.
+        if let chain1 = order.firstIndex(of: "Chain 1"), let chain2 = order.firstIndex(of: "Chain 2") {
+            #expect(chain1 < chain2)
+        }
+        #expect(order.last == "Finished")
     }
 
     @available(macOS 13.0, iOS 16.0, tvOS 16.0, watchOS 9.0, *)
-    func testAsyncWait() {
-        let testExpectation = expectation(description: "Async Wait")
+    @Test("Async wait delays the queue without blocking a thread")
+    func asyncWait() async {
+        let completed = Protected(false)
         let start = Date()
 
         Queuer(name: "SyntacticSugarTestAsyncWait")
             .asyncWait(.milliseconds(100))
             .completion {
-                testExpectation.fulfill()
+                completed.mutate { $0 = true }
             }
 
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            /// The wait must last at least the requested time.
-            /// A lenient lower bound avoids failures from clock differences.
-            XCTAssertGreaterThanOrEqual(Date().timeIntervalSince(start), 0.05)
-        }
+        #expect(await waitUntil { completed.value })
+        /// The wait must last at least the requested time.
+        /// A lenient lower bound avoids failures from clock differences.
+        #expect(Date().timeIntervalSince(start) >= 0.05)
     }
 
-    func testSyncWait() {
-        let testExpectation = expectation(description: "Sync Wait")
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Sync wait delays the queue")
+    func syncWait() async {
+        let completed = Protected(false)
         let start = Date()
 
         Queuer(name: "SyntacticSugarTestSyncWait")
             .syncWait(0.1)
             .completion {
-                testExpectation.fulfill()
+                completed.mutate { $0 = true }
             }
 
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            XCTAssertGreaterThanOrEqual(Date().timeIntervalSince(start), 0.05)
-        }
+        #expect(await waitUntil { completed.value })
+        #expect(Date().timeIntervalSince(start) >= 0.05)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Chained blocks and retryable concurrent blocks run in order")
+    func chainedBlocksAndConcurrentRetries() async {
+        let order = Protected<[String]>([])
+        let completed = Protected(false)
+
+        Queuer(name: "SyntacticSugarTestChainedBlocks")
+            .maxConcurrentOperationCount(1)
+            .chained(
+                { _ in
+                    order.append("First")
+                },
+                { operation in
+                    order.append("Second")
+                    operation.success = false
+                }
+            )
+            .concurrent(retries: 2) { operation in
+                order.append("Retry")
+                operation.success = false
+            }
+            .completion {
+                order.append("Finished")
+                completed.mutate { $0 = true }
+            }
+
+        #expect(await waitUntil { completed.value })
+        /// "Second" fails with the default 3 maximum retries,
+        /// "Retry" fails with 2 maximum retries.
+        #expect(order.value == ["First", "Second", "Second", "Second", "Retry", "Retry", "Finished"])
     }
 }

@@ -58,8 +58,12 @@ Once your changes are ready, please add an entry to the [CHANGELOG.md](https://g
 
 Add tests for every added function. The aim is to have 100% of code coverage.
 
+The test suite uses the [Swift Testing](https://developer.apple.com/documentation/testing) framework and runs on Swift 6 and later toolchains.
+
 Tests must be deterministic: never use `Thread.sleep` or fixed delays to wait for something to happen, as they make tests flaky on slow CI runners.
-Use the utilities in `Tests/QueuerTests/Helpers/TestHelper.swift` instead: `Protected` for state shared between threads, `waitUntil(timeout:_:)` to poll a condition, `fulfill(_:when:)` to fulfill an expectation when a condition becomes true, and `DispatchSemaphore` to enforce an execution order between operations.
+Use the utilities in `Tests/QueuerTests/Helpers/TestHelper.swift` instead: `Protected` for state shared between threads, the async `waitUntil(timeout:_:)` to poll a condition from a test, its blocking variant together with `onBackgroundThread(_:)` to drive manual retries, and `DispatchSemaphore` to enforce an execution order between operations.
+
+Keep in mind that Swift Testing runs tests in parallel within the same process: tests touching global state, like `Queuer.shared`, belong to the serialized `SharedQueuerTests` suite. Also apply `@available` attributes to the test functions and never to the suites, since the `@Test` macro does not support inherited availability.
 
 ## Platform Support
 

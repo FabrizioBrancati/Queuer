@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,17 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import Dispatch
+import Foundation
 import Queuer
-import XCTest
+import Testing
 
-final class GroupOperationTests: XCTestCase {
-    func testGroupOperations() {
+@Suite("GroupOperation")
+struct GroupOperationTests {
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Chained groups run their operations in order")
+    func groupOperations() async {
         let order = Protected<[String]>([])
-        let testExpectation = expectation(description: "GroupOperations")
+        let completed = Protected(false)
         let queue = Queuer(name: "Group Operations")
         let operation2Done = DispatchSemaphore(value: 0)
         let group1Done = DispatchSemaphore(value: 0)
@@ -82,19 +85,19 @@ final class GroupOperationTests: XCTestCase {
         }
 
         queue.addChainedOperations([groupOperation1, groupOperation2, groupOperation3]) {
-            testExpectation.fulfill()
+            completed.mutate { $0 = true }
         }
 
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertTrue(groupOperation1.allOperationsSucceeded)
-            XCTAssertNil(error)
-            XCTAssertEqual(order.value, ["2", "1", "3", "4", "5", "6", "7"])
-        }
+        #expect(await waitUntil { completed.value })
+        #expect(groupOperation1.allOperationsSucceeded)
+        #expect(order.value == ["2", "1", "3", "4", "5", "6", "7"])
     }
 
-    func testGroupOperationsWithInnerChainedRetry() {
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Failed operations in a group retry before the next chained operation")
+    func groupOperationsWithInnerChainedRetry() async {
         let order = Protected<[String]>([])
-        let testExpectation = expectation(description: "GroupOperationsWithInnerChainedRetry")
+        let completed = Protected(false)
         let queue = Queuer(name: "Group Operations Chained Retry")
         let operation1Done = DispatchSemaphore(value: 0)
 
@@ -121,19 +124,19 @@ final class GroupOperationTests: XCTestCase {
         }
 
         queue.addChainedOperations([groupOperation1, groupOperation2]) {
-            testExpectation.fulfill()
+            completed.mutate { $0 = true }
         }
 
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(order.value, ["1", "2", "2", "2", "3"])
-        }
+        #expect(await waitUntil { completed.value })
+        #expect(order.value == ["1", "2", "2", "2", "3"])
     }
 
-    func testGroupOperationsWithCancelledInnerChainedRetry() {
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Self canceled operations in a group do not retry")
+    func groupOperationsWithCancelledInnerChainedRetry() async {
         let queue = Queuer(name: "GroupOperationsWithCancelledInnerChainedRetry")
-        let testExpectation = expectation(description: "Group Operations Cancelled Inner Chained Retry")
         let order = Protected<[String]>([])
+        let completed = Protected(false)
 
         let groupOperation1 = GroupOperation(
             [
@@ -157,19 +160,19 @@ final class GroupOperationTests: XCTestCase {
         }
 
         queue.addChainedOperations([groupOperation1, groupOperation2]) {
-            testExpectation.fulfill()
+            completed.mutate { $0 = true }
         }
 
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(order.value, ["1", "1", "1", "3"])
-        }
+        #expect(await waitUntil { completed.value })
+        #expect(order.value == ["1", "1", "1", "3"])
     }
 
-    func testGroupOperationsWithInnerChainedManualRetry() {
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Manual retries in a group run every attempt in order")
+    func groupOperationsWithInnerChainedManualRetry() async {
         let queue = Queuer(name: "GroupOperationsWithInnerChainedManualRetry")
-        let testExpectation = expectation(description: "Group Operations Inner Chained Manual Retry")
         let order = Protected<[String]>([])
+        let completed = Protected(false)
         let operation1Done = DispatchSemaphore(value: 0)
 
         let concurrentOperation1 = ConcurrentOperation { operation in
@@ -200,7 +203,7 @@ final class GroupOperationTests: XCTestCase {
         }
 
         queue.addChainedOperations([groupOperation1, groupOperation2]) {
-            testExpectation.fulfill()
+            completed.mutate { $0 = true }
         }
 
         /// Trigger every retry as soon as the previous attempt has been recorded,
@@ -216,15 +219,14 @@ final class GroupOperationTests: XCTestCase {
             concurrentOperation1.retry()
         }
 
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(order.value, ["1", "2", "1", "2", "2", "1", "3"])
-        }
+        #expect(await waitUntil { completed.value })
+        #expect(order.value == ["1", "2", "1", "2", "2", "1", "3"])
     }
 
-    func testCancelGroupOperationCancelsInnerOperations() {
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Canceling a group cancels its inner operations")
+    func cancelGroupOperationCancelsInnerOperations() async {
         let queue = Queuer(name: "GroupOperationTestCancel")
-        let testExpectation = expectation(description: "Cancel Group Operation Cancels Inner Operations")
         let order = Protected<[String]>([])
         let firstOperationStarted = DispatchSemaphore(value: 0)
         let releaseOperations = DispatchSemaphore(value: 0)
@@ -252,14 +254,10 @@ final class GroupOperationTests: XCTestCase {
             releaseOperations.signal()
         }
 
-        fulfill(testExpectation, when: { groupOperation.isFinished })
-
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(order.value, ["1"])
-            XCTAssertTrue(groupOperation.isCancelled)
-            XCTAssertTrue(concurrentOperation1.isCancelled)
-            XCTAssertTrue(concurrentOperation2.isCancelled)
-        }
+        #expect(await waitUntil { groupOperation.isFinished })
+        #expect(order.value == ["1"])
+        #expect(groupOperation.isCancelled)
+        #expect(concurrentOperation1.isCancelled)
+        #expect(concurrentOperation2.isCancelled)
     }
 }

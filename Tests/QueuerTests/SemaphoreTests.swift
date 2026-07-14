@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +24,20 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+import Dispatch
+import Foundation
 import Queuer
-import XCTest
+import Testing
 
-final class SemaphoreTests: XCTestCase {
-    func testWithSemaphore() {
+@Suite("Semaphore")
+struct SemaphoreTests {
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Wait is released by a continue call")
+    func withSemaphore() async {
         let semaphore = Semaphore()
         let queue = Queuer(name: "SemaphoreTestWithSemaphore")
-        let testExpectation = expectation(description: "With Semaphore")
         let testString = Protected("")
+        let waitResult = Protected<DispatchTimeoutResult?>(nil)
 
         let concurrentOperation = ConcurrentOperation { _ in
             testString.mutate { $0 = "Tested" }
@@ -40,37 +45,38 @@ final class SemaphoreTests: XCTestCase {
         }
         concurrentOperation.addToQueue(queue)
 
-        /// Use a bounded wait so a failure doesn't hang the whole test run.
-        XCTAssertEqual(semaphore.wait(.now() + .seconds(8)), .success)
-        XCTAssertEqual(testString.value, "Tested")
-        testExpectation.fulfill()
-
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
+        /// The blocking wait runs on a background thread,
+        /// to keep the cooperative thread pool free.
+        onBackgroundThread {
+            waitResult.mutate { $0 = semaphore.wait(.now() + .seconds(8)) }
         }
+
+        #expect(await waitUntil { waitResult.value != nil })
+        #expect(waitResult.value == .success)
+        #expect(testString.value == "Tested")
     }
 
-    func testWithoutSemaphore() {
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Operation runs only after being released")
+    func withoutSemaphore() async {
         let queue = Queuer(name: "SemaphoreTestWithoutSemaphore")
-        let testExpectation = expectation(description: "Without Semaphore")
         let testString = Protected("")
+        let completed = Protected(false)
         let releaseOperation = DispatchSemaphore(value: 0)
 
         let concurrentOperation = ConcurrentOperation { _ in
             /// Hold the operation until the initial assert has been made,
-            /// instead of relying on it being slower than the main thread.
+            /// instead of relying on it being slower than the test.
             _ = releaseOperation.wait(timeout: .now() + .seconds(8))
             testString.mutate { $0 = "Tested" }
-            testExpectation.fulfill()
+            completed.mutate { $0 = true }
         }
         concurrentOperation.addToQueue(queue)
 
-        XCTAssertEqual(testString.value, "")
+        #expect(testString.value == "")
         releaseOperation.signal()
 
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(testString.value, "Tested")
-        }
+        #expect(await waitUntil { completed.value })
+        #expect(testString.value == "Tested")
     }
 }

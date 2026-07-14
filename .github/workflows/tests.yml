@@ -16,10 +16,13 @@ jobs:
         swift:
           - image: "swift:5.9-jammy"
             os: ubuntu-22.04
+            tests: false
           - image: "swift:5.10-jammy"
             os: ubuntu-22.04
+            tests: false
           - image: "swift:5.10-noble"
             os: ubuntu-24.04
+            tests: false
           - image: "swift:6.0-noble"
             os: ubuntu-24.04
           - image: "swift:6.1-jammy"
@@ -46,6 +49,8 @@ jobs:
     - name: Build
       run: swift build -v -c debug
     - name: Test
+      # The test suite uses Swift Testing, only available on Swift 6 and later toolchains.
+      if: matrix.swift.tests != false
       run: swift test -c debug --parallel
 
   android:
@@ -91,6 +96,7 @@ jobs:
             runner: macos-14
             platform: "macOS"
             arch: "arm64"
+            tests: false
           - version: "26.4.1"
             runner: macos-26
             platform: "macOS"
@@ -106,6 +112,7 @@ jobs:
             platform: "macOS"
             arch: "arm64"
             variant: "Mac Catalyst"
+            tests: false
           - version: "26.4.1"
             runner: macos-26
             platform: "iOS"
@@ -118,6 +125,7 @@ jobs:
             runner: macos-14
             platform: "iOS"
             simulator: "iPhone 15,OS=17.5"
+            tests: false
           - version: "26.4.1"
             runner: macos-26
             platform: "watchOS"
@@ -130,6 +138,7 @@ jobs:
             runner: macos-14
             platform: "watchOS"
             simulator: "Apple Watch Series 9 (45mm),OS=10.5"
+            tests: false
           - version: "26.4.1"
             runner: macos-26
             platform: "tvOS"
@@ -142,6 +151,7 @@ jobs:
             runner: macos-14
             platform: "tvOS"
             simulator: "Apple TV 4K (3rd generation),OS=17.5"
+            tests: false
           - version: "26.4.1"
             runner: macos-26
             platform: "visionOS"
@@ -154,6 +164,7 @@ jobs:
             runner: macos-14
             platform: "visionOS"
             simulator: "Apple Vision Pro,OS=1.2"
+            tests: false
     name: Apple
     runs-on: ${{ matrix.xcode.runner }}
     steps:
@@ -169,7 +180,8 @@ jobs:
         swift build -v -c debug
         xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}"
     - name: Test (macOS)
-      if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst'
+      # The test suite uses Swift Testing, only available on Swift 6 and later toolchains.
+      if: matrix.xcode.platform == 'macOS' && matrix.xcode.variant != 'Mac Catalyst' && matrix.xcode.tests != false
       run: |
         swift test -c debug --parallel
         xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }}" test
@@ -177,11 +189,13 @@ jobs:
       if: matrix.xcode.variant == 'Mac Catalyst'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}"
     - name: Test (Mac Catalyst)
-      if: matrix.xcode.variant == 'Mac Catalyst'
+      # The test suite uses Swift Testing, only available on Swift 6 and later toolchains.
+      if: matrix.xcode.variant == 'Mac Catalyst' && matrix.xcode.tests != false
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }},arch=${{ matrix.xcode.arch }},variant=${{ matrix.xcode.variant }}" test
     - name: Build (Simulator)
       if: matrix.xcode.platform != 'macOS'
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}"
     - name: Test (Simulator)
-      if: matrix.xcode.platform != 'macOS'
+      # The test suite uses Swift Testing, only available on Swift 6 and later toolchains.
+      if: matrix.xcode.platform != 'macOS' && matrix.xcode.tests != false
       run: xcodebuild -scheme Queuer -destination "platform=${{ matrix.xcode.platform }} Simulator,name=${{ matrix.xcode.simulator }}" test

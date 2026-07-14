@@ -5,7 +5,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati.
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -47,16 +47,8 @@ let package = Package(
         /// The library builds in the Swift 6 language mode,
         /// with strict concurrency enabled by default.
         .target(name: "Queuer"),
-        /// The XCTest suite intentionally stays in the Swift 5 language mode:
-        /// it exercises patterns, like mutable captures across threads,
-        /// that the Swift 6 language mode forbids.
-        .testTarget(
-            name: "QueuerTests",
-            dependencies: ["Queuer"],
-            swiftSettings: [
-                .swiftLanguageMode(.v5)
-            ]),
-        /// Swift Testing suite, available on Swift 6 and later toolchains only.
-        .testTarget(name: "QueuerSwiftTestingTests", dependencies: ["Queuer"])
+        /// The test suite uses the Swift Testing framework,
+        /// so it is only declared in this manifest and runs on Swift 6 and later toolchains.
+        .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
     ]
 )

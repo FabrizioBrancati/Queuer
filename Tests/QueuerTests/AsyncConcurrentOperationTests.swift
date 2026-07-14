@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -36,8 +36,8 @@ struct AsyncConcurrentOperationTests {
     @Test("Chained async operations retry and run in order")
     func chainedAsyncRetry() async {
         let queue = Queuer(name: "AsyncConcurrentOperationChainedRetry")
-        let order = Locked<[Int]>([])
-        let completed = Locked(false)
+        let order = Protected<[Int]>([])
+        let completed = Protected(false)
 
         let concurrentOperation1 = AsyncConcurrentOperation { operation in
             order.mutate { $0.append(0) }
@@ -60,7 +60,7 @@ struct AsyncConcurrentOperationTests {
     @Test("Thrown errors mark attempts as failed and are retried")
     func throwingBlockRetriesAndFails() async {
         let queue = Queuer(name: "AsyncConcurrentOperationThrowingBlock")
-        let attempts = Locked(0)
+        let attempts = Protected(0)
 
         let concurrentOperation = AsyncConcurrentOperation { _ in
             attempts.mutate { $0 += 1 }
@@ -77,7 +77,7 @@ struct AsyncConcurrentOperationTests {
     @Test("Canceling the operation cancels its task")
     func cancellationStopsTheOperation() async {
         let queue = Queuer(name: "AsyncConcurrentOperationCancellation")
-        let started = Locked(false)
+        let started = Protected(false)
 
         let concurrentOperation = AsyncConcurrentOperation { _ in
             started.mutate { $0 = true }
@@ -95,10 +95,10 @@ struct AsyncConcurrentOperationTests {
     }
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Manual finish completes the operation")
+    @Test("Async manual finish completes the operation")
     func manualFinishCompletesTheOperation() async {
         let queue = Queuer(name: "AsyncConcurrentOperationManualFinish")
-        let executed = Locked(false)
+        let executed = Protected(false)
 
         let concurrentOperation = AsyncConcurrentOperation { _ in
             executed.mutate { $0 = true }
@@ -116,7 +116,7 @@ struct AsyncConcurrentOperationTests {
     }
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Retry delay throttles automatic retries")
+    @Test("Async retry delay throttles automatic retries")
     func retryDelayThrottlesAutomaticRetries() async {
         let queue = Queuer(name: "AsyncConcurrentOperationRetryDelay")
         let start = Date()
@@ -138,8 +138,8 @@ struct AsyncConcurrentOperationTests {
     @Test("Async completion waits for every operation in the queue")
     func asyncCompletionWaitsForAllOperations() async {
         let queue = Queuer(name: "AsyncConcurrentOperationAsyncCompletion")
-        let order = Locked<[String]>([])
-        let completed = Locked(false)
+        let order = Protected<[String]>([])
+        let completed = Protected(false)
 
         let concurrentOperation = AsyncConcurrentOperation { _ in
             order.mutate { $0.append("operation") }

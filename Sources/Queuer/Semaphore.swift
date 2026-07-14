@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,9 @@ import Dispatch
 import Foundation
 
 /// `DispatchSemaphore` struct wrapper.
-public struct Semaphore {
+/// `@unchecked` since the underlying `DispatchSemaphore` is thread safe,
+/// but not marked as `Sendable` on every supported platform.
+public struct Semaphore: @unchecked Sendable {
     /// Private `DispatchSemaphore`.
     private let semaphore: DispatchSemaphore
 

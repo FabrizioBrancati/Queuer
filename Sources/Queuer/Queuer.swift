@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -83,12 +83,6 @@ public final class Queuer: @unchecked Sendable {
         queue.name = name
         self.maxConcurrentOperationCount = maxConcurrentOperationCount
         self.qualityOfService = qualityOfService
-    }
-
-    /// Cancel all `Operation`s in queue.
-    @available(*, deprecated, message: "Use `cancel()` instead.")
-    public func cancelAll() {
-        cancel()
     }
 
     /// Cancel all `Operation`s in queue.
