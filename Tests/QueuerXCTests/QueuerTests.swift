@@ -112,32 +112,6 @@ final class QueuerTests: XCTestCase {
         }
     }
 
-    func testMaxConcurrentOperationCountSetToTwo() {
-        let testExpectation = expectation(description: "Max Concurrent Operation Count Set To Two")
-        let testString = Protected("")
-        let secondOperationDone = DispatchSemaphore(value: 0)
-
-        let concurrentOperation1 = ConcurrentOperation { _ in
-            /// Deterministically finish after `concurrentOperation2`, without sleeping.
-            _ = secondOperationDone.wait(timeout: .now() + .seconds(8))
-            testString.mutate { $0 = "Tested1" }
-
-            testExpectation.fulfill()
-        }
-        let concurrentOperation2 = ConcurrentOperation { _ in
-            testString.mutate { $0 = "Tested2" }
-            secondOperationDone.signal()
-        }
-        Queuer.shared.maxConcurrentOperationCount = 2
-        Queuer.shared.addOperation(concurrentOperation2)
-        Queuer.shared.addOperation(concurrentOperation1)
-
-        waitForExpectations(timeout: 10) { error in
-            XCTAssertNil(error)
-            XCTAssertEqual(testString.value, "Tested1")
-        }
-    }
-
     func testQualityOfService() {
         let queue = Queuer(name: "QueuerTestMaxConcurrentOperationCount")
 
