@@ -34,20 +34,19 @@ struct QueuerTests {
     @Test("Operation count reflects the queue state")
     func operationCount() async {
         let queue = Queuer(name: "QueuerTestOperationCount")
-        let operationStarted = DispatchSemaphore(value: 0)
         let releaseOperation = DispatchSemaphore(value: 0)
 
         #expect(queue.operationCount == 0)
 
+        /// Keep the operation alive until the count has been verified.
+        /// `DispatchSemaphore.wait(timeout:)` cannot be called from this
+        /// asynchronous context, so the count is polled instead.
         let concurrentOperation = ConcurrentOperation { _ in
-            operationStarted.signal()
-            /// Keep the operation alive until the count has been verified.
             _ = releaseOperation.wait(timeout: .now() + .seconds(8))
         }
         concurrentOperation.addToQueue(queue)
 
         #expect(await waitUntil { queue.operationCount == 1 })
-        _ = operationStarted.wait(timeout: .now() + .seconds(8))
         releaseOperation.signal()
 
         /// The operation needs some time to leave the queue after its block returns,
@@ -59,17 +58,17 @@ struct QueuerTests {
     @Test("Operations list reflects the queue state")
     func operations() async {
         let queue = Queuer(name: "QueuerTestOperations")
-        let operationStarted = DispatchSemaphore(value: 0)
         let releaseOperation = DispatchSemaphore(value: 0)
 
+        /// Keep the operation alive until the asserts have been made.
+        /// `DispatchSemaphore.wait(timeout:)` cannot be called from this
+        /// asynchronous context, so the operations list is polled instead.
         let concurrentOperation = ConcurrentOperation { _ in
-            operationStarted.signal()
             _ = releaseOperation.wait(timeout: .now() + .seconds(8))
         }
         queue.addOperation(concurrentOperation)
 
-        _ = operationStarted.wait(timeout: .now() + .seconds(8))
-        #expect(queue.operations.contains(concurrentOperation))
+        #expect(await waitUntil { queue.operations.contains(concurrentOperation) })
         releaseOperation.signal()
 
         #expect(await waitUntil { !queue.operations.contains(concurrentOperation) })

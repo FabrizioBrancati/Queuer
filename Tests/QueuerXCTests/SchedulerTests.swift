@@ -34,6 +34,9 @@ final class SchedulerTests: XCTestCase {
         let order = Protected<[Int]>([])
 
         var schedule = Scheduler(deadline: .now(), repeating: .milliseconds(100))
+        /// The timer is boxed since `DispatchSourceTimer` is not `Sendable`,
+        /// and captured separately to avoid capturing the mutable `schedule`.
+        let timer = Protected(schedule.timer)
         schedule.setHandler {
             /// Count the ticks instead of measuring time.
             /// Cancel on the fourth one, the timer's queue is serial so no other tick can race this.
@@ -43,7 +46,7 @@ final class SchedulerTests: XCTestCase {
             }
 
             if count == 4 {
-                schedule.timer.cancel()
+                timer.value.cancel()
                 testExpectation.fulfill()
             }
         }
@@ -80,9 +83,12 @@ final class SchedulerTests: XCTestCase {
         let order = Protected<[Int]>([])
 
         var schedule = Scheduler(deadline: .now(), repeating: .milliseconds(100))
+        /// The timer is boxed since `DispatchSourceTimer` is not `Sendable`,
+        /// and captured separately to avoid capturing the mutable `schedule`.
+        let timer = Protected(schedule.timer)
         schedule.setHandler {
             order.append(0)
-            schedule.timer.cancel()
+            timer.value.cancel()
 
             /// The timer has been canceled on the first tick.
             /// Give it a short, bounded amount of time to (wrongly) fire again before asserting.
@@ -111,28 +117,33 @@ final class SchedulerTests: XCTestCase {
         let testExpectation = expectation(description: "Set Handler Twice")
         let order = Protected<[Int]>([])
 
-        var schedule = Scheduler(deadline: .now(), repeating: .milliseconds(100))
-        /// The timer is captured separately to avoid overlapping accesses
-        /// to `schedule` between `setHandler(_:)` and the firing handler.
-        let timer = schedule.timer
-        schedule.setHandler {
-            order.append(0)
+        /// The `Scheduler` is boxed, since a `@Sendable` closure cannot capture
+        /// a mutable variable to call the mutating `setHandler(_:)`.
+        let schedule = Protected(Scheduler(deadline: .now(), repeating: .milliseconds(100)))
+        /// The timer is boxed since `DispatchSourceTimer` is not `Sendable`.
+        let timer = Protected(schedule.value.timer)
+        schedule.mutate {
+            $0.setHandler {
+                order.append(0)
+            }
         }
 
         onBackgroundThread {
             waitUntil(timeout: 8) { order.value.contains(0) }
 
             /// Setting the handler again must replace the previous one, without crashing.
-            schedule.setHandler {
-                let alreadyReplaced = order.mutate { value -> Bool in
-                    let alreadyReplaced = value.contains(1)
-                    value.append(1)
-                    return alreadyReplaced
-                }
+            schedule.mutate {
+                $0.setHandler {
+                    let alreadyReplaced = order.mutate { value -> Bool in
+                        let alreadyReplaced = value.contains(1)
+                        value.append(1)
+                        return alreadyReplaced
+                    }
 
-                if !alreadyReplaced {
-                    timer.cancel()
-                    testExpectation.fulfill()
+                    if !alreadyReplaced {
+                        timer.value.cancel()
+                        testExpectation.fulfill()
+                    }
                 }
             }
         }

@@ -104,7 +104,7 @@ extension XCTestCase {
     /// Useful to drive manual retries or cancellations without relying on wall clock delays.
     ///
     /// - Parameter block: Block to be executed.
-    func onBackgroundThread(_ block: @escaping () -> Void) {
+    func onBackgroundThread(_ block: @escaping @Sendable () -> Void) {
         DispatchQueue.global().async(execute: block)
     }
 }
