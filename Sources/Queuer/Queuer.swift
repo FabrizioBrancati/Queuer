@@ -27,7 +27,9 @@
 import Foundation
 
 /// Queuer class.
-public final class Queuer: Sendable {
+/// `@unchecked` since the underlying `OperationQueue` is thread safe,
+/// but not marked as `Sendable` on every supported platform.
+public final class Queuer: @unchecked Sendable {
     /// Shared Queuer.
     public static let shared = Queuer(name: "Queuer")
 
@@ -193,7 +195,7 @@ extension Queuer {
     ///   - operations: `Operation`s Array.
     ///   - completionHandler: Completion block to be executed when all `Operation`s
     ///                        are finished.
-    @available(macOS 10.15, *)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func addChainedAsyncOperations(_ operations: [Operation], completionHandler: (@Sendable () async -> Void)? = nil) {
         for (index, operation) in operations.enumerated() {
             if index > 0 {
@@ -207,7 +209,22 @@ extension Queuer {
             return
         }
 
-        addAsyncCompletionHandler(completionHandler)
+        guard !operations.isEmpty else {
+            addAsyncCompletionHandler(completionHandler)
+            return
+        }
+
+        /// The completion depends on every `Operation` of the chain directly.
+        /// Depending on the last `Operation` currently in the queue would be racy:
+        /// the chain could already be finished, or the last `Operation`
+        /// could belong to someone else on a shared queue.
+        let completionOperation = AsyncConcurrentOperation { _ in
+            await completionHandler()
+        }
+        for operation in operations {
+            completionOperation.addDependency(operation)
+        }
+        addOperation(completionOperation)
     }
 
     /// Add an Array of chained `Operation`s.
@@ -251,16 +268,22 @@ extension Queuer {
         queue.addBarrierBlock(completionHandler)
     }
 
-    /// Add a completion block to the queue.
+    /// Add an async completion block to the queue.
+    /// The completion waits for every `Operation` currently in the queue.
+    /// On an empty queue, the completion is executed right away.
     ///
-    /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
-    @available(macOS 10.15, *)
+    /// - Parameter completionHandler: Async completion handler to be executed as last `Operation`.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func addAsyncCompletionHandler(_ completionHandler: @Sendable @escaping () async -> Void) {
-        let completionOperation = AsyncConcurrentOperation { operation in
+        let completionOperation = AsyncConcurrentOperation { _ in
             await completionHandler()
         }
-        if let lastOperation = operations.last {
-            completionOperation.addDependency(lastOperation)
+        /// Depending on every `Operation` guarantees the completion runs last,
+        /// even on concurrent queues where the last added `Operation`
+        /// is not necessarily the last to finish.
+        /// Dependencies on already finished `Operation`s are immediately satisfied.
+        for operation in operations where !operation.isFinished {
+            completionOperation.addDependency(operation)
         }
         addOperation(completionOperation)
     }

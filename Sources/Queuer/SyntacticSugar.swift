@@ -65,7 +65,7 @@ public extension Queuer {
     /// - Parameter completion: Completion block to be executed.
     /// - Returns: Returns the current `Queuer` instance.
     @discardableResult
-    func completion(_ completion: @escaping () -> Void) -> Queuer {
+    func completion(_ completion: @escaping @Sendable () -> Void) -> Queuer {
         addCompletionHandler(completion)
         return self
     }

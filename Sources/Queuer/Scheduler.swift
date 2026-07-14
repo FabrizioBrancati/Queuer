@@ -38,7 +38,7 @@ public struct Scheduler {
     /// Schedule quality of service.
     public private(set) var qualityOfService: DispatchQoS
     /// Schedule handler.
-    public private(set) var handler: (() -> Void)?
+    public private(set) var handler: (@Sendable () -> Void)?
 
     /// Create a schedule.
     ///
@@ -47,7 +47,7 @@ public struct Scheduler {
     ///   - repeating: Repeating interval
     ///   - qualityOfService: Quality of service.
     ///   - handler: Closure handler.
-    public init(deadline: DispatchTime, repeating: DispatchTimeInterval, qualityOfService: DispatchQoS = .default, handler: (() -> Void)? = nil) {
+    public init(deadline: DispatchTime, repeating: DispatchTimeInterval, qualityOfService: DispatchQoS = .default, handler: (@Sendable () -> Void)? = nil) {
         self.deadline = deadline
         self.repeating = repeating
         self.qualityOfService = qualityOfService
@@ -67,7 +67,7 @@ public struct Scheduler {
     /// Set the handler after schedule creation.
     ///
     /// - Parameter handler: Closure handler.
-    public mutating func setHandler(_ handler: @escaping () -> Void) {
+    public mutating func setHandler(_ handler: @escaping @Sendable () -> Void) {
         self.handler = handler
 
         timer.setEventHandler(qos: qualityOfService, handler: handler)
