@@ -29,7 +29,7 @@ import XCTest
 
 /// A thread safe box around a value.
 /// Tests mutate state from operation threads, so every shared value goes through this lock.
-final class Protected<Value> {
+final class Protected<Value>: @unchecked Sendable {
     private let lock = NSLock()
     private var protectedValue: Value
 

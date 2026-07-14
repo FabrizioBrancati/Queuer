@@ -57,8 +57,11 @@ public struct Scheduler {
         timer.schedule(deadline: deadline, repeating: repeating)
         if let handler {
             timer.setEventHandler(qos: qualityOfService, handler: handler)
-            timer.resume()
         }
+        /// The timer is always resumed, even without a handler, since it fires harmlessly.
+        /// A never resumed `DispatchSourceTimer` crashes on release,
+        /// and `resume()` calls must be balanced, so `setHandler(_:)` must not resume it again.
+        timer.resume()
     }
 
     /// Set the handler after schedule creation.
@@ -68,6 +71,5 @@ public struct Scheduler {
         self.handler = handler
 
         timer.setEventHandler(qos: qualityOfService, handler: handler)
-        timer.resume()
     }
 }

@@ -44,6 +44,13 @@ open class ConcurrentOperation: Operation {
     /// This block is called when the `Operation` is canceled.
     public var onCancel: ((_ operation: ConcurrentOperation) -> Void)?
 
+    /// Lock that protects the retry state shared between threads.
+    private let stateLock = NSLock()
+
+    /// Semaphore used to park the execution thread while waiting for
+    /// a manual `finish(success:)` call, instead of spinning.
+    private let manualFinishSemaphore = DispatchSemaphore(value: 0)
+
     /// Set if the `Operation` is executing.
     private var _executing = false {
         willSet {
@@ -74,17 +81,44 @@ open class ConcurrentOperation: Operation {
         return _finished
     }
 
+    /// The `Operation` manages its own state,
+    /// even when its task lives longer than the `start()` call.
+    override open var isAsynchronous: Bool {
+        return true
+    }
+
     /// You should use `success` if you want the retry feature.
     /// Set it to `false` if the `Operation` has failed, otherwise `true`.
     /// Default is `true` to avoid retries.
-    open var success = true
+    open var success: Bool {
+        get {
+            stateLock.lock()
+            defer { stateLock.unlock() }
+            return _success
+        }
+        set {
+            stateLock.lock()
+            defer { stateLock.unlock() }
+            _success = newValue
+        }
+    }
+
+    /// `success` backing storage, protected by the state lock.
+    private var _success = true
 
     /// Maximum allowed retries.
     /// Default are 3 retries.
     open var maximumRetries = 3
 
     /// Current retry attempt.
-    open private(set) var currentAttempt = 1
+    open var currentAttempt: Int {
+        stateLock.lock()
+        defer { stateLock.unlock() }
+        return _currentAttempt
+    }
+
+    /// `currentAttempt` backing storage, protected by the state lock.
+    private var _currentAttempt = 1
 
     /// Allows for manual retries.
     /// If set to `true`, `retry()` function must be manually called.
@@ -102,6 +136,16 @@ open class ConcurrentOperation: Operation {
     /// Keep track of the last executed attempt.
     /// This avoids running the `executionBlock` more than once per retry.
     private var lastExecutedAttempt = 0
+
+    /// Whether the `Operation` has been started by its queue, protected by the state lock.
+    private var hasStarted = false
+
+    /// Whether an attempt of the `executionBlock` is currently running, protected by the state lock.
+    private var attemptInFlight = false
+
+    /// Keep track of the `finish(success:)` terminal state, protected by the state lock.
+    /// This makes `finish(success:)` idempotent.
+    private var hasFinished = false
 
     /// Creates the `Operation` with an execution block.
     ///
@@ -122,67 +166,158 @@ open class ConcurrentOperation: Operation {
         /// `OperationQueue` calls `start()` even on operations that were
         /// canceled before ever starting.
         guard !isCancelled else {
+            stateLock.lock()
+            hasFinished = true
+            shouldRetry = false
+            stateLock.unlock()
+
             _finished = true
             return
         }
+
+        stateLock.lock()
+        hasStarted = true
+        stateLock.unlock()
 
         _executing = true
         execute()
     }
 
     /// Retry function.
-    /// It only works if `manualRetry` property has been set to `true`.
+    /// It only works if `manualRetry` property has been set to `true`,
+    /// and the `Operation` has already been started by its queue.
     open func retry() {
-        if manualRetry, shouldRetry, let executionBlock {
-            executionBlock(self)
+        guard manualRetry else {
+            return
+        }
 
-            if !manualFinish {
-                finish(success: success)
+        /// Claim the current attempt while holding the lock, so concurrent
+        /// `retry()` calls cannot run the same attempt more than once,
+        /// and a never started, finished, or canceled `Operation` is left untouched.
+        /// With `manualFinish` the attempt is not claimed, since `finish(success:)`
+        /// is never called automatically and the attempt never advances.
+        stateLock.lock()
+        guard hasStarted, !hasFinished, shouldRetry, !isCancelled, let executionBlock else {
+            stateLock.unlock()
+            return
+        }
+
+        if !manualFinish {
+            guard lastExecutedAttempt != _currentAttempt else {
+                stateLock.unlock()
+                return
             }
+
+            lastExecutedAttempt = _currentAttempt
+        }
+        attemptInFlight = true
+        stateLock.unlock()
+
+        executionBlock(self)
+
+        stateLock.lock()
+        attemptInFlight = false
+        stateLock.unlock()
+
+        if !manualFinish {
+            finish(success: success)
         }
     }
 
     /// Execute the `Operation`.
     /// If `executionBlock` is set, it will be executed.
     open func execute() {
-        if let executionBlock {
-            while shouldRetry, !manualRetry {
-                /// Read the current attempt once, before executing the block.
-                /// With `manualFinish`, `finish(success:)` can be called from another thread
-                /// while the block is being executed: re-reading `currentAttempt` afterwards
-                /// would mark the new attempt as already executed and spin this loop forever.
-                let attempt = currentAttempt
+        guard executionBlock != nil else {
+            /// An `Operation` without an execution block has nothing to execute,
+            /// so it must finish right away, unless a manual finish is required.
+            /// Otherwise it would occupy its queue forever.
+            if !manualFinish {
+                finish(success: success)
+            }
+            return
+        }
 
-                if lastExecutedAttempt != attempt {
-                    executionBlock(self)
-                    lastExecutedAttempt = attempt
-                }
+        guard !manualRetry else {
+            /// The first attempt is always executed,
+            /// the following ones must be manually retried.
+            retry()
+            return
+        }
+
+        while true {
+            stateLock.lock()
+            guard shouldRetry, !hasFinished else {
+                stateLock.unlock()
+                return
+            }
+
+            guard !isCancelled else {
+                stateLock.unlock()
+                /// A canceled `Operation` must not retry another attempt.
+                finish(success: success)
+                return
+            }
+
+            /// Claim the current attempt once, before executing the block.
+            /// `finish(success:)` can be called from another thread while
+            /// the block is being executed.
+            let alreadyExecuted = lastExecutedAttempt == _currentAttempt
+            if !alreadyExecuted {
+                lastExecutedAttempt = _currentAttempt
+                attemptInFlight = true
+            }
+            stateLock.unlock()
+
+            if !alreadyExecuted {
+                executionBlock?(self)
+
+                stateLock.lock()
+                attemptInFlight = false
+                stateLock.unlock()
 
                 if !manualFinish {
                     finish(success: success)
                 }
+            } else {
+                /// Wait for a manual `finish(success:)` call,
+                /// parking the thread instead of spinning.
+                manualFinishSemaphore.wait()
             }
-
-            retry()
         }
     }
 
     /// Notify the completion of asynchronous task and hence the completion of the `Operation`.
     /// Must be called when the `Operation` is finished.
+    /// Once the `Operation` is finished, any subsequent call does nothing.
     ///
     /// - Parameter success: Set it to `false` if the `Operation` has failed, otherwise `true`.
     ///                      Default is `true`.
     open func finish(success: Bool = true) {
-        if success || currentAttempt >= maximumRetries {
-            _executing = false
-            _finished = true
-            shouldRetry = false
-        } else {
-            currentAttempt += 1
-            shouldRetry = true
+        stateLock.lock()
+        guard !hasFinished else {
+            stateLock.unlock()
+            return
         }
 
-        self.success = success
+        _success = success
+
+        if success || _currentAttempt >= maximumRetries || isCancelled {
+            hasFinished = true
+            shouldRetry = false
+            stateLock.unlock()
+
+            /// State change notifications are sent outside the lock,
+            /// the queue reacts to them synchronously.
+            _executing = false
+            _finished = true
+        } else {
+            _currentAttempt += 1
+            shouldRetry = true
+            stateLock.unlock()
+        }
+
+        /// Wake up the execution thread, if it is parked waiting for a manual finish.
+        manualFinishSemaphore.signal()
     }
 
     /// Pause the current `Operation`, if it's supported.
@@ -202,6 +337,24 @@ open class ConcurrentOperation: Operation {
     override open func cancel() {
         super.cancel()
         onCancel?(self)
+
+        /// A started `Operation` that is idle between attempts, waiting for
+        /// a manual `finish(success:)` or a manual `retry()`, would never
+        /// finish on its own after being canceled, so it is finished here.
+        /// An `Operation` in the middle of an attempt finishes on its own,
+        /// and an `Operation` without an execution block, like `GroupOperation`,
+        /// manages its own completion.
+        stateLock.lock()
+        let shouldFinish = hasStarted && !hasFinished && !attemptInFlight && executionBlock != nil
+        stateLock.unlock()
+
+        /// Wake up the execution thread, if it is parked waiting for a manual finish,
+        /// so it can react to the cancellation.
+        manualFinishSemaphore.signal()
+
+        if shouldFinish {
+            finish(success: success)
+        }
     }
 }
 

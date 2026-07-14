@@ -221,4 +221,45 @@ final class GroupOperationTests: XCTestCase {
             XCTAssertEqual(order.value, ["1", "2", "1", "2", "2", "1", "3"])
         }
     }
+
+    func testCancelGroupOperationCancelsInnerOperations() {
+        let queue = Queuer(name: "GroupOperationTestCancel")
+        let testExpectation = expectation(description: "Cancel Group Operation Cancels Inner Operations")
+        let order = Protected<[String]>([])
+        let firstOperationStarted = DispatchSemaphore(value: 0)
+        let releaseOperations = DispatchSemaphore(value: 0)
+
+        let concurrentOperation1 = ConcurrentOperation { _ in
+            order.append("1")
+            firstOperationStarted.signal()
+            _ = releaseOperations.wait(timeout: .now() + .seconds(8))
+        }
+        let concurrentOperation2 = ConcurrentOperation { operation in
+            _ = releaseOperations.wait(timeout: .now() + .seconds(8))
+            guard !operation.isCancelled else {
+                return
+            }
+            order.append("2")
+        }
+        let groupOperation = GroupOperation([concurrentOperation1, concurrentOperation2])
+        groupOperation.addToQueue(queue)
+
+        onBackgroundThread {
+            _ = firstOperationStarted.wait(timeout: .now() + .seconds(8))
+            /// Canceling the group must cancel its inner operations too.
+            groupOperation.cancel()
+            releaseOperations.signal()
+            releaseOperations.signal()
+        }
+
+        fulfill(testExpectation, when: { groupOperation.isFinished })
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, ["1"])
+            XCTAssertTrue(groupOperation.isCancelled)
+            XCTAssertTrue(concurrentOperation1.isCancelled)
+            XCTAssertTrue(concurrentOperation2.isCancelled)
+        }
+    }
 }

@@ -128,7 +128,7 @@ final class ConcurrentOperationTests: XCTestCase {
     func testAsyncChainedRetry() async {
         let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
         let testExpectation = expectation(description: "Chained Retry")
-        let order = OrderHelper()
+        let order = OrderHelper<Int>()
 
         let concurrentOperation1 = ConcurrentOperation { operation in
             Task {
@@ -425,6 +425,77 @@ final class ConcurrentOperationTests: XCTestCase {
         waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
             XCTAssertEqual(order.value, [0, 0, 0])
+            XCTAssertTrue(concurrentOperation.isFinished)
+        }
+    }
+
+    func testRetryBeforeStartIsIgnored() {
+        let queue = Queuer(name: "ConcurrentOperationTestRetryBeforeStart")
+        let testExpectation = expectation(description: "Retry Before Start Is Ignored")
+        let order = Protected<[Int]>([])
+
+        let concurrentOperation = ConcurrentOperation { _ in
+            order.append(0)
+        }
+        concurrentOperation.manualRetry = true
+
+        /// A `retry()` before the queue starts the `Operation` must do nothing,
+        /// otherwise the `Operation` would execute on the caller's thread
+        /// and could not be added to a queue anymore.
+        concurrentOperation.retry()
+        XCTAssertEqual(order.value, [])
+        XCTAssertFalse(concurrentOperation.isFinished)
+
+        concurrentOperation.addToQueue(queue)
+
+        fulfill(testExpectation, when: { concurrentOperation.isFinished })
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0])
+        }
+    }
+
+    func testOperationWithoutExecutionBlockFinishes() {
+        let queue = Queuer(name: "ConcurrentOperationTestWithoutExecutionBlock")
+        let testExpectation = expectation(description: "Operation Without Execution Block Finishes")
+
+        let concurrentOperation = ConcurrentOperation()
+        concurrentOperation.addToQueue(queue)
+
+        /// An `Operation` without an execution block must finish on its own,
+        /// otherwise it would occupy the queue forever.
+        fulfill(testExpectation, when: { queue.operationCount == 0 })
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(concurrentOperation.isFinished)
+        }
+    }
+
+    func testCancelWhileWaitingForManualFinish() {
+        let queue = Queuer(name: "ConcurrentOperationTestCancelWhileWaitingForManualFinish")
+        let testExpectation = expectation(description: "Cancel While Waiting For Manual Finish")
+        let operationStarted = DispatchSemaphore(value: 0)
+
+        let concurrentOperation = ConcurrentOperation { _ in
+            operationStarted.signal()
+        }
+        concurrentOperation.manualFinish = true
+        concurrentOperation.addToQueue(queue)
+
+        onBackgroundThread {
+            _ = operationStarted.wait(timeout: .now() + .seconds(8))
+            /// Canceling an `Operation` that is waiting for a manual finish
+            /// must wake it up and finish it.
+            concurrentOperation.cancel()
+        }
+
+        fulfill(testExpectation, when: { concurrentOperation.isFinished })
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(concurrentOperation.isCancelled)
             XCTAssertTrue(concurrentOperation.isFinished)
         }
     }

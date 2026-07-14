@@ -12,7 +12,9 @@ _Describe the platforms that your PR supports. If your PR does not support a pla
 - [ ] tvOS
 - [ ] watchOS
 - [ ] visionOS
+- [ ] Android
 - [ ] Linux
+- [ ] Windows
 
 ## Checklist
 

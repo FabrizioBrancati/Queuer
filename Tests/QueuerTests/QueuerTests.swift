@@ -394,4 +394,36 @@ final class QueuerTests: XCTestCase {
         XCTAssertEqual(queue.operationCount, 0)
         XCTAssertTrue(queue.isExecuting)
     }
+
+    func testCompletionWaitsForAllOperations() {
+        let queue = Queuer(name: "QueuerTestCompletionWaitsForAllOperations")
+        let testExpectation = expectation(description: "Completion Waits For All Operations")
+        let order = Protected<[String]>([])
+        let releaseSlowOperation = DispatchSemaphore(value: 0)
+
+        /// The slow operation is added first, the fast one last:
+        /// the completion must wait for both, not just for the last added one.
+        let slowOperation = ConcurrentOperation { _ in
+            _ = releaseSlowOperation.wait(timeout: .now() + .seconds(8))
+            order.append("slow")
+        }
+        let fastOperation = ConcurrentOperation { _ in
+            order.append("fast")
+        }
+        queue.addOperation(slowOperation)
+        queue.addOperation(fastOperation)
+
+        queue.addCompletionHandler {
+            order.append("done")
+            testExpectation.fulfill()
+        }
+
+        releaseSlowOperation.signal()
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value.last, "done")
+            XCTAssertEqual(Set(order.value), ["slow", "fast", "done"])
+        }
+    }
 }

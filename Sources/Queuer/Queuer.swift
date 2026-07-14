@@ -118,8 +118,11 @@ public class Queuer {
 
     /// Blocks the current thread until all of the receiver’s queued and executing
     /// `Operation`s finish executing.
-    public func waitUntilAllOperationsAreFinished() {
+    /// - Returns: Returns the current `Queuer` instance.
+    @discardableResult
+    public func waitUntilAllOperationsAreFinished() -> Queuer {
         queue.waitUntilAllOperationsAreFinished()
+        return self
     }
 }
 
@@ -164,7 +167,20 @@ extension Queuer {
             return
         }
 
-        addCompletionHandler(completionHandler)
+        guard !operations.isEmpty else {
+            addCompletionHandler(completionHandler)
+            return
+        }
+
+        /// The completion depends on every `Operation` of the chain directly.
+        /// Depending on the last `Operation` currently in the queue would be racy:
+        /// the chain could already be finished, or the last `Operation`
+        /// could belong to someone else on a shared queue.
+        let completionOperation = BlockOperation(block: completionHandler)
+        for operation in operations {
+            completionOperation.addDependency(operation)
+        }
+        addOperation(completionOperation)
     }
 
     /// Add an Array of chained `Operation`s.
@@ -182,13 +198,29 @@ extension Queuer {
     }
 
     /// Add a completion block to the queue.
+    /// The completion waits for every `Operation` currently in the queue.
+    /// On an empty queue, the completion is executed right away.
     ///
     /// - Parameter completionHandler: Completion handler to be executed as last `Operation`.
     public func addCompletionHandler(_ completionHandler: @escaping () -> Void) {
         let completionOperation = BlockOperation(block: completionHandler)
-        if let lastOperation = operations.last {
-            completionOperation.addDependency(lastOperation)
+        /// Depending on every `Operation` guarantees the completion runs last,
+        /// even on concurrent queues where the last added `Operation`
+        /// is not necessarily the last to finish.
+        /// Dependencies on already finished `Operation`s are immediately satisfied.
+        for operation in operations where !operation.isFinished {
+            completionOperation.addDependency(operation)
         }
         addOperation(completionOperation)
+    }
+
+    /// Adds a barrier block to the queue.
+    /// The barrier waits for all the `Operation`s currently in the queue,
+    /// and every `Operation` added afterwards waits for the barrier to finish.
+    ///
+    /// - Parameter completionHandler: Barrier block to be executed.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    public func addBarrier(_ completionHandler: @escaping @Sendable () -> Void) {
+        queue.addBarrierBlock(completionHandler)
     }
 }

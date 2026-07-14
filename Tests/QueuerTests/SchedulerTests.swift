@@ -96,4 +96,51 @@ final class SchedulerTests: XCTestCase {
             XCTAssertEqual(order.value, [0])
         }
     }
+
+    func testInitWithoutHandlerIsReleasedSafely() {
+        /// A `Scheduler` created without a handler and never used
+        /// must not crash when it is released.
+        var schedule: Scheduler? = Scheduler(deadline: .now(), repeating: .seconds(10))
+        schedule?.timer.cancel()
+        schedule = nil
+
+        XCTAssertNil(schedule)
+    }
+
+    func testSetHandlerTwice() {
+        let testExpectation = expectation(description: "Set Handler Twice")
+        let order = Protected<[Int]>([])
+
+        var schedule = Scheduler(deadline: .now(), repeating: .milliseconds(100))
+        /// The timer is captured separately to avoid overlapping accesses
+        /// to `schedule` between `setHandler(_:)` and the firing handler.
+        let timer = schedule.timer
+        schedule.setHandler {
+            order.append(0)
+        }
+
+        onBackgroundThread {
+            waitUntil(timeout: 8) { order.value.contains(0) }
+
+            /// Setting the handler again must replace the previous one, without crashing.
+            schedule.setHandler {
+                let alreadyReplaced = order.mutate { value -> Bool in
+                    let alreadyReplaced = value.contains(1)
+                    value.append(1)
+                    return alreadyReplaced
+                }
+
+                if !alreadyReplaced {
+                    timer.cancel()
+                    testExpectation.fulfill()
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value.first, 0)
+            XCTAssertTrue(order.value.contains(1))
+        }
+    }
 }
