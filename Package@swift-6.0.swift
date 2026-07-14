@@ -41,10 +41,22 @@ let package = Package(
         .library(name: "Queuer", targets: ["Queuer"])
     ],
     dependencies: [
-        .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.4.0")
+        .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.5.0")
     ],
     targets: [
+        /// The library builds in the Swift 6 language mode,
+        /// with strict concurrency enabled by default.
         .target(name: "Queuer"),
-        .testTarget(name: "QueuerTests", dependencies: ["Queuer"])
+        /// The XCTest suite intentionally stays in the Swift 5 language mode:
+        /// it exercises patterns, like mutable captures across threads,
+        /// that the Swift 6 language mode forbids.
+        .testTarget(
+            name: "QueuerTests",
+            dependencies: ["Queuer"],
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ]),
+        /// Swift Testing suite, available on Swift 6 and later toolchains only.
+        .testTarget(name: "QueuerSwiftTestingTests", dependencies: ["Queuer"])
     ]
 )

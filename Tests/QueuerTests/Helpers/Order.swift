@@ -26,7 +26,7 @@
 
 import Foundation
 
-actor OrderHelper<Element: Equatable> {
+actor Order<Element: Equatable> {
     var order: [Element] = []
 
     func append(_ element: Element) {

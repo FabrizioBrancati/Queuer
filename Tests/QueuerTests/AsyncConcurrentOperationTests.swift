@@ -24,33 +24,134 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+import Foundation
 import Queuer
 import Testing
 
-@Suite struct AsyncConcurrentOperationTests {
-    @Test func asyncChainedRetry() async throws {
-        try await confirmation("Chained Retry") { confirmation in
-            let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
-            let order = Order()
+private struct TestError: Error {}
 
-            let concurrentOperation1 = AsyncConcurrentOperation { operation in
-                try await Task.sleep(for: .seconds(1))
-                await order.append(0)
-                operation.success = false
-            }
-            let concurrentOperation2 = AsyncConcurrentOperation { operation in
-                await order.append(1)
-                operation.success = false
-            }
-            queue.addChainedAsyncOperations([concurrentOperation1, concurrentOperation2]) {
-                await order.append(2)
-                confirmation()
-            }
+@Suite("AsyncConcurrentOperation")
+struct AsyncConcurrentOperationTests {
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Chained async operations retry and run in order")
+    func chainedAsyncRetry() async {
+        let queue = Queuer(name: "AsyncConcurrentOperationChainedRetry")
+        let order = Locked<[Int]>([])
+        let completed = Locked(false)
 
-            try await Task.sleep(for: .seconds(2))
-
-            let finalOrder = await order.order
-            #expect(finalOrder == [0, 0, 0, 1, 1, 1, 2])
+        let concurrentOperation1 = AsyncConcurrentOperation { operation in
+            order.mutate { $0.append(0) }
+            operation.success = false
         }
+        let concurrentOperation2 = AsyncConcurrentOperation { operation in
+            order.mutate { $0.append(1) }
+            operation.success = false
+        }
+        queue.addChainedAsyncOperations([concurrentOperation1, concurrentOperation2]) {
+            order.mutate { $0.append(2) }
+            completed.mutate { $0 = true }
+        }
+
+        #expect(await waitUntil { completed.value })
+        #expect(order.value == [0, 0, 0, 1, 1, 1, 2])
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Thrown errors mark attempts as failed and are retried")
+    func throwingBlockRetriesAndFails() async {
+        let queue = Queuer(name: "AsyncConcurrentOperationThrowingBlock")
+        let attempts = Locked(0)
+
+        let concurrentOperation = AsyncConcurrentOperation { _ in
+            attempts.mutate { $0 += 1 }
+            throw TestError()
+        }
+        concurrentOperation.addToQueue(queue)
+
+        #expect(await waitUntil { concurrentOperation.isFinished })
+        #expect(attempts.value == 3)
+        #expect(concurrentOperation.success == false)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Canceling the operation cancels its task")
+    func cancellationStopsTheOperation() async {
+        let queue = Queuer(name: "AsyncConcurrentOperationCancellation")
+        let started = Locked(false)
+
+        let concurrentOperation = AsyncConcurrentOperation { _ in
+            started.mutate { $0 = true }
+            /// The cooperative cancellation interrupts this sleep right away.
+            try await Task.sleep(nanoseconds: 8_000_000_000)
+        }
+        concurrentOperation.addToQueue(queue)
+
+        #expect(await waitUntil { started.value })
+        concurrentOperation.cancel()
+
+        #expect(await waitUntil { concurrentOperation.isFinished })
+        #expect(concurrentOperation.isCancelled)
+        #expect(concurrentOperation.success == false)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Manual finish completes the operation")
+    func manualFinishCompletesTheOperation() async {
+        let queue = Queuer(name: "AsyncConcurrentOperationManualFinish")
+        let executed = Locked(false)
+
+        let concurrentOperation = AsyncConcurrentOperation { _ in
+            executed.mutate { $0 = true }
+        }
+        concurrentOperation.manualFinish = true
+        concurrentOperation.addToQueue(queue)
+
+        #expect(await waitUntil { executed.value })
+        #expect(concurrentOperation.isFinished == false)
+
+        concurrentOperation.finish()
+
+        #expect(await waitUntil { concurrentOperation.isFinished })
+        #expect(concurrentOperation.success)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Retry delay throttles automatic retries")
+    func retryDelayThrottlesAutomaticRetries() async {
+        let queue = Queuer(name: "AsyncConcurrentOperationRetryDelay")
+        let start = Date()
+
+        let concurrentOperation = AsyncConcurrentOperation { operation in
+            operation.success = false
+        }
+        concurrentOperation.retryDelay = 0.2
+        concurrentOperation.addToQueue(queue)
+
+        #expect(await waitUntil { concurrentOperation.isFinished })
+        #expect(concurrentOperation.currentAttempt == 3)
+        /// Three attempts with two delays in between must take at least 0.4 seconds.
+        /// A lenient lower bound avoids failures from clock differences.
+        #expect(Date().timeIntervalSince(start) >= 0.3)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Async completion waits for every operation in the queue")
+    func asyncCompletionWaitsForAllOperations() async {
+        let queue = Queuer(name: "AsyncConcurrentOperationAsyncCompletion")
+        let order = Locked<[String]>([])
+        let completed = Locked(false)
+
+        let concurrentOperation = AsyncConcurrentOperation { _ in
+            order.mutate { $0.append("operation") }
+        }
+        concurrentOperation.addToQueue(queue)
+
+        queue.addAsyncCompletionHandler {
+            order.mutate { $0.append("done") }
+            completed.mutate { $0 = true }
+        }
+
+        #expect(await waitUntil { completed.value })
+        #expect(order.value.last == "done")
     }
 }
