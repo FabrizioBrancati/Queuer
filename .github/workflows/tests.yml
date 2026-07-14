@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Build for Android
       uses: skiptools/swift-android-action@v2
       with:
@@ -65,7 +65,7 @@ jobs:
     name: Windows
     runs-on: windows-2025
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: "Setup Swift on Windows"
         uses: compnerd/gha-setup-swift@main
         with:
@@ -79,7 +79,7 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
-          - version: "26.4.1"
+          - version: "26.5"
             runner: macos-26
             platform: "macOS"
             arch: "arm64"
@@ -91,7 +91,7 @@ jobs:
             runner: macos-14
             platform: "macOS"
             arch: "arm64"
-          - version: "26.4.1"
+          - version: "26.5"
             runner: macos-26
             platform: "macOS"
             arch: "arm64"
@@ -106,22 +106,22 @@ jobs:
             platform: "macOS"
             arch: "arm64"
             variant: "Mac Catalyst"
-          - version: "26.4.1"
+          - version: "26.5"
             runner: macos-26
             platform: "iOS"
-            simulator: "iPhone 17,OS=26.4.1"
+            simulator: "iPhone 17,OS=26.5"
           - version: "16.4"
             runner: macos-15
             platform: "iOS"
-            simulator: "iPhone 16,OS=18.5"
+            simulator: "iPhone 16,OS=18.6"
           - version: "15.4"
             runner: macos-14
             platform: "iOS"
             simulator: "iPhone 15,OS=17.5"
-          - version: "26.4.1"
+          - version: "26.5"
             runner: macos-26
             platform: "watchOS"
-            simulator: "Apple Watch Series 11 (46mm),OS=26.4"
+            simulator: "Apple Watch Series 11 (46mm),OS=26.5"
           - version: "16.4"
             runner: macos-15
             platform: "watchOS"
@@ -130,10 +130,10 @@ jobs:
             runner: macos-14
             platform: "watchOS"
             simulator: "Apple Watch Series 9 (45mm),OS=10.5"
-          - version: "26.4.1"
+          - version: "26.5"
             runner: macos-26
             platform: "tvOS"
-            simulator: "Apple TV 4K (3rd generation),OS=26.4"
+            simulator: "Apple TV 4K (3rd generation),OS=26.5"
           - version: "16.4"
             runner: macos-15
             platform: "tvOS"
@@ -142,10 +142,10 @@ jobs:
             runner: macos-14
             platform: "tvOS"
             simulator: "Apple TV 4K (3rd generation),OS=17.5"
-          - version: "26.4.1"
+          - version: "26.5"
             runner: macos-26
             platform: "visionOS"
-            simulator: "Apple Vision Pro,OS=26.4.1"
+            simulator: "Apple Vision Pro,OS=26.5"
           - version: "16.4"
             runner: macos-15
             platform: "visionOS"
