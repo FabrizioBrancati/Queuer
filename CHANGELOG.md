@@ -30,6 +30,12 @@
 - Added `addBarrier(_:)` and its chainable `barrier(_:)` variant to `Queuer`, to wait for all the operations currently in a queue - [#35](https://github.com/FabrizioBrancati/Queuer/pull/35)
 - Added `asyncWait(_:tolerance:clock:)` and `syncWait(_:)` to `Queuer`, to add wait operations to a queue - [#35](https://github.com/FabrizioBrancati/Queuer/pull/35)
 - Added `onPause`, `onResume`, and `onCancel` closures to `ConcurrentOperation` class - [#37](https://github.com/FabrizioBrancati/Queuer/pull/37)
+- Added Swift 6 language mode support with strict concurrency, the package now ships a `Package@swift-6.0.swift` manifest and stays compatible with Swift 5.9 and 5.10 - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
+- Added `AsyncConcurrentOperation`, an `Operation` based on async/await with automatic retries on thrown errors and cooperative `Task` cancellation - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
+- Added `addChainedAsyncOperations(_:completionHandler:)` and `addAsyncCompletionHandler(_:)` to `Queuer`, to chain operations with async completion handlers - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
+- Added a Swift Testing test suite alongside the XCTest one, the XCTest suite runs on every supported toolchain, while the Swift Testing suite runs on Swift 6 and later - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
+- Added `retryDelay` to `ConcurrentOperation` and `AsyncConcurrentOperation`, with its chainable `retryDelay(_:)` variant, to throttle automatic retries - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
+- Added Dependabot for Swift packages and GitHub Actions dependencies, targeting the `develop` branch - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added `pre-commit` hook [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
 - Added Makefile [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
 - Added swift-format support [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
@@ -38,6 +44,7 @@
 ### Changed
 
 - Changed `waitUntilAllOperationsAreFinished()` to return the `Queuer` instance, to allow chaining - [#35](https://github.com/FabrizioBrancati/Queuer/pull/35)
+- Changed `Queuer` to be `final` and `Sendable`, and completion, barrier, and `Scheduler` handlers to be `@Sendable`, as required by the Swift 6 language mode - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 
 ### Improved
 

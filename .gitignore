@@ -65,3 +65,6 @@ xcuserdata/
 .swiftpm
 .build
 .vscode
+
+# Claude
+.claude/

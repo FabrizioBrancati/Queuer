@@ -4,7 +4,7 @@
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +65,7 @@ public extension Queuer {
     /// - Parameter completion: Completion block to be executed.
     /// - Returns: Returns the current `Queuer` instance.
     @discardableResult
-    func completion(_ completion: @escaping () -> Void) -> Queuer {
+    func completion(_ completion: @escaping @Sendable () -> Void) -> Queuer {
         addCompletionHandler(completion)
         return self
     }
@@ -224,6 +224,16 @@ public extension ConcurrentOperation {
     @discardableResult
     func maximumRetries(_ retries: Int) -> ConcurrentOperation {
         maximumRetries = retries
+        return self
+    }
+
+    /// Sets the throttling between each automatic retry.
+    ///
+    /// - Parameter delay: Delay between each automatic retry.
+    /// - Returns: Returns the current `ConcurrentOperation` instance.
+    @discardableResult
+    func retryDelay(_ delay: TimeInterval) -> ConcurrentOperation {
+        retryDelay = delay
         return self
     }
 

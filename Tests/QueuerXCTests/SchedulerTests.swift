@@ -25,22 +25,17 @@
 //  SOFTWARE.
 
 import Dispatch
-import Foundation
 import Queuer
-import Testing
+import XCTest
 
-@Suite("Scheduler")
-struct SchedulerTests {
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Handler set after creation is called on every tick")
-    func initWithoutHandler() async {
+final class SchedulerTests: XCTestCase {
+    func testInitWithoutHandler() {
+        let testExpectation = expectation(description: "Init Without Handler")
         let order = Protected<[Int]>([])
-        let completed = Protected(false)
 
         var schedule = Scheduler(deadline: .now(), repeating: .milliseconds(100))
         /// The timer is boxed since `DispatchSourceTimer` is not `Sendable`,
-        /// and captured separately to avoid overlapping accesses to `schedule`
-        /// between `setHandler(_:)` and the firing handler.
+        /// and captured separately to avoid capturing the mutable `schedule`.
         let timer = Protected(schedule.timer)
         schedule.setHandler {
             /// Count the ticks instead of measuring time.
@@ -52,67 +47,75 @@ struct SchedulerTests {
 
             if count == 4 {
                 timer.value.cancel()
-                completed.mutate { $0 = true }
+                testExpectation.fulfill()
             }
         }
 
-        #expect(await waitUntil { completed.value })
-        #expect(order.value == [0, 0, 0, 0])
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0, 0, 0, 0])
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Never repeating timer fires exactly once")
-    func initWithHandler() async {
+    func testInitWithHandler() {
+        let testExpectation = expectation(description: "Init With Handler")
         let order = Protected<[Int]>([])
 
         let schedule = Scheduler(deadline: .now(), repeating: .never) {
             order.append(0)
+
+            /// A `.never` repeating timer must only fire once.
+            /// Give it a short, bounded amount of time to (wrongly) fire again before asserting.
+            DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) {
+                testExpectation.fulfill()
+            }
         }
 
-        #expect(await waitUntil { order.count >= 1 })
-        /// A `.never` repeating timer must only fire once.
-        /// Give it a short, bounded amount of time to (wrongly) fire again before asserting.
-        try? await Task.sleep(nanoseconds: 300_000_000)
-        #expect(order.value == [0])
-        schedule.timer.cancel()
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0])
+            schedule.timer.cancel()
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Canceled timer stops firing")
-    func cancel() async {
+    func testCancel() {
+        let testExpectation = expectation(description: "Cancel")
         let order = Protected<[Int]>([])
 
         var schedule = Scheduler(deadline: .now(), repeating: .milliseconds(100))
-        /// The timer is boxed since `DispatchSourceTimer` is not `Sendable`.
+        /// The timer is boxed since `DispatchSourceTimer` is not `Sendable`,
+        /// and captured separately to avoid capturing the mutable `schedule`.
         let timer = Protected(schedule.timer)
         schedule.setHandler {
             order.append(0)
             timer.value.cancel()
+
+            /// The timer has been canceled on the first tick.
+            /// Give it a short, bounded amount of time to (wrongly) fire again before asserting.
+            DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) {
+                testExpectation.fulfill()
+            }
         }
 
-        #expect(await waitUntil { order.count >= 1 })
-        /// The timer has been canceled on the first tick.
-        /// Give it a short, bounded amount of time to (wrongly) fire again before asserting.
-        try? await Task.sleep(nanoseconds: 300_000_000)
-        #expect(order.value == [0])
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0])
+        }
     }
 
-    @Test("Scheduler without a handler is released safely")
-    func initWithoutHandlerIsReleasedSafely() {
+    func testInitWithoutHandlerIsReleasedSafely() {
         /// A `Scheduler` created without a handler and never used
         /// must not crash when it is released.
         var schedule: Scheduler? = Scheduler(deadline: .now(), repeating: .seconds(10))
         schedule?.timer.cancel()
         schedule = nil
 
-        #expect(schedule == nil)
+        XCTAssertNil(schedule)
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Handler can be replaced without crashing")
-    func setHandlerTwice() async {
+    func testSetHandlerTwice() {
+        let testExpectation = expectation(description: "Set Handler Twice")
         let order = Protected<[Int]>([])
-        let completed = Protected(false)
 
         /// The `Scheduler` is boxed, since a `@Sendable` closure cannot capture
         /// a mutable variable to call the mutating `setHandler(_:)`.
@@ -139,14 +142,16 @@ struct SchedulerTests {
 
                     if !alreadyReplaced {
                         timer.value.cancel()
-                        completed.mutate { $0 = true }
+                        testExpectation.fulfill()
                     }
                 }
             }
         }
 
-        #expect(await waitUntil { completed.value })
-        #expect(order.value.first == 0)
-        #expect(order.value.contains(1))
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value.first, 0)
+            XCTAssertTrue(order.value.contains(1))
+        }
     }
 }

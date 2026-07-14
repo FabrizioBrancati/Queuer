@@ -3,7 +3,7 @@
     {
       "identity" : "swift-docc-plugin",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-docc-plugin",
+      "location" : "https://github.com/swiftlang/swift-docc-plugin",
       "state" : {
         "revision" : "647c708be89f834fa6a6d4945442793a77ddf5b6",
         "version" : "1.5.0"

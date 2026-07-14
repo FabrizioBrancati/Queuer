@@ -24,29 +24,44 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import Foundation
 import Queuer
-import Testing
+import XCTest
 
-@Suite("ConcurrentOperation")
-struct ConcurrentOperationTests {
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Init with execution block executes it")
-    func initWithExecutionBlock() async {
+final class ConcurrentOperationTests: XCTestCase {
+    func testInitWithExecutionBlock() {
         let queue = Queuer(name: "ConcurrentOperationTestInitWithExecutionBlock")
-        let executed = Protected(false)
+
+        let testExpectation = expectation(description: "Init With Execution Block")
 
         let concurrentOperation = ConcurrentOperation { _ in
-            executed.mutate { $0 = true }
+            testExpectation.fulfill()
         }
         concurrentOperation.addToQueue(queue)
 
-        #expect(await waitUntil { executed.value })
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Add to queue")
-    func addToQueue() async {
+    func testAddToSharedQueuer() {
+        let releaseOperation = DispatchSemaphore(value: 0)
+
+        /// Hold the operation in the queue until the asserts have been made.
+        let concurrentOperation = ConcurrentOperation { _ in
+            _ = releaseOperation.wait(timeout: .now() + .seconds(8))
+        }
+        concurrentOperation.addToSharedQueuer()
+
+        XCTAssertGreaterThanOrEqual(Queuer.shared.operationCount, 1)
+        XCTAssertTrue(Queuer.shared.operations.contains(concurrentOperation))
+
+        releaseOperation.signal()
+
+        /// Leave the shared queue clean for the other tests.
+        Queuer.shared.waitUntilAllOperationsAreFinished()
+    }
+
+    func testAddToQueue() {
         let queue = Queuer(name: "ConcurrentOperationTestAddToQueuer")
         let releaseOperation = DispatchSemaphore(value: 0)
 
@@ -56,18 +71,17 @@ struct ConcurrentOperationTests {
         }
         concurrentOperation.addToQueue(queue)
 
-        #expect(queue.operationCount == 1)
-        #expect(queue.operations == [concurrentOperation])
+        XCTAssertEqual(queue.operationCount, 1)
+        XCTAssertEqual(queue.operations, [concurrentOperation])
 
         releaseOperation.signal()
-        #expect(await waitUntil { queue.operationCount == 0 })
+        queue.waitUntilAllOperationsAreFinished()
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Failed operations are retried three times")
-    func simpleRetry() async {
+    func testSimpleRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestSimpleRetry")
-        let finished = Protected(false)
+
+        let testExpectation = expectation(description: "Simple Retry")
 
         let concurrentOperation = ConcurrentOperation { operation in
             operation.success = false
@@ -75,21 +89,21 @@ struct ConcurrentOperationTests {
         /// `completionBlock` is only called once the operation is finished,
         /// so every retry is guaranteed to be over by then.
         concurrentOperation.completionBlock = {
-            finished.mutate { $0 = true }
+            testExpectation.fulfill()
         }
         concurrentOperation.addToQueue(queue)
 
-        #expect(await waitUntil { finished.value })
-        #expect(concurrentOperation.success == false)
-        #expect(concurrentOperation.currentAttempt == 3)
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertFalse(concurrentOperation.success)
+            XCTAssertEqual(concurrentOperation.currentAttempt, 3)
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Chained operations retry and run in order")
-    func chainedRetry() async {
+    func testChainedRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+        let testExpectation = expectation(description: "Chained Retry")
         let order = Protected<[Int]>([])
-        let completed = Protected(false)
 
         let concurrentOperation1 = ConcurrentOperation { operation in
             order.append(0)
@@ -101,49 +115,51 @@ struct ConcurrentOperationTests {
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             order.append(2)
-            completed.mutate { $0 = true }
+            testExpectation.fulfill()
         }
 
-        #expect(await waitUntil { completed.value })
-        #expect(order.value == [0, 0, 0, 1, 1, 1, 2])
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0, 0, 0, 1, 1, 1, 2])
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Chained operations with manual finish from a task retry in order")
-    func asyncChainedRetry() async {
-        let queue = Queuer(name: "ConcurrentOperationTestAsyncChainedRetry")
-        let order = Protected<[Int]>([])
-        let completed = Protected(false)
+    @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
+    func testAsyncChainedRetry() async {
+        let queue = Queuer(name: "ConcurrentOperationTestChainedRetry")
+        let testExpectation = expectation(description: "Chained Retry")
+        let order = Order<Int>()
 
         let concurrentOperation1 = ConcurrentOperation { operation in
             Task {
-                order.append(0)
+                await order.append(0)
                 operation.finish(success: false)
             }
         }
         concurrentOperation1.manualFinish = true
         let concurrentOperation2 = ConcurrentOperation { operation in
             Task {
-                order.append(1)
+                await order.append(1)
                 operation.finish(success: false)
             }
         }
         concurrentOperation2.manualFinish = true
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
-            order.append(2)
-            completed.mutate { $0 = true }
+            Task {
+                await order.append(2)
+                testExpectation.fulfill()
+            }
         }
 
-        #expect(await waitUntil { completed.value })
-        #expect(order.value == [0, 0, 0, 1, 1, 1, 2])
+        await fulfillment(of: [testExpectation], timeout: 10)
+        let finalOrder = await order.order
+        XCTAssertEqual(finalOrder, [0, 0, 0, 1, 1, 1, 2])
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Self canceled chained operation does not retry")
-    func canceledChainedRetry() async {
+    func testCanceledChainedRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestCanceledChainedRetry")
+        let testExpectation = expectation(description: "Canceled Chained Retry")
         let order = Protected<[Int]>([])
-        let completed = Protected(false)
 
         let concurrentOperation1 = ConcurrentOperation { operation in
             order.append(0)
@@ -159,19 +175,19 @@ struct ConcurrentOperationTests {
         }
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             order.append(2)
-            completed.mutate { $0 = true }
+            testExpectation.fulfill()
         }
 
-        #expect(await waitUntil { completed.value })
-        #expect(order.value == [0, 0, 0, 2])
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0, 0, 0, 2])
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Chained manual retries run in order")
-    func chainedManualRetry() async {
+    func testChainedManualRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedManualRetry")
+        let testExpectation = expectation(description: "Chained Manual Retry")
         let order = Protected<[Int]>([])
-        let completed = Protected(false)
 
         let concurrentOperation1 = ConcurrentOperation(name: "concurrentOperation1") { operation in
             operation.success = false
@@ -186,7 +202,7 @@ struct ConcurrentOperationTests {
 
         queue.addChainedOperations([concurrentOperation1, concurrentOperation2]) {
             order.append(2)
-            completed.mutate { $0 = true }
+            testExpectation.fulfill()
         }
 
         /// Trigger a retry as soon as the previous attempt has been executed,
@@ -198,14 +214,15 @@ struct ConcurrentOperationTests {
             concurrentOperation1.retry()
         }
 
-        #expect(await waitUntil { completed.value })
-        #expect(order.value == [0, 0, 0, 1, 1, 1, 2])
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0, 0, 0, 1, 1, 1, 2])
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Without manual retries the chain stalls")
-    func chainedWrongManualRetry() async {
+    func testChainedWrongManualRetry() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedWrongManualRetry")
+        let testExpectation = expectation(description: "Chained Wrong Manual Retry")
         let order = Protected<[Int]>([])
 
         let concurrentOperation1 = ConcurrentOperation { operation in
@@ -223,16 +240,20 @@ struct ConcurrentOperationTests {
 
         /// `retry()` is never called, so the chain must stall after the first attempt.
         /// Give it a bounded amount of time to (wrongly) make progress before asserting.
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
-        #expect(order.value == [0])
+        DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(2)) {
+            testExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0])
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Concurrent operations can be ordered with semaphores")
-    func concurrentOperation() async {
+    func testConcurrentOperation() {
         let queue = Queuer(name: "ConcurrentOperation")
+        let testExpectation = expectation(description: "Concurrent Operation")
         let testString = Protected("")
-        let completed = Protected(false)
         let firstOperationDone = DispatchSemaphore(value: 0)
 
         let concurrentOperation1 = ConcurrentOperation { _ in
@@ -243,19 +264,46 @@ struct ConcurrentOperationTests {
             /// Deterministically run after `concurrentOperation1`, without sleeping.
             _ = firstOperationDone.wait(timeout: .now() + .seconds(8))
             testString.mutate { $0 = "Tested2" }
-            completed.mutate { $0 = true }
+
+            testExpectation.fulfill()
         }
         concurrentOperation1.addToQueue(queue)
         concurrentOperation2.addToQueue(queue)
 
-        #expect(await waitUntil { completed.value })
-        #expect(testString.value == "Tested2")
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString.value, "Tested2")
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Failed operation retries after the other operations")
-    func concurrentOperationRetry() async {
+    func testConcurrentOperationOnSharedQueuer() {
+        let testExpectation = expectation(description: "Concurrent Operation")
+        let testString = Protected("")
+        let secondOperationDone = DispatchSemaphore(value: 0)
+
+        let concurrentOperation1 = ConcurrentOperation { _ in
+            _ = secondOperationDone.wait(timeout: .now() + .seconds(8))
+            testString.mutate { $0 = "Tested1" }
+
+            testExpectation.fulfill()
+        }
+        let concurrentOperation2 = ConcurrentOperation { _ in
+            testString.mutate { $0 = "Tested2" }
+            secondOperationDone.signal()
+        }
+        Queuer.shared.maxConcurrentOperationCount = 2
+        concurrentOperation2.addToSharedQueuer()
+        concurrentOperation1.addToSharedQueuer()
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString.value, "Tested1")
+        }
+    }
+
+    func testConcurrentOperationRetry() {
         let queue = Queuer(name: "ConcurrentOperationRetry")
+        let testExpectation = expectation(description: "Concurrent Operation Retry")
         let order = Protected<[Int]>([])
         let secondOperationDone = DispatchSemaphore(value: 0)
 
@@ -276,17 +324,22 @@ struct ConcurrentOperationTests {
 
             order.append(0)
             operation.success = false
+
+            if operation.currentAttempt == 3 {
+                testExpectation.fulfill()
+            }
         }
         concurrentOperation1.addToQueue(queue)
 
-        #expect(await waitUntil { concurrentOperation1.isFinished })
-        #expect(order.value == [1, 0, 0, 0])
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [1, 0, 0, 0])
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Canceling a queue stops pending operations")
-    func cancel() async {
+    func testCancel() {
         let queue = Queuer(name: "TestCancel", maxConcurrentOperationCount: 1)
+        let testExpectation = expectation(description: "Cancel")
         let testString = Protected("")
         let firstOperationStarted = DispatchSemaphore(value: 0)
         let queueCanceled = DispatchSemaphore(value: 0)
@@ -309,18 +362,20 @@ struct ConcurrentOperationTests {
             _ = firstOperationStarted.wait(timeout: .now() + .seconds(8))
             queue.cancel()
             queueCanceled.signal()
+            testExpectation.fulfill()
         }
 
-        #expect(await waitUntil { concurrentOperation1.isFinished && concurrentOperation2.isCancelled })
-        #expect(testString.value == "Tested1")
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(testString.value, "Tested1")
+            XCTAssertTrue(concurrentOperation2.isCancelled)
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Manual finish completes the operation")
-    func manualFinish() async {
+    func testManualFinish() {
         let queue = Queuer(name: "ManualFinish")
+        let testExpectation = expectation(description: "Manual Finish")
         let operationStarted = DispatchSemaphore(value: 0)
-        let finishedBeforeManualFinish = Protected(true)
 
         let concurrentOperation = ConcurrentOperation { _ in
             operationStarted.signal()
@@ -331,21 +386,21 @@ struct ConcurrentOperationTests {
 
         onBackgroundThread {
             _ = operationStarted.wait(timeout: .now() + .seconds(8))
-            /// The operation must not be finished until `finish(success:)` is called.
-            finishedBeforeManualFinish.mutate { $0 = concurrentOperation.isFinished }
+            XCTAssertFalse(concurrentOperation.isFinished)
             concurrentOperation.finish()
+            testExpectation.fulfill()
         }
 
-        #expect(await waitUntil { concurrentOperation.isFinished })
-        #expect(finishedBeforeManualFinish.value == false)
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(concurrentOperation.isFinished)
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Chained manual retries with manual finish run every attempt")
-    func chainedManualRetryAndManualFinish() async {
+    func testChainedManualRetryAndManualFinish() {
         let queue = Queuer(name: "ConcurrentOperationTestChainedManualRetryAndManualFinish")
+        let testExpectation = expectation(description: "Chained Manual Retry And Manual Finish")
         let order = Protected<[Int]>([])
-        let finishedBeforeManualFinish = Protected(true)
 
         let concurrentOperation = ConcurrentOperation(name: "concurrentOperation1") { operation in
             operation.success = false
@@ -362,20 +417,21 @@ struct ConcurrentOperationTests {
             waitUntil(timeout: 8) { order.count >= 2 }
             concurrentOperation.retry()
             waitUntil(timeout: 8) { order.count >= 3 }
-            /// The operation must not be finished until `finish(success:)` is called.
-            finishedBeforeManualFinish.mutate { $0 = concurrentOperation.isFinished }
+            XCTAssertFalse(concurrentOperation.isFinished)
             concurrentOperation.finish()
+            testExpectation.fulfill()
         }
 
-        #expect(await waitUntil { concurrentOperation.isFinished })
-        #expect(order.value == [0, 0, 0])
-        #expect(finishedBeforeManualFinish.value == false)
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0, 0, 0])
+            XCTAssertTrue(concurrentOperation.isFinished)
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Retry before start is ignored")
-    func retryBeforeStartIsIgnored() async {
+    func testRetryBeforeStartIsIgnored() {
         let queue = Queuer(name: "ConcurrentOperationTestRetryBeforeStart")
+        let testExpectation = expectation(description: "Retry Before Start Is Ignored")
         let order = Protected<[Int]>([])
 
         let concurrentOperation = ConcurrentOperation { _ in
@@ -387,52 +443,62 @@ struct ConcurrentOperationTests {
         /// otherwise the `Operation` would execute on the caller's thread
         /// and could not be added to a queue anymore.
         concurrentOperation.retry()
-        #expect(order.value == [])
-        #expect(concurrentOperation.isFinished == false)
+        XCTAssertEqual(order.value, [])
+        XCTAssertFalse(concurrentOperation.isFinished)
 
         concurrentOperation.addToQueue(queue)
 
-        #expect(await waitUntil { concurrentOperation.isFinished })
-        #expect(order.value == [0])
+        fulfill(testExpectation, when: { concurrentOperation.isFinished })
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(order.value, [0])
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Operations without an execution block finish on their own")
-    func operationWithoutExecutionBlockFinishes() async {
+    func testOperationWithoutExecutionBlockFinishes() {
         let queue = Queuer(name: "ConcurrentOperationTestWithoutExecutionBlock")
+        let testExpectation = expectation(description: "Operation Without Execution Block Finishes")
 
         let concurrentOperation = ConcurrentOperation()
         concurrentOperation.addToQueue(queue)
 
         /// An `Operation` without an execution block must finish on its own,
         /// otherwise it would occupy the queue forever.
-        #expect(await waitUntil { queue.operationCount == 0 })
-        #expect(concurrentOperation.isFinished)
+        fulfill(testExpectation, when: { queue.operationCount == 0 })
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(concurrentOperation.isFinished)
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Retry delay throttles automatic retries")
-    func retryDelayThrottlesAutomaticRetries() async {
+    func testRetryDelayThrottlesAutomaticRetries() {
         let queue = Queuer(name: "ConcurrentOperationTestRetryDelay")
+        let testExpectation = expectation(description: "Retry Delay Throttles Automatic Retries")
         let start = Date()
 
         let concurrentOperation = ConcurrentOperation { operation in
             operation.success = false
         }
         concurrentOperation.retryDelay = 0.2
+        concurrentOperation.completionBlock = {
+            testExpectation.fulfill()
+        }
         concurrentOperation.addToQueue(queue)
 
-        #expect(await waitUntil { concurrentOperation.isFinished })
-        #expect(concurrentOperation.currentAttempt == 3)
-        /// Three attempts with two delays in between must take at least 0.4 seconds.
-        /// A lenient lower bound avoids failures from clock differences.
-        #expect(Date().timeIntervalSince(start) >= 0.3)
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(concurrentOperation.currentAttempt, 3)
+            /// Three attempts with two delays in between must take at least 0.4 seconds.
+            /// A lenient lower bound avoids failures from clock differences.
+            XCTAssertGreaterThanOrEqual(Date().timeIntervalSince(start), 0.3)
+        }
     }
 
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    @Test("Canceling wakes an operation waiting for a manual finish")
-    func cancelWhileWaitingForManualFinish() async {
+    func testCancelWhileWaitingForManualFinish() {
         let queue = Queuer(name: "ConcurrentOperationTestCancelWhileWaitingForManualFinish")
+        let testExpectation = expectation(description: "Cancel While Waiting For Manual Finish")
         let operationStarted = DispatchSemaphore(value: 0)
 
         let concurrentOperation = ConcurrentOperation { _ in
@@ -448,7 +514,12 @@ struct ConcurrentOperationTests {
             concurrentOperation.cancel()
         }
 
-        #expect(await waitUntil { concurrentOperation.isFinished })
-        #expect(concurrentOperation.isCancelled)
+        fulfill(testExpectation, when: { concurrentOperation.isFinished })
+
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(concurrentOperation.isCancelled)
+            XCTAssertTrue(concurrentOperation.isFinished)
+        }
     }
 }

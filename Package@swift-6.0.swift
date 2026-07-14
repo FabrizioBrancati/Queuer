@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.0
 //
 //  Package.swift
 //  Queuer
@@ -44,14 +44,19 @@ let package = Package(
         .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.5.0")
     ],
     targets: [
-        .target(
-            name: "Queuer",
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]),
+        /// The library builds in the Swift 6 language mode,
+        /// with strict concurrency enabled by default.
+        .target(name: "Queuer"),
+        /// The Swift Testing suite runs on Swift 6 and later toolchains only.
+        .testTarget(name: "QueuerTests", dependencies: ["Queuer"]),
         /// The XCTest suite runs on every supported toolchain.
-        /// The Swift Testing suite lives in `Tests/QueuerTests`,
-        /// and is only declared in the Swift 6 manifest.
-        .testTarget(name: "QueuerXCTests", dependencies: ["Queuer"])
+        /// It intentionally stays in the Swift 5 language mode:
+        /// it must compile on Swift 5.9 and 5.10 toolchains too.
+        .testTarget(
+            name: "QueuerXCTests",
+            dependencies: ["Queuer"],
+            swiftSettings: [
+                .swiftLanguageMode(.v5)
+            ])
     ]
 )

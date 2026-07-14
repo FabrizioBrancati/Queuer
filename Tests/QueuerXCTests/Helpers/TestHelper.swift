@@ -25,6 +25,7 @@
 //  SOFTWARE.
 
 import Foundation
+import XCTest
 
 /// A thread safe box around a value.
 /// Tests mutate state from operation threads, so every shared value goes through this lock.
@@ -60,9 +61,8 @@ extension Protected where Value: RangeReplaceableCollection {
     }
 }
 
-/// Polls a condition until it becomes `true` or the timeout is reached,
-/// blocking the current thread.
-/// Use it only on background threads, like the ones driving manual retries.
+/// Polls a condition until it becomes `true` or the timeout is reached.
+/// Never call it on the main thread while `waitForExpectations` needs to run.
 ///
 /// - Parameters:
 ///   - timeout: Maximum time to wait for the condition. Default is 10 seconds.
@@ -83,34 +83,28 @@ func waitUntil(timeout: TimeInterval = 10, _ condition: () -> Bool) -> Bool {
     return true
 }
 
-/// Polls a condition until it becomes `true` or the timeout is reached,
-/// without blocking any thread.
-///
-/// - Parameters:
-///   - timeout: Maximum time to wait for the condition. Default is 10 seconds.
-///   - condition: Condition to be verified.
-/// - Returns: Returns `true` if the condition became true before the timeout, otherwise `false`.
-@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-@discardableResult
-func waitUntil(timeout: TimeInterval = 10, _ condition: @Sendable () -> Bool) async -> Bool {
-    let deadline = Date().addingTimeInterval(timeout)
-
-    while !condition() {
-        guard Date() < deadline else {
-            return false
+extension XCTestCase {
+    /// Fulfills the given expectation on a background thread as soon as the condition becomes `true`.
+    /// If the condition never becomes `true` the expectation is not fulfilled and
+    /// `waitForExpectations` will fail with a timeout.
+    ///
+    /// - Parameters:
+    ///   - expectation: Expectation to be fulfilled.
+    ///   - timeout: Maximum time to wait for the condition. Default is 10 seconds.
+    ///   - condition: Condition to be verified.
+    func fulfill(_ expectation: XCTestExpectation, timeout: TimeInterval = 10, when condition: @escaping () -> Bool) {
+        DispatchQueue.global().async {
+            if waitUntil(timeout: timeout, condition) {
+                expectation.fulfill()
+            }
         }
-
-        try? await Task.sleep(nanoseconds: 20_000_000)
     }
 
-    return true
-}
-
-/// Runs a block on a background thread.
-/// Useful to drive manual retries or cancellations without relying on wall clock delays,
-/// and without blocking the cooperative thread pool.
-///
-/// - Parameter block: Block to be executed.
-func onBackgroundThread(_ block: @escaping @Sendable () -> Void) {
-    DispatchQueue.global().async(execute: block)
+    /// Runs a block on a background thread.
+    /// Useful to drive manual retries or cancellations without relying on wall clock delays.
+    ///
+    /// - Parameter block: Block to be executed.
+    func onBackgroundThread(_ block: @escaping @Sendable () -> Void) {
+        DispatchQueue.global().async(execute: block)
+    }
 }

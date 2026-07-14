@@ -10,9 +10,19 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    target-branch: "develop"
+    # Match the Conventional Commits specification used by the repository
+    commit-message:
+      prefix: "chore"
+      include: "scope"
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    target-branch: "develop"
+    # Match the Conventional Commits specification used by the repository
+    commit-message:
+      prefix: "chore"
+      include: "scope"

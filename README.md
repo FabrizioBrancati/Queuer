@@ -21,8 +21,10 @@ Queuer is a queue manager built on top of [OperationQueue](https://developer.app
 - [x] Create semaphores
 - [x] Create and handle schedules
 - [x] Automatically or manually retry an operation
+- [x] Throttling between each automatic operation retry
 - [x] Syntactic sugar to create and chain operations easier and faster
-- [ ] Throttling between each automatic operation retry
+- [x] Async/await operations with automatic retries on thrown errors
+- [x] Builds in the Swift 6 language mode with strict concurrency
 
 ## Requirements
 
@@ -36,6 +38,14 @@ Queuer is a queue manager built on top of [OperationQueue](https://developer.app
 | 5.9...5.10 | 3.0.0...3.0.1 | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        |             |             |
 | 5.9...6.3  | develop       | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        | ✅          | ✅          |
 
+> [!NOTE]
+> Some APIs require a newer OS than the minimum deployment target:
+>
+> - `AsyncConcurrentOperation`, `addChainedAsyncOperations(_:completionHandler:)`, `addAsyncCompletionHandler(_:)`, `addBarrier(_:)`, and `barrier(_:)` require macOS 10.15, iOS 13, tvOS 13, or watchOS 6.
+> - `asyncWait(_:tolerance:clock:)` requires macOS 13, iOS 16, tvOS 16, or watchOS 9.
+>
+> On Linux, Android, and Windows every API is always available.
+
 ## Installing
 
 See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) section to check Swift, Queuer, and OS versions.
@@ -43,7 +53,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 In your `Package.swift` Swift Package Manager manifest, add the following dependency to your `dependencies` argument:
 
 ```swift
-.package(url: "https://github.com/FabrizioBrancati/Queuer.git", from: "3.0.0"),
+.package(url: "https://github.com/FabrizioBrancati/Queuer.git", from: "3.1.0"),
 ```
 
 Add the dependency to any targets you've declared in your manifest:
@@ -69,11 +79,14 @@ Add the dependency to any targets you've declared in your manifest:
 - [Use a Synchronous Queue](https://github.com/FabrizioBrancati/Queuer#use-a-synchronous-queue)
 - [Create a Custom Operation](https://github.com/FabrizioBrancati/Queuer#create-a-custom-operation)
 - [Automatically Retry an Operation](https://github.com/FabrizioBrancati/Queuer#automatically-retry-an-operation)
+- [Throttle Automatic Retries](https://github.com/FabrizioBrancati/Queuer#throttle-automatic-retries)
 - [Manually Retry an Operation](https://github.com/FabrizioBrancati/Queuer#manually-retry-an-operation)
 - [Manually Finish an Operation](https://github.com/FabrizioBrancati/Queuer#manually-finish-an-operation)
 - [Async Task in an Operation](https://github.com/FabrizioBrancati/Queuer#async-task-in-an-operation)
+- [Create an Async Operation](https://github.com/FabrizioBrancati/Queuer#create-an-async-operation)
 - [Set Up a Scheduler](https://github.com/FabrizioBrancati/Queuer#set-up-a-scheduler)
 - [Use a Semaphore](https://github.com/FabrizioBrancati/Queuer#use-a-semaphore)
+- [Syntactic Sugar](https://github.com/FabrizioBrancati/Queuer#syntactic-sugar)
 
 ### Using the Shared Queuer
 
@@ -273,6 +286,41 @@ let concurrentOperation = ConcurrentOperation { operation in
 }
 ```
 
+### Throttle Automatic Retries
+
+You can throttle the automatic retries with the `retryDelay` property.
+Every retry waits the given time before executing, the first attempt is never delayed.
+Default is `0`, retries happen immediately.
+
+```swift
+let concurrentOperation = ConcurrentOperation { operation in
+    /// Your task here
+    operation.success = false
+}
+concurrentOperation.retryDelay = 1
+```
+
+The same property is available on `AsyncConcurrentOperation`, where canceling the `Operation` also interrupts the delay right away:
+
+```swift
+let concurrentOperation = AsyncConcurrentOperation { operation in
+    /// Your asynchronous task here
+    operation.success = false
+}
+concurrentOperation.retryDelay = 1
+```
+
+You can also set it with the chainable [syntactic sugar](https://github.com/FabrizioBrancati/Queuer#syntactic-sugar) helper:
+
+```swift
+let concurrentOperation = ConcurrentOperation()
+    .retryDelay(1)
+    .executionBlock { operation in
+        /// Your task here
+        operation.success = false
+    }
+```
+
 ### Manually Retry an Operation
 
 You can manually retry an `Operation` when you think that the execution will be successful.
@@ -344,6 +392,28 @@ concurrentOperation.manualFinish = true
 
 > [!CAUTION]
 > If you don't set `manualFinish` to `true`, your `Operation` will finish before the async task is completed.
+
+### Create an Async Operation
+
+`AsyncConcurrentOperation` is an `Operation` built for async/await, available on macOS 10.15, iOS 13, tvOS 13, and watchOS 6 or later.
+Its execution block is an async throwing function: a thrown error marks the attempt as failed and enables the retry feature, and canceling the `Operation` also cancels the `Task` running its block.
+
+```swift
+let concurrentOperation = AsyncConcurrentOperation { operation in
+    /// Your asynchronous task here, it can throw
+    try await yourAsyncTask()
+}
+concurrentOperation.addToQueue(queue)
+```
+
+You can chain them with an async completion handler:
+
+```swift
+queue.addChainedAsyncOperations([concurrentOperation1, concurrentOperation2]) {
+    /// Your asynchronous completion here
+    await yourAsyncCompletion()
+}
+```
 
 ### Set Up a Scheduler
 

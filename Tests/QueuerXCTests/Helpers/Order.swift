@@ -1,10 +1,10 @@
 //
-//  OrderHelper.swift
+//  Order.swift
 //  Queuer
 //
 //  MIT License
 //
-//  Copyright (c) 2017 - 2024 Fabrizio Brancati
+//  Copyright (c) 2017 - 2026 Fabrizio Brancati
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 
 import Foundation
 
-actor OrderHelper<Element: Equatable> {
+actor Order<Element: Equatable> {
     var order: [Element] = []
 
     func append(_ element: Element) {
