@@ -209,17 +209,19 @@ struct GroupOperationTests {
         /// Trigger every retry as soon as the previous attempt has been recorded,
         /// instead of relying on wall clock delays.
         onBackgroundThread {
-            waitUntil(timeout: 8) { order.count >= 2 && concurrentOperation1.currentAttempt == 2 }
+            guard waitUntil(timeout: 8, { order.count >= 2 && concurrentOperation1.currentAttempt == 2 }) else { return }
             concurrentOperation1.retry()
-            waitUntil(timeout: 8) { order.count >= 3 && concurrentOperation2.currentAttempt == 2 }
+            guard waitUntil(timeout: 8, { order.count >= 3 && concurrentOperation2.currentAttempt == 2 }) else { return }
             concurrentOperation2.retry()
-            waitUntil(timeout: 8) { order.count >= 4 && concurrentOperation2.currentAttempt == 3 }
+            guard waitUntil(timeout: 8, { order.count >= 4 && concurrentOperation2.currentAttempt == 3 }) else { return }
             concurrentOperation2.retry()
-            waitUntil(timeout: 8) { order.count >= 5 && concurrentOperation1.currentAttempt == 3 }
+            guard waitUntil(timeout: 8, { order.count >= 5 && concurrentOperation1.currentAttempt == 3 }) else { return }
             concurrentOperation1.retry()
         }
 
-        #expect(await waitUntil { completed.value })
+        /// The retries are driven step by step from a background thread:
+        /// give slow emulators with few cores some extra headroom.
+        #expect(await waitUntil(timeout: 20) { completed.value })
         #expect(order.value == ["1", "2", "1", "2", "2", "1", "3"])
     }
 

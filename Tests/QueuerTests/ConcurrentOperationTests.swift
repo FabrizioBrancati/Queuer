@@ -134,7 +134,9 @@ struct ConcurrentOperationTests {
             completed.mutate { $0 = true }
         }
 
-        #expect(await waitUntil { completed.value })
+        /// Every attempt hops through an unstructured `Task`:
+        /// give slow emulators with few cores some extra headroom.
+        #expect(await waitUntil(timeout: 20) { completed.value })
         #expect(order.value == [0, 0, 0, 1, 1, 1, 2])
     }
 
@@ -192,9 +194,9 @@ struct ConcurrentOperationTests {
         /// Trigger a retry as soon as the previous attempt has been executed,
         /// instead of relying on wall clock delays.
         onBackgroundThread {
-            waitUntil(timeout: 8) { order.count >= 1 && concurrentOperation1.currentAttempt == 2 }
+            guard waitUntil(timeout: 8, { order.count >= 1 && concurrentOperation1.currentAttempt == 2 }) else { return }
             concurrentOperation1.retry()
-            waitUntil(timeout: 8) { order.count >= 2 && concurrentOperation1.currentAttempt == 3 }
+            guard waitUntil(timeout: 8, { order.count >= 2 && concurrentOperation1.currentAttempt == 3 }) else { return }
             concurrentOperation1.retry()
         }
 
@@ -357,11 +359,11 @@ struct ConcurrentOperationTests {
         concurrentOperation.addToQueue(queue)
 
         onBackgroundThread {
-            waitUntil(timeout: 8) { order.count >= 1 }
+            guard waitUntil(timeout: 8, { order.count >= 1 }) else { return }
             concurrentOperation.retry()
-            waitUntil(timeout: 8) { order.count >= 2 }
+            guard waitUntil(timeout: 8, { order.count >= 2 }) else { return }
             concurrentOperation.retry()
-            waitUntil(timeout: 8) { order.count >= 3 }
+            guard waitUntil(timeout: 8, { order.count >= 3 }) else { return }
             /// The operation must not be finished until `finish(success:)` is called.
             finishedBeforeManualFinish.mutate { $0 = concurrentOperation.isFinished }
             concurrentOperation.finish()

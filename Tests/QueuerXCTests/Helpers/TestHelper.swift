@@ -70,10 +70,12 @@ extension Protected where Value: RangeReplaceableCollection {
 /// - Returns: Returns `true` if the condition became true before the timeout, otherwise `false`.
 @discardableResult
 func waitUntil(timeout: TimeInterval = 10, _ condition: () -> Bool) -> Bool {
-    let deadline = Date().addingTimeInterval(timeout)
+    /// The deadline uses a monotonic clock: the wall clock can jump,
+    /// for example when an emulator syncs its time, and would burn the budget.
+    let deadline = DispatchTime.now() + timeout
 
     while !condition() {
-        guard Date() < deadline else {
+        guard DispatchTime.now() < deadline else {
             return false
         }
 
