@@ -5,6 +5,10 @@
 >
 > `Queuer` adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.x Releases
+
+- `4.0.x` Releases - [4.0.0](#400---await-queuer)
+
 ## 3.x Releases
 
 - `3.0.x` Releases - [3.0.0](#300---the-phoenix) | [3.0.1](#301---no-loop-no-party)
@@ -22,6 +26,12 @@
 - `1.0.x` Releases - [1.0.0](#100---first-queue)
 
 ## Develop
+
+- Nothing yet.
+
+## [4.0.0](https://github.com/FabrizioBrancati/Queuer/releases/tag/4.0.0) - Await Queuer
+
+### 15 July 2026
 
 ### Added
 

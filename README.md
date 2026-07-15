@@ -26,7 +26,7 @@ Queuer is a queue manager built on top of [OperationQueue](https://developer.app
 - [x] Async/await operations with automatic retries on thrown errors
 - [x] Builds in the Swift 6 language mode with strict concurrency
 
-## Requirements
+## Compatibility
 
 | **Swift**  | **Queuer**    | **iOS** | **macOS**  | **macCatalyst** | **tvOS**  | **watchOS** | **visionOS** | **Linux** | **Android** | **Windows** |
 |------------|---------------|---------|------------|-----------------|-----------|-------------|--------------|-----------|-------------|-------------|
@@ -36,7 +36,7 @@ Queuer is a queue manager built on top of [OperationQueue](https://developer.app
 | 4.2        | 2.0.0...2.0.1 | 8.0+    | 10.10+     |                 | 9.0+      | 3.0+        |              | ✅        |             |             |
 | 5.0...5.10 | 2.1.0...2.2.0 | 8.0+    | 10.10+     |                 | 9.0+      | 3.0+        |              | ✅        |             |             |
 | 5.9...5.10 | 3.0.0...3.0.1 | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        |             |             |
-| 5.9...6.3  | develop       | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        | ✅          | ✅          |
+| 5.9...6.3  | 4.0.0         | 12.0+   | 10.13+     | 13.0+           | 12.0+     | 4.0+        | 1.0+         | ✅        | ✅          | ✅          |
 
 > [!NOTE]
 > Some APIs require a newer OS than the minimum deployment target:
@@ -53,7 +53,7 @@ See [Requirements](https://github.com/FabrizioBrancati/Queuer#requirements) sect
 In your `Package.swift` Swift Package Manager manifest, add the following dependency to your `dependencies` argument:
 
 ```swift
-.package(url: "https://github.com/FabrizioBrancati/Queuer.git", from: "3.1.0"),
+.package(url: "https://github.com/FabrizioBrancati/Queuer.git", from: "4.0.0"),
 ```
 
 Add the dependency to any targets you've declared in your manifest:

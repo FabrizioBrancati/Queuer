@@ -25,8 +25,8 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Configuration**
-OS and Version: [e.g. iOS 18.4]
-Queuer Version: [e.g. 3.1.0]
+OS and Version: [e.g. iOS 26.5, macOS 13.4, etc.]
+Queuer Version: [e.g. 4.0.0]
 
 **Additional Context**
 Add any other context about the problem here.
