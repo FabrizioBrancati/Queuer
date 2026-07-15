@@ -556,6 +556,38 @@ queue
     }
 ```
 
+`AsyncConcurrentOperation`s have the same chainable helpers (requires macOS 10.15, iOS 13, tvOS 13 or watchOS 6):
+
+```swift
+queue
+    .asyncConcurrent { _ in
+        /// Your asynchronous task here, it can throw
+        try await yourAsyncTask()
+    }
+    .asyncConcurrent(retries: 2) { operation in
+        /// Your retryable asynchronous task here
+        operation.success = false
+    }
+    .asyncCompletion {
+        /// Your asynchronous completion here
+        await yourAsyncCompletion()
+    }
+```
+
+And they can be configured with the same fluent style:
+
+```swift
+let operation = AsyncConcurrentOperation()
+    .name("MyAsyncOperation")
+    .queuePriority(.high)
+    .maximumRetries(5)
+    .retryDelay(1)
+    .executionBlock { operation in
+        /// Your asynchronous task here, it can throw
+        try await yourAsyncTask()
+    }
+```
+
 ## Changelog
 
 To see what has changed in recent versions of Queuer, see the **[CHANGELOG.md](https://github.com/FabrizioBrancati/Queuer/blob/main/CHANGELOG.md)** file.

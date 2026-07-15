@@ -208,9 +208,9 @@ final class ConcurrentOperationTests: XCTestCase {
         /// Trigger a retry as soon as the previous attempt has been executed,
         /// instead of relying on wall clock delays.
         onBackgroundThread {
-            waitUntil(timeout: 8) { order.count >= 1 && concurrentOperation1.currentAttempt == 2 }
+            guard waitUntil(timeout: 8, { order.count >= 1 && concurrentOperation1.currentAttempt == 2 }) else { return }
             concurrentOperation1.retry()
-            waitUntil(timeout: 8) { order.count >= 2 && concurrentOperation1.currentAttempt == 3 }
+            guard waitUntil(timeout: 8, { order.count >= 2 && concurrentOperation1.currentAttempt == 3 }) else { return }
             concurrentOperation1.retry()
         }
 
@@ -412,11 +412,11 @@ final class ConcurrentOperationTests: XCTestCase {
         concurrentOperation.addToQueue(queue)
 
         onBackgroundThread {
-            waitUntil(timeout: 8) { order.count >= 1 }
+            guard waitUntil(timeout: 8, { order.count >= 1 }) else { return }
             concurrentOperation.retry()
-            waitUntil(timeout: 8) { order.count >= 2 }
+            guard waitUntil(timeout: 8, { order.count >= 2 }) else { return }
             concurrentOperation.retry()
-            waitUntil(timeout: 8) { order.count >= 3 }
+            guard waitUntil(timeout: 8, { order.count >= 3 }) else { return }
             XCTAssertFalse(concurrentOperation.isFinished)
             concurrentOperation.finish()
             testExpectation.fulfill()

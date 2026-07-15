@@ -206,6 +206,60 @@ struct SyntacticSugarTests {
     }
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Fluent setters configure the async operation")
+    func asyncConcurrentOperationSugar() {
+        let concurrentOperation = AsyncConcurrentOperation()
+            .name("AsyncSugarOperation")
+            .queuePriority(.high)
+            .qualityOfService(.utility)
+            .manualFinish()
+            .manualRetry()
+            .maximumRetries(5)
+            .retryDelay(1)
+            .executionBlock { _ in }
+            .onPause { _ in }
+            .onResume { _ in }
+            .onCancel { _ in }
+
+        #expect(concurrentOperation.name == "AsyncSugarOperation")
+        #expect(concurrentOperation.queuePriority == .high)
+        #expect(concurrentOperation.qualityOfService == .utility)
+        #expect(concurrentOperation.manualFinish)
+        #expect(concurrentOperation.manualRetry)
+        #expect(concurrentOperation.maximumRetries == 5)
+        #expect(concurrentOperation.retryDelay == 1)
+        #expect(concurrentOperation.executionBlock != nil)
+        #expect(concurrentOperation.onPause != nil)
+        #expect(concurrentOperation.onResume != nil)
+        #expect(concurrentOperation.onCancel != nil)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @Test("Async concurrent blocks and async completion run in order")
+    func asyncConcurrentAndAsyncCompletion() async {
+        let order = Protected<[String]>([])
+        let completed = Protected(false)
+
+        Queuer(name: "SyntacticSugarTestAsyncConcurrent")
+            .maxConcurrentOperationCount(1)
+            .asyncConcurrent { _ in
+                order.append("First")
+            }
+            .asyncConcurrent(retries: 2) { operation in
+                order.append("Retry")
+                operation.success = false
+            }
+            .asyncCompletion {
+                order.append("Finished")
+                completed.mutate { $0 = true }
+            }
+
+        #expect(await waitUntil { completed.value })
+        /// "Retry" fails with 2 maximum retries.
+        #expect(order.value == ["First", "Retry", "Retry", "Finished"])
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     @Test("Chained blocks and retryable concurrent blocks run in order")
     func chainedBlocksAndConcurrentRetries() async {
         let order = Protected<[String]>([])

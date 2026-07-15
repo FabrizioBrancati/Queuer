@@ -206,13 +206,13 @@ final class GroupOperationTests: XCTestCase {
         /// Trigger every retry as soon as the previous attempt has been recorded,
         /// instead of relying on wall clock delays.
         onBackgroundThread {
-            waitUntil(timeout: 8) { order.count >= 2 && concurrentOperation1.currentAttempt == 2 }
+            guard waitUntil(timeout: 8, { order.count >= 2 && concurrentOperation1.currentAttempt == 2 }) else { return }
             concurrentOperation1.retry()
-            waitUntil(timeout: 8) { order.count >= 3 && concurrentOperation2.currentAttempt == 2 }
+            guard waitUntil(timeout: 8, { order.count >= 3 && concurrentOperation2.currentAttempt == 2 }) else { return }
             concurrentOperation2.retry()
-            waitUntil(timeout: 8) { order.count >= 4 && concurrentOperation2.currentAttempt == 3 }
+            guard waitUntil(timeout: 8, { order.count >= 4 && concurrentOperation2.currentAttempt == 3 }) else { return }
             concurrentOperation2.retry()
-            waitUntil(timeout: 8) { order.count >= 5 && concurrentOperation1.currentAttempt == 3 }
+            guard waitUntil(timeout: 8, { order.count >= 5 && concurrentOperation1.currentAttempt == 3 }) else { return }
             concurrentOperation1.retry()
         }
 

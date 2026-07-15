@@ -126,7 +126,7 @@ struct SchedulerTests {
         }
 
         onBackgroundThread {
-            waitUntil(timeout: 8) { order.value.contains(0) }
+            guard waitUntil(timeout: 8, { order.value.contains(0) }) else { return }
 
             /// Setting the handler again must replace the previous one, without crashing.
             schedule.mutate {

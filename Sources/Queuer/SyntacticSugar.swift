@@ -182,6 +182,45 @@ public extension Queuer {
         add(operation)
         return self
     }
+
+    /// Adds an `AsyncConcurrentOperation` with the given async throwing execution block.
+    ///
+    /// - Parameter block: Async throwing execution block.
+    /// - Returns: Returns the current `Queuer` instance.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @discardableResult
+    func asyncConcurrent(_ block: @escaping (_ operation: AsyncConcurrentOperation) async throws -> Void) -> Queuer {
+        addOperation(AsyncConcurrentOperation(executionBlock: block))
+        return self
+    }
+
+    /// Adds an `AsyncConcurrentOperation` with the given async throwing execution block
+    /// and maximum allowed retries.
+    ///
+    /// - Parameters:
+    ///   - retries: Maximum allowed retries.
+    ///   - block: Async throwing execution block.
+    /// - Returns: Returns the current `Queuer` instance.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @discardableResult
+    func asyncConcurrent(retries: Int, _ block: @escaping (_ operation: AsyncConcurrentOperation) async throws -> Void) -> Queuer {
+        let operation = AsyncConcurrentOperation(executionBlock: block)
+        operation.maximumRetries = retries
+        addOperation(operation)
+        return self
+    }
+
+    /// Adds an async completion block to the queue.
+    /// The completion waits for every `Operation` currently in the queue.
+    ///
+    /// - Parameter completion: Async completion block to be executed.
+    /// - Returns: Returns the current `Queuer` instance.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    @discardableResult
+    func asyncCompletion(_ completion: @escaping @Sendable () async -> Void) -> Queuer {
+        addAsyncCompletionHandler(completion)
+        return self
+    }
 }
 
 /// `ConcurrentOperation` extension with syntactic sugar.
@@ -293,6 +332,121 @@ public extension ConcurrentOperation {
     /// - Returns: Returns the current `ConcurrentOperation` instance.
     @discardableResult
     func onCancel(_ block: @escaping (_ operation: ConcurrentOperation) -> Void) -> ConcurrentOperation {
+        self.onCancel = block
+        return self
+    }
+}
+
+/// `AsyncConcurrentOperation` extension with syntactic sugar.
+/// Every function returns the `AsyncConcurrentOperation` instance, so the calls can be chained.
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+public extension AsyncConcurrentOperation {
+    /// Sets the manual finish state.
+    ///
+    /// - Parameter manualFinish: Whether the `Operation` must be manually finished.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func manualFinish(_ manualFinish: Bool = true) -> AsyncConcurrentOperation {
+        self.manualFinish = manualFinish
+        return self
+    }
+
+    /// Sets the manual retry state.
+    ///
+    /// - Parameter manualRetry: Whether the `Operation` must be manually retried.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func manualRetry(_ manualRetry: Bool = true) -> AsyncConcurrentOperation {
+        self.manualRetry = manualRetry
+        return self
+    }
+
+    /// Sets the async throwing execution block.
+    ///
+    /// - Parameter block: Async throwing execution block.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func executionBlock(_ block: @escaping (_ operation: AsyncConcurrentOperation) async throws -> Void) -> AsyncConcurrentOperation {
+        executionBlock = block
+        return self
+    }
+
+    /// Sets the maximum allowed retries.
+    ///
+    /// - Parameter retries: Maximum allowed retries.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func maximumRetries(_ retries: Int) -> AsyncConcurrentOperation {
+        maximumRetries = retries
+        return self
+    }
+
+    /// Sets the throttling between each automatic retry.
+    ///
+    /// - Parameter delay: Delay between each automatic retry.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func retryDelay(_ delay: TimeInterval) -> AsyncConcurrentOperation {
+        retryDelay = delay
+        return self
+    }
+
+    /// Sets the `Operation` name.
+    ///
+    /// - Parameter name: `Operation` name.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func name(_ name: String) -> AsyncConcurrentOperation {
+        self.name = name
+        return self
+    }
+
+    /// Sets the execution priority in its queue.
+    ///
+    /// - Parameter priority: Execution priority.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func queuePriority(_ priority: Operation.QueuePriority) -> AsyncConcurrentOperation {
+        self.queuePriority = priority
+        return self
+    }
+
+    /// Sets the service level to apply to the `Operation`.
+    ///
+    /// - Parameter quality: The service level.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func qualityOfService(_ quality: QualityOfService) -> AsyncConcurrentOperation {
+        self.qualityOfService = quality
+        return self
+    }
+
+    /// Sets the block to be called when the `Operation` is paused.
+    ///
+    /// - Parameter block: Pause block.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func onPause(_ block: @escaping (_ operation: AsyncConcurrentOperation) -> Void) -> AsyncConcurrentOperation {
+        self.onPause = block
+        return self
+    }
+
+    /// Sets the block to be called when the `Operation` is resumed.
+    ///
+    /// - Parameter block: Resume block.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func onResume(_ block: @escaping (_ operation: AsyncConcurrentOperation) -> Void) -> AsyncConcurrentOperation {
+        self.onResume = block
+        return self
+    }
+
+    /// Sets the block to be called when the `Operation` is canceled.
+    ///
+    /// - Parameter block: Cancel block.
+    /// - Returns: Returns the current `AsyncConcurrentOperation` instance.
+    @discardableResult
+    func onCancel(_ block: @escaping (_ operation: AsyncConcurrentOperation) -> Void) -> AsyncConcurrentOperation {
         self.onCancel = block
         return self
     }
