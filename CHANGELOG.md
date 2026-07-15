@@ -45,7 +45,7 @@
 - Added `addChainedAsyncOperations(_:completionHandler:)` and `addAsyncCompletionHandler(_:)` to `Queuer`, to chain operations with async completion handlers - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added a Swift Testing test suite alongside the XCTest one, the XCTest suite runs on every supported toolchain, while the Swift Testing suite runs on Swift 6 and later - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added `retryDelay` to `ConcurrentOperation` and `AsyncConcurrentOperation`, with its chainable `retryDelay(_:)` variant, to throttle automatic retries - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
-- Added syntactic sugar for `AsyncConcurrentOperation`, with its fluent setters and the chainable `asyncConcurrent(_:)`, `asyncConcurrent(retries:_:)`, and `asyncCompletion(_:)` helpers on `Queuer` - [#38](https://github.com/FabrizioBrancati/Queuer/pull/39)
+- Added syntactic sugar for `AsyncConcurrentOperation`, with its fluent setters and the chainable `asyncConcurrent(_:)`, `asyncConcurrent(retries:_:)`, and `asyncCompletion(_:)` helpers on `Queuer` - [#39](https://github.com/FabrizioBrancati/Queuer/pull/39)
 - Added Dependabot for Swift packages and GitHub Actions dependencies, targeting the `develop` branch - [#38](https://github.com/FabrizioBrancati/Queuer/pull/38)
 - Added `pre-commit` hook [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
 - Added Makefile [#43](https://github.com/FabrizioBrancati/Queuer/pull/43)
